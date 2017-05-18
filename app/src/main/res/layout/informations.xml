@@ -13,13 +13,12 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:padding="10dp"
-
         android:background="@color/buttonColor"
         android:textSize="20sp"
-        android:id="@+id/tvInfo1"
-        android:text="@string/Tutorial"
         android:textColor="@color/textColor"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:id="@+id/tvInfo1"
+        android:text="@string/Tutorial"/>
 
 <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
 

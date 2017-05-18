@@ -3,6 +3,7 @@ package okosnotesz.hu.okosnotesz;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
@@ -42,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
         btnGues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                    guestsView(v);
             }
         });
     }
+
+    //                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Groups.CONTENT_URI);
+//                startActivity(intent);
 
    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,5 +82,11 @@ public class MainActivity extends AppCompatActivity {
     public void infoView(View v){
         Intent infoIntent = new Intent(this, Informations.class);
         startActivity(infoIntent);
+    }
+    public void guestsView(View v){
+        Intent guestIntent = new Intent(this, Guests.class);
+        /*guestIntent.setAction(Intent.ACTION_VIEW);
+        guestIntent.setData(ContactsContract.Contacts.CONTENT_URI);*/
+        startActivity(guestIntent);
     }
 }

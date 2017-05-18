@@ -54,6 +54,7 @@
             android:text="@string/Guests"
             android:background="@color/buttonColor"
             android:textColor="@color/textColor"
+            android:onClick=""
             />
 
         <Button
