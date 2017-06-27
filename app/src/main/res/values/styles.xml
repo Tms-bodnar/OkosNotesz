@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/textColor</item>
-        <item name="colorPrimaryDark">@color/background</item>
+        <item name="colorPrimary">@color/Color15</item>
+        <item name="colorPrimaryDark">@color/Color14</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -16,7 +16,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    
 
 
 </resources>

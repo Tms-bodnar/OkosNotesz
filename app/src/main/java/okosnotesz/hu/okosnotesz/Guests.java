@@ -1,5 +1,114 @@
 package okosnotesz.hu.okosnotesz;
 
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+public class Guests extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+
+    private final static String[] FROM_COLUMNS = {
+            Build.VERSION.SDK_INT
+                    >= Build.VERSION_CODES.HONEYCOMB ?
+                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
+                    ContactsContract.Contacts.DISPLAY_NAME};
+
+    private final static int[] TO_IDS = {
+            android.R.id.text1};
+
+    private static final String[] PROJECTION = {
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.LOOKUP_KEY,
+            Build.VERSION.SDK_INT
+                    >= Build.VERSION_CODES.HONEYCOMB ?
+                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
+                    ContactsContract.Contacts.DISPLAY_NAME};
+
+    private static final String SELECTION =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?" :
+                    ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
+    private String mSearchString;
+    private String[] mSelectionArgs = {mSearchString};
+
+    private ListView mGuestList;
+    private long mContactId;
+    private String mContactKey;
+    private Uri mContactUri;
+    private SimpleCursorAdapter mSimpleCursorAdapter;
+
+    private static final int CONTACT_ID_INDEX = 0;
+    private static final int LOOKUP_KEY_INDEX = 1;
+
+
+    public Guests() {
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.guests, container, false);
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, null);
+        mGuestList = (ListView) getActivity().findViewById(R.id.guests_list);
+        mSimpleCursorAdapter = new SimpleCursorAdapter(
+                getActivity(),
+                R.layout.contact_list_item,
+                null,
+                FROM_COLUMNS, TO_IDS,
+                0);
+        mGuestList.setAdapter(mSimpleCursorAdapter);
+        mGuestList.setOnItemClickListener(this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        mSelectionArgs[0] = "%" + mSearchString + "%";
+        return new CursorLoader(getActivity(),
+                ContactsContract.Contacts.CONTENT_URI,
+                PROJECTION,
+                SELECTION,
+                mSelectionArgs,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mSimpleCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mSimpleCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        mSimpleCursorAdapter.getItem(position);
+        mContactId = Long.getLong(String.valueOf(CONTACT_ID_INDEX));
+        mContactKey = String.valueOf(LOOKUP_KEY_INDEX);
+        mContactUri = ContactsContract.Contacts.getLookupUri(mContactId, mContactKey);
+
+
+    }
+
+}
+
+/*
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -30,7 +139,7 @@ public class Guests extends AppCompatActivity {
 
     private static final String GROUP_SELECTION = ContactsContract.Groups.DELETED +"=? AND " + ContactsContract.Groups.GROUP_VISIBLE + "=?";
 
-    private String groupNameInput = "Család";
+    private String groupNameInput = "";
     private String[] groupSelectionArgs = {"0", "1"};
     private static final String[] GROUP_SECOND_PROJECTION =
             {                            DISPLAY_NAME,
@@ -40,10 +149,8 @@ public class Guests extends AppCompatActivity {
     private static final String GROUP_SECOND_SELECTION = ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + "= ?" +
                                 " AND " +  ContactsContract.CommonDataKinds.GroupMembership.MIMETYPE + "='" +
                                 ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE + "='";
-            /*(
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                    ContactsContract.Contacts.DISPLAY_NAME);*/
+
+
 
 
     String nameSearch = "";
@@ -207,4 +314,4 @@ public class Guests extends AppCompatActivity {
 
         return numbers;
     }
-}
+*/

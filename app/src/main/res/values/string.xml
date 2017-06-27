@@ -1,27 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+        <string name="first_start">false</string>
+        <string name="OK">OK</string>
+        <string name="NO">Nincs</string>
+        <string name="iHave">Van</string>
+        <string name="yes">Igen</string>
+        <string name="back">Vissza</string>
         <string name="app_name">OkosNotesz</string>
-        <string name="action_settings">Settings</string>
-        <string name="Guests">Vendégek</string>
-        <string name="Calendar">Naptár</string>
-        <string name="Reports">Kimutatások</string>
-        <string name="Booking">Foglalás</string>
-        <string name="Tutorial">Így használd az OkosNoteszt</string>
-        <string name="TutorialFirst">
+        <string name="settings">Beállítások</string>
+        <string name="activity_main">Home</string>
+        <string name="welcome">Üdvözöllek!</string>
+        <string name="start2">
+                Kérlek, szánj néhány percet noteszed beállítására! \n
+                Az OkosNotesz használatához szükséged lesz egy \n
+                Google.fiókra\n
+                Van már Google-fiókod?\n
+        </string>
+        <string name="groupSel2">
+                A vendégeidet a Kapcsolataidon belül egy külön csoportban kell tárolnod!\n
+                Van már ilyen csoportod?
+        </string>
+        <string name="groupSel21">
+                Sikerült létrehozni a csoportot?
+        </string>
+        <string name="groupCreate1">
+                Így hozd létre a vendégeid csoportját:\n
+                1.\n
+                Az oldal alján az OK-ra kattintva
+                a kapcsolatok képernyőre kerülsz. Menj a csoportok fülre,
+                és nyomd meg a plusz gombot.
+        </string>
+        <string name="groupCreate2">
+                2.\n
+                Válaszd ki a Google-fiókod.
+        </string>
+        <string name="groupCreate3">
+                3.\n
+                Nevezd el a csoportot,
+                mondjuk Vendégek -nek.
+        </string>
+        <string name="groupCreate4">
+                4.\n
+                Nyisd meg az újonnan létrehozott csoportod.
+        </string>
+        <string name="groupCreate5">
+                5.\n
+                A jobb felső sarokban kattints
+                a tag hozzáadása gombra.
+        </string>
+        <string name="groupCreate6">
+                6.\n
+                Pipáld ki a kapcsolataid közül
+                a vendégeidet.
+        </string>
+        <string name="groupCreate7">
+                7.\n
+                Ha kész vagy, láthatod az új,
+                csoportba rendezett vendégeidet.
+        </string>
+        <string name="guests">Vendégek</string>
+        <string name="calendar">Naptár</string>
+        <string name="reports">Kimutatások</string>
+        <string name="booking">Foglalás</string>
+        <string name="goods">Termékek</string>
+        <string name="commercial">Kereskedelem</string>
+        <string name="expert">Szakemberek</string>
+        <string name="treatment">Kezelések</string>
+        <string name="tutorial">Így használd az OkosNoteszt</string>
+        <string name="tutorialFirst">
                 A program használatához szükséged lesz egy Google accountra,
                 ha nincs, hozz létre egyet!
         </string>
-        <string name="TutorialSecond">
+        <string name="tutorialSecond">
                 A megnyíló Kapcsolatok felületen a \"Vendégek\" csoportot láthatod. \n
                 Ha nincs ilyan csoport, hozz létre egyet, és a vendégidet helyezd a csopotba! \n
                 Ha van már ilyen csoport, akkor válaszd ki azt. \n
         </string>
-        <string name="TutorialThird">
+        <string name="tutorialThird">
                 A \"Vendégek\" csoport tagjai kereshetőek, szerkeszthetőek, \n
                 új tag adható a csoporthoz, illetve régi törölhető a szokásos módokon.
         </string>
-        <string name="TutorialFourth">"Ez egy próba txt, cseréld le \n
+        <string name="tutorialFourth">"Ez egy próba txt, cseréld le \n
                 mondon\n
                 \n
                 vége"</string>
