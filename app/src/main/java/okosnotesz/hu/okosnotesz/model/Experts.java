@@ -43,4 +43,9 @@ public class Experts {
     public void setNote(String note) {
         this.note = note;
     }
+
+    @Override
+    public String toString() {
+        return this.getName() + ", " + this.getNote();
+    }
 }

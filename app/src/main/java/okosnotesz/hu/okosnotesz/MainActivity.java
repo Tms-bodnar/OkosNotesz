@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -28,6 +29,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import okosnotesz.hu.okosnotesz.model.DBHelper;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -46,11 +49,17 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     SharedPreferences sp;
+    private SQLiteDatabase db;
+    private DBHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("oncreate", "xxx-1");
         super.onCreate(savedInstanceState);
         Log.d("oncreate", "xxx-2");
+        helper = DBHelper.getHelper(this);
+        db = helper.getWritableDatabase();
+
         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean firstStart = sp.getBoolean(getString(R.string.first_start), false );
         Log.d("oncreate", "xxx-3");
@@ -164,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Intent i = new Intent(getBaseContext(),Guests.class);
-                startActivity(i);
             }
         });
     }
@@ -370,11 +377,13 @@ private class SectionsPagerAdapter1 extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = null;
         switch (position){
-            case 0:
-            case 1:
+            case 0: fragment = new GuestsAdminFragment();
+                break;
+            case 1:fragment = new ExpertsAdminFragment();
+                break;
             case 2:
             case 3:
-                fragment = new GroupCreateFragment();
+                fragment = new GuestsAdminFragment();
                 break;
 
         }

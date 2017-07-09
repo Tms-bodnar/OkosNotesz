@@ -12,6 +12,11 @@
         <string name="settings">Beállítások</string>
         <string name="activity_main">Home</string>
         <string name="welcome">Üdvözöllek!</string>
+        <string name="addExpert">Szakember hozzáadása</string>
+        <string name="addExpertOK">Szakember hozzáadása sikeres!</string>
+        <string name="expertName">Név</string>
+        <string name="expertNote">Megjegyzés</string>
+        <string name="cancel">Mégsem</string>
         <string name="start2">
                 Kérlek, szánj néhány percet noteszed beállítására! \n
                 Az OkosNotesz használatához szükséged lesz egy \n

@@ -13,8 +13,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+    private static DBHelper helper;
+
     private static final String DATABASE_NAME = "okosnotesz.db";
     private static final int DATABASE_VESRION = 1;
+
+    private static final String GUESTS_DATAS = "guestsDatas";
+    private static final String GUE_COL_ID = "guestId";
+    private static final String GUE_COL_NAME = "guestName";
+    private static final String GUE_COL_PHONE1 = "phone1";
+    private static final String GUE_COL_PHONE2 = "phone2";
+    private static final String GUE_COL_EMAIL1 = "email1";
+    private static final String GUE_COL_EMAIL2 = "email2";
+    private static final String GUE_COL_CONTACT1 = "contact1";
+    private static final String GUE_COL_CONTACT2 = "contact2";
 
     private static final String TREATMENT_TABLE = "treatments";
     private static final String TRE_COL_ID = "treatmentID";
@@ -64,8 +76,25 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, name, factory, version, errorHandler);
     }
 
+    public static synchronized DBHelper getHelper(Context context) {
+        if (helper == null)
+            helper = new DBHelper(context);
+        return helper;
+    }
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        db.execSQL("CREATE TABLE " + GUESTS_DATAS + " ("
+                + GUE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + GUE_COL_NAME + " TEXT, "
+                + GUE_COL_PHONE1 + " TEXT, "
+                + GUE_COL_PHONE2 + " TEXT, "
+                + GUE_COL_EMAIL1 + " TEXT, "
+                + GUE_COL_EMAIL2 + " TEXT, "
+                + GUE_COL_CONTACT1 + " TEXT, "
+                + GUE_COL_CONTACT2 + " TEXT);");
 
         db.execSQL("CREATE TABLE " + TREATMENT_TABLE + " ("
                 + TRE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -121,6 +150,58 @@ public class DBHelper extends SQLiteOpenHelper {
         super.onOpen(db);
     }
 
+    public Cursor getAllGuests(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM GUESTSDATAS", null);
+        return c;
+    }
+
+    public Cursor getGuest(String name){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM GUESTSDATAS WHERE name ='" + name + "'", null);
+        return c;
+    }
+
+    public Cursor getGuest(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM GUESTSDATAS WHERE guestId ='" + id + "'", null);
+        return c;
+    }
+
+    public boolean addGuest(GuestsDatas g){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("guestName", g.getName());
+        cv.put("phone1", g.getPhone1());
+        cv.put("phone2", g.getPhone2());
+        cv.put("email1", g.getEmail1());
+        cv.put("email2", g.getEmail2());
+        cv.put("contact1", g.getContact1());
+        cv.put("contact2", g.getContact2());
+        db.insert("guestsDatas", null, cv);
+        db.close();
+        return true;
+    }
+    public boolean updateGuest(GuestsDatas g){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("guestName", g.getName());
+        cv.put("phone1", g.getPhone1());
+        cv.put("phone2", g.getPhone2());
+        cv.put("email1", g.getEmail1());
+        cv.put("email2", g.getEmail2());
+        cv.put("contact1", g.getContact1());
+        cv.put("contact2", g.getContact2());
+        db.update("guestsDatas", cv, GUE_COL_ID + "=?",  new String[]{String.valueOf(g.getId())});
+        db.close();
+        return true;
+    }
+
+    public boolean deleteGuest(GuestsDatas g){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("guestsDatas", GUE_COL_ID + "=?", new String[]{String.valueOf(g.getId())});
+        return true;
+    }
 
     public Cursor getAllTreatment() {
         SQLiteDatabase db = this.getReadableDatabase();
