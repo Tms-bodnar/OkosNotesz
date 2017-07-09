@@ -10,6 +10,9 @@ public class Experts {
     private String name;
     private String note;
 
+    public Experts() {
+    }
+
     public Experts(int id) {
         this.id = id;
     }
@@ -44,8 +47,4 @@ public class Experts {
         this.note = note;
     }
 
-    @Override
-    public String toString() {
-        return this.getName() + ", " + this.getNote();
-    }
 }
