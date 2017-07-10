@@ -379,15 +379,18 @@ private class SectionsPagerAdapter1 extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = null;
         switch (position){
-            case 0: fragment = new GuestsAdminFragment();
-                break;
-            case 1:fragment = new ExpertsAdminFragment();
-                break;
-            case 2:
-            case 3:
+            case 0:
                 fragment = new GuestsAdminFragment();
                 break;
-
+            case 1:
+                fragment = new ExpertsAdminFragment();
+                break;
+            case 2:
+                fragment = new GuestsAdminFragment();
+                break;
+            case 3:
+                fragment = new ExpertsAdminFragment();
+                break;
         }
         return fragment;
 

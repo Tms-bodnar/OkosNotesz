@@ -18,6 +18,10 @@ public class GuestsDatas {
     public GuestsDatas(){
     }
 
+    public GuestsDatas(String name) {
+        this.name = name;
+    }
+
     public GuestsDatas(String name, String phone1) {
         this.name = name;
         this.phone1 = phone1;

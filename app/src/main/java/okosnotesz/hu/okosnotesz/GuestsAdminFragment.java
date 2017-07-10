@@ -16,6 +16,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import okosnotesz.hu.okosnotesz.model.GuestsDatas;
+
 public class GuestsAdminFragment extends Fragment {
 
     ArrayList<String> guestsList = null;
@@ -44,7 +46,12 @@ public class GuestsAdminFragment extends Fragment {
         lv = (ListView) view.findViewById(R.id.guests_list);
         Context context = getActivity();
         guestsList = getAllNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,R.layout.contact_list_item,guestsList);
+        ArrayList<GuestsDatas> glist = new ArrayList<>(guestsList.size());
+        for (String s : guestsList) {
+            GuestsDatas gd = new GuestsDatas(s);
+            glist.add(gd);
+        }
+        CustomGuestsAdapter adapter = new CustomGuestsAdapter(context, R.layout.guests_list_item, glist);
         lv.setAdapter(adapter);
         return view;
     }

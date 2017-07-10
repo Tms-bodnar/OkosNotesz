@@ -66,7 +66,7 @@ public class Guests extends Fragment implements LoaderManager.LoaderCallbacks<Cu
         mGuestList = (ListView) getActivity().findViewById(R.id.guests_list);
         mSimpleCursorAdapter = new SimpleCursorAdapter(
                 getActivity(),
-                R.layout.contact_list_item,
+                R.layout.guests_list_item,
                 null,
                 FROM_COLUMNS, TO_IDS,
                 0);
