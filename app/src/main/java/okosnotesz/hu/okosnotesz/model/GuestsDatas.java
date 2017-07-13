@@ -1,5 +1,9 @@
 package okosnotesz.hu.okosnotesz.model;
 
+import android.support.annotation.NonNull;
+
+import java.util.Comparator;
+
 /**
  * Created by user on 2017.06.27..
  */
@@ -15,7 +19,7 @@ public class GuestsDatas {
     private String contact1;
     private String contact2;
 
-    public GuestsDatas(){
+    public GuestsDatas() {
     }
 
     public GuestsDatas(String name) {
@@ -89,5 +93,15 @@ public class GuestsDatas {
 
     public void setContact2(String contact2) {
         this.contact2 = contact2;
+    }
+
+
+
+    public static class SortByName implements Comparator<GuestsDatas> {
+
+        public int compare(GuestsDatas o1, GuestsDatas o2) {
+
+            return o1.name.compareTo(o2.getName());
+        }
     }
 }
