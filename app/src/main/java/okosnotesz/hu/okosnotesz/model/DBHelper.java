@@ -228,6 +228,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("treatmentTime", t.getTime());
         cv.put("treatmentPrice", t.getPrice());
         cv.put("treatmentCost", t.getCost());
+        cv.put("treatmentNote", t.getNote());
         db.insert("treatments", null, cv);
         db.close();
         return true;
@@ -240,6 +241,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("treatmentTime", t.getTime());
         cv.put("treatmentPrice", t.getPrice());
         cv.put("treatmentCost", t.getCost());
+        cv.put("treatmentNote", t.getNote());
         db.update("treatments", cv, TRE_COL_ID + "=?", new String[]{String.valueOf(t.getId())});
         db.close();
         return true;

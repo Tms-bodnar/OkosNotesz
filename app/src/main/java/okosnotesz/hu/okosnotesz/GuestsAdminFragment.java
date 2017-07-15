@@ -55,6 +55,7 @@ public class GuestsAdminFragment extends Fragment {
        ArrayList<GuestsDatas>gdList = getAllContacts();
         CustomGuestsAdapter adapter = new CustomGuestsAdapter(context, R.layout.guests_list_item, gdList);
         lv.setAdapter(adapter);
+
         return view;
     }
 

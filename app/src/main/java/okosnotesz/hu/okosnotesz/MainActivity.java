@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import okosnotesz.hu.okosnotesz.model.DBHelper;
+import okosnotesz.hu.okosnotesz.model.Treatments;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -386,7 +387,7 @@ private class SectionsPagerAdapter1 extends FragmentStatePagerAdapter {
                 fragment = new ExpertsAdminFragment();
                 break;
             case 2:
-                fragment = new GuestsAdminFragment();
+                fragment = new TreatmentsAdminFragment();
                 break;
             case 3:
                 fragment = new ExpertsAdminFragment();
@@ -422,28 +423,23 @@ private class SectionsPagerAdapter1 extends FragmentStatePagerAdapter {
     }
 }
 
-public static class PlaceholderFragment1 extends Fragment{
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    public PlaceholderFragment1() {
-    }
-
-    public static PlaceholderFragment1 newInstance(int sectionNumber){
-        PlaceholderFragment1 fragment = new PlaceholderFragment1();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View rootView = inflater.inflate(R.layout.first_settings, container, false);
-        return rootView;
-    }
-}
-    public void openContacts(View v) {
-        Intent i = new Intent(Intent.ACTION_VIEW, ContactsContract.Contacts.CONTENT_URI);
-        startActivity(i);
-
-    }
+//public static class PlaceholderFragment1 extends Fragment{
+//    private static final String ARG_SECTION_NUMBER = "section_number";
+//
+//    public PlaceholderFragment1() {
+//    }
+//
+//    public static PlaceholderFragment1 newInstance(int sectionNumber){
+//        PlaceholderFragment1 fragment = new PlaceholderFragment1();
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+//        View rootView = inflater.inflate(R.layout.first_settings, container, false);
+//        return rootView;
+//    }
+//}
 }

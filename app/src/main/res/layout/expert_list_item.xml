@@ -5,26 +5,23 @@
     android:layout_height="wrap_content"
     >
 
-        <TextView android:textColor="#FFFFFF"
+        <TextView
             android:id="@+id/expertNameItem"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginLeft="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
             android:layout_margin="5dp"
-            android:gravity="left"
-            android:layout_weight="1"
-            android:typeface="monospace"
-            android:height="40sp" />
+            android:textStyle="bold"/>
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:textColor="#FFFFFF"
-            android:layout_marginRight="30dp"
-            android:layout_margin="5dp"
-            android:gravity="right"
             android:id="@+id/expertNoteItem"
-            android:height="20sp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/expertNameItem"
+            android:layout_margin="5dp" />
 </RelativeLayout>

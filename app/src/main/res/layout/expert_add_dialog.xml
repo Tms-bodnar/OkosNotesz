@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:hint="@string/expertName"
+            android:hint="@string/Name"
             android:inputType="text"
             android:textAlignment="center"
             android:textSize="22sp" />
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:hint="@string/expertNote"
+            android:hint="@string/Note"
             android:inputType="text"
             android:textAlignment="center"
             android:textSize="22sp"

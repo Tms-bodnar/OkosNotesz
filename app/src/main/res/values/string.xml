@@ -14,8 +14,13 @@
         <string name="welcome">Üdvözöllek!</string>
         <string name="addExpert">Szakember hozzáadása</string>
         <string name="addExpertOK">Szakember hozzáadása sikeres!</string>
-        <string name="expertName">Név</string>
-        <string name="expertNote">Megjegyzés</string>
+        <string name="addTreatment">Kezelés hozzáadása</string>
+        <string name="addTreatmentOK">Kezelés hozzáadása sikeres!</string>
+        <string name="Name">Név</string>
+        <string name="Note">Megjegyzés</string>
+        <string name="treatmentTime">Időtartam percben</string>
+        <string name="treatmentPrice">Ár</string>
+        <string name="treatmentCost">Költség</string>
         <string name="cancel">Mégsem</string>
         <string name="start2">
                 Kérlek, szánj néhány percet noteszed beállítására! \n

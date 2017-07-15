@@ -53,7 +53,7 @@ public class ExpertsAdminFragment extends Fragment {
                                        Log.d("xxx", "clicked");
                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                        builder.setTitle(R.string.addExpert);
-                                       final View addExpertViev = LayoutInflater.from(getContext()).inflate(R.layout.expert_add_dialog, (ViewGroup) getView(), false);
+//                                       final View addExpertViev = LayoutInflater.from(getContext()).inflate(R.layout.expert_add_dialog, (ViewGroup) getView(), false);
 
                                        builder.setView(R.layout.expert_add_dialog);
 
