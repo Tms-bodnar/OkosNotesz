@@ -14,14 +14,22 @@
         <string name="welcome">Üdvözöllek!</string>
         <string name="addExpert">Szakember hozzáadása</string>
         <string name="addExpertOK">Szakember hozzáadása sikeres!</string>
-        <string name="addTreatment">Kezelés hozzáadása</string>
+        <string name="addTreatment">Kezelés szerkesztése</string>
         <string name="addTreatmentOK">Kezelés hozzáadása sikeres!</string>
+        <string name="addProduct">Termék hozzáadása</string>
+        <string name="addProductOK">Termék hozzáadása sikeres!</string>
+        <string name="unsuccessfulOp">Sikertelen művelet!</string>
         <string name="Name">Név</string>
         <string name="Note">Megjegyzés</string>
         <string name="treatmentTime">Időtartam percben</string>
-        <string name="treatmentPrice">Ár</string>
-        <string name="treatmentCost">Költség</string>
+        <string name="price">Ár</string>
+        <string name="cost">Költség</string>
         <string name="cancel">Mégsem</string>
+        <string name="edit">Szerkeszt</string>
+        <string name="delete">Töröl</string>
+        <string name="deleteAlert">Biztosan törlöd?</string>
+        <string name="deleteSuccessful">Sikeresen törölve!</string>
+        <string name="editSuccessful">Szerkesztés sikeres!</string>
         <string name="start2">
                 Kérlek, szánj néhány percet noteszed beállítására! \n
                 Az OkosNotesz használatához szükséged lesz egy \n

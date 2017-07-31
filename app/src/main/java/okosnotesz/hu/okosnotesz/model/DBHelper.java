@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by user on 2017.05.19..
@@ -248,9 +249,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean deleteTreatment(Treatments t) {
+        Log.d("xxx","db:"+t.getId());
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("treatments", TRE_COL_ID + "=?", new String[]{String.valueOf(t.getId())});
-        return true;
+        int success = db.delete("treatments", TRE_COL_ID + "=?", new String[]{String.valueOf(t.getId())});
+        if(success!=0){
+            return true;
+        }
+        return false;
     }
 
     public Cursor getAllExperts() {

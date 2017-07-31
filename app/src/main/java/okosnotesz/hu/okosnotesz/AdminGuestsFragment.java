@@ -24,7 +24,7 @@ import java.util.List;
 
 import okosnotesz.hu.okosnotesz.model.GuestsDatas;
 
-public class GuestsAdminFragment extends Fragment {
+public class AdminGuestsFragment extends Fragment {
 
     ArrayList<String> guestsList = null;
     ListView lv;
@@ -72,7 +72,7 @@ public class GuestsAdminFragment extends Fragment {
                 int colIdxContactId = mCursor.getColumnIndex(ContactsContract.Data.CONTACT_ID);
                 long contactId = mCursor.getLong(colIdxContactId);
 
-                        Log.d("xxx", "contactId:" + contactId);
+
                         int colIdxMimetype = mCursor.getColumnIndex(ContactsContract.Data.MIMETYPE);
                     if(lastContactId!=contactId){
                         if (mCursor.getString(colIdxMimetype).equals(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)) {
@@ -82,14 +82,16 @@ public class GuestsAdminFragment extends Fragment {
                         }
                         if (mCursor.getString(colIdxMimetype).equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)) {
                             String phone = mCursor.getString(mCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            gd.setPhone1(phone);
+                            if(gd != null && phone != null || !phone.isEmpty()) {
+                                gd.setPhone1(phone);
+                            }
                         }
                         if (mCursor.getString(colIdxMimetype).equals(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)) {
                             String email = mCursor.getString(mCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
                             gd.setEmail1(email);
                         }
                         if (gd != null && gd.getName() != null && gd.getPhone1() != null && gd.getEmail1() != null) {
-                            Log.d("xxx", gdList.size() + "" + gd.getName() + ",  " + gd.getEmail1() + "  . " + gd.getPhone1());
+
                             gdList.add(gd);
                             lastContactId=contactId;
                             gd = null;

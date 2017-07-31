@@ -1,19 +1,16 @@
 package okosnotesz.hu.okosnotesz;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -31,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import okosnotesz.hu.okosnotesz.model.DBHelper;
-import okosnotesz.hu.okosnotesz.model.Treatments;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,26 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("oncreate", "xxx-1");
         super.onCreate(savedInstanceState);
-        Log.d("oncreate", "xxx-2");
         helper = DBHelper.getHelper(this);
         db = helper.getWritableDatabase();
 
         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean firstStart = sp.getBoolean(getString(R.string.first_start), false );
-        Log.d("oncreate", "xxx-3");
         if(!firstStart){
-            Log.d("oncreate", "xxx-4");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-                Log.d("oncreate", "xxx-5");
             }
             else {
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putBoolean(getString(R.string.first_start), true);
                 edit.commit();
-                Log.d("oncreate", "xxx-6");
                 firstStart();
             }
         }else {
@@ -88,11 +78,9 @@ public class MainActivity extends AppCompatActivity {
                                            int[] grantResults){
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("00021 ", "showaccess");
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putBoolean(getString(R.string.first_start), true);
                 edit.commit();
-                Log.d("oncreate", "xxx-6");
                 firstStart();
             } else {
                 Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT).show();
@@ -101,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void mainActivityStart() {
-        Log.d("oncreate", "xxx-7");
         final SectionsPagerAdapter mSectionsPagerAdapter;
         mainActivity=true;
         setContentView(R.layout.activity_main);
@@ -180,8 +167,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void firstStart() {
-        Log.d("oncreate", "xxx-8");
+    public void firstStart() {
         final SectionsPagerAdapter1 mSectionsPagerAdapter1;
         mainActivity=false;
         setContentView(R.layout.first_settings);
@@ -381,16 +367,16 @@ private class SectionsPagerAdapter1 extends FragmentStatePagerAdapter {
         Fragment fragment = null;
         switch (position){
             case 0:
-                fragment = new GuestsAdminFragment();
+                fragment = new AdminGuestsFragment();
                 break;
             case 1:
-                fragment = new ExpertsAdminFragment();
+                fragment = new AdminExpertsFragment();
                 break;
             case 2:
-                fragment = new TreatmentsAdminFragment();
+                fragment = new AdminTreatmentsFragment();
                 break;
             case 3:
-                fragment = new ExpertsAdminFragment();
+                fragment = new AdminProductsFragment();
                 break;
         }
         return fragment;

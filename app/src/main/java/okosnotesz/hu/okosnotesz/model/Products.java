@@ -12,6 +12,9 @@ public class Products {
     private int cost;
     private String note;
 
+    public Products() {
+    }
+
     public Products(int id) {
         this.id = id;
     }

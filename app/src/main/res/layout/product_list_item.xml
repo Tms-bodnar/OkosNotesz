@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/productNameItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/productPriceItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productNameItem"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <TextView
+        android:id="@+id/productCostItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productNameItem"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:clickable="false"
+        android:focusable="false"/>
+
+    <TextView
+        android:id="@+id/productNoteItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productNameItem"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:clickable="false"
+        android:focusable="false"/>
+
+</RelativeLayout>
