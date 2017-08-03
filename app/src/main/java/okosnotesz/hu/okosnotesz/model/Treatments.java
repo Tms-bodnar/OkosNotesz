@@ -3,8 +3,6 @@ package okosnotesz.hu.okosnotesz.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Created by user on 2017.05.20..
  */

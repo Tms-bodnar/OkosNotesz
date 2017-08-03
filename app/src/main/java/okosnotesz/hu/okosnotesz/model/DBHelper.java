@@ -326,7 +326,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("productName", p.getName());
         cv.put("productPrice", p.getPrice());
         cv.put("productCost", p.getCost());
-        cv.put("produtNote", p.getNote());
+        cv.put("productNote", p.getNote());
         db.update("products",cv,PRO_COL_ID+"=?",new String[]{String.valueOf(p.getId())});
         db.close();
         return true;

@@ -1,7 +1,5 @@
 package okosnotesz.hu.okosnotesz;
 
-import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,22 +8,16 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.TraceCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,16 +25,14 @@ import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.Treatments;
 
 /**
- * Created by user on 2017.07.15..
+ * Created by Bodnar Tamas on 2017.07.15.. tms.bodnar@gmail.com | okosnotesz.hu
  */
 
 public class AdminTreatmentsFragment extends Fragment{
 
-
-    final int REQUEST_CODE = 101;
+    final int REQUEST_CODE = 104;
     static ArrayList<Treatments> treatmentsList = null;
     ListView lv;
-    Menu menu;
     Treatments t;
 
     @Override
@@ -69,12 +59,11 @@ public class AdminTreatmentsFragment extends Fragment{
                 }
         );
         lv = (ListView) view.findViewById(R.id.treatmentList);
-        final Context context = getActivity();
+        Context context = getActivity();
         treatmentsList = getAllTreatments();
         CustomTreatmentsAdapter adapter = new CustomTreatmentsAdapter(context, treatmentsList);
         lv.setAdapter(adapter);
         registerForContextMenu(lv);
-        Log.d("xxx", "List:" + treatmentsList.size());
         return view;
     }
 
@@ -123,7 +112,7 @@ public class AdminTreatmentsFragment extends Fragment{
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info){
-        super.onCreateContextMenu(menu, v, info);
+
         if (v.getId()== R.id.treatmentList){
             AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) info;
             ListView lv = (ListView) v;
@@ -137,14 +126,17 @@ public class AdminTreatmentsFragment extends Fragment{
 
     @Override
     public boolean onContextItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.adminMenuEdit:
-                return treatmentEdit(this.t);
-            case R.id.adminMenuDelete:
-                return treatmentDelete(this.t);
-            default:
-                return super.onOptionsItemSelected(item);
+        if(getUserVisibleHint()) {
+            switch (item.getItemId()) {
+                case R.id.adminMenuEdit:
+                    return treatmentEdit(this.t);
+                case R.id.adminMenuDelete:
+                    return treatmentDelete(this.t);
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
+        return false;
     }
 
     private boolean treatmentDelete(final Treatments  t) {
@@ -155,7 +147,9 @@ public class AdminTreatmentsFragment extends Fragment{
         builder.setView(alertView);
         builder.setTitle(R.string.deleteAlert);
         TextView tv = (TextView) alertView.findViewById(R.id.adminOkTextView);
-        tv.setText(t.getName());
+        if (t != null) {
+            tv.setText(t.getName());
+        }
         builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -184,94 +178,6 @@ public class AdminTreatmentsFragment extends Fragment{
         Intent i = new Intent(getContext(), AdminDialog.class);
         i.putExtra("hu.okosnotesz.Treatments",t);
         startActivityForResult(i,REQUEST_CODE);
-        /*Treatments tre = openDialog(t);
-        DBHelper helper = DBHelper.getHelper(getContext());
-        boolean successful = helper.updateTreatment(tre);
-        helper.close();*/
-        refreshView(getAllTreatments());
         return true;
-    }
-
-    private Treatments openDialog(final Treatments tre){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(R.string.addTreatment);
-        builder.setView(R.layout.treatment_add_dialog);
-
-            builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Dialog d = (Dialog) dialog;
-                    final Treatments t = new Treatments();
-                    final EditText treName = (EditText) d.findViewById(R.id.treatmentNameInput);
-                    final EditText treTime = (EditText) d.findViewById(R.id.treatmentTimeInput);
-                    final EditText trePrice = (EditText) d.findViewById(R.id.treatmentPriceInput);
-                    final EditText treCost = (EditText) d.findViewById(R.id.treatmentCostInput);
-                    final EditText treNote = (EditText) d.findViewById(R.id.treatmentNoteInput);
-                    String name = "-";
-                    String price = "0";
-                    String cost ="0";
-                    String time = "0";
-                    String note = "-";
-
-                    if(tre == null) {
-                        treName.setText(name);
-                        name = String.valueOf(treName.getText());
-                        treTime.setText(time);
-                        time = treTime.getText().toString();
-                        int timeInt = Integer.valueOf(time);
-                        trePrice.setText(price);
-                        price = trePrice.getText().toString();
-                        int priceInt = Integer.valueOf(price);
-                        treCost.setText(cost);
-                        cost = treCost.getText().toString();
-                        int costInt = Integer.valueOf(cost);
-                        treNote.setText(note);
-                        note = treNote.getText().toString();
-                        t.setName(name);
-                        t.setPrice(priceInt);
-                        t.setTime(timeInt);
-                        t.setCost(costInt);
-                        t.setNote(note);
-                    /*}else{
-                        treName.setText(tre.getName() == null || tre.getName().isEmpty() ? "-" : tre.getName());
-                        name = String.valueOf(treName.getText());
-                        treTime.setText(tre.getTime());
-                        time = treTime.getText().toString();
-                        int timeInt = Integer.valueOf(time);
-                        trePrice.setText(tre.getPrice());
-                        price = trePrice.getText().toString();
-                        int priceInt = Integer.valueOf(price);
-                        treCost.setText(tre.getCost());
-                        cost = treCost.getText().toString();
-                        int costInt = Integer.valueOf(cost);
-                        treNote.setText(tre.getNote() == null || tre.getNote().isEmpty() ? "-" : tre.getNote());
-                        note = treNote.getText().toString();
-                        t.setName(name);
-                        t.setPrice(priceInt);
-                        t.setTime(timeInt);
-                        t.setCost(costInt);
-                        t.setNote(note);*/
-                    }
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Snackbar.make(getView(), R.string.cancel, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                    dialog.dismiss();
-                }
-            });
-            builder.show();
-
-       return t;
-    }
-
-    public static ArrayList<Treatments> getTreatmentsList() {
-        return treatmentsList;
-    }
-
-    public static void setTreatmentsList(ArrayList<Treatments> treatmentsList) {
-        AdminTreatmentsFragment.treatmentsList = treatmentsList;
     }
 }
