@@ -18,7 +18,6 @@ public class Products implements Parcelable{
     public Products() {
     }
 
-
     public Products(int id) {
         this.id = id;
     }

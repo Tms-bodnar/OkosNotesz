@@ -23,13 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AdminDialog"
-            android:parentActivityName=".MainActivity"/>
-
-        <!-- <activity -->
-        <!-- android:name=".MainActivity" -->
-        <!-- android:label="@string/title_activity_main2" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar"></activity> -->
-
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

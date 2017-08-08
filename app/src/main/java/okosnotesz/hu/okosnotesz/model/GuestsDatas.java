@@ -1,14 +1,17 @@
 package okosnotesz.hu.okosnotesz.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import java.security.Guard;
 import java.util.Comparator;
 
 /**
  * Created by user on 2017.06.27..
  */
 
-public class GuestsDatas {
+public class GuestsDatas implements Parcelable {
 
     private int id;
     private String name;
@@ -22,6 +25,10 @@ public class GuestsDatas {
     public GuestsDatas() {
     }
 
+    public GuestsDatas(int id){
+        this.id = id;
+    }
+
     public GuestsDatas(String name) {
         this.name = name;
     }
@@ -29,6 +36,58 @@ public class GuestsDatas {
     public GuestsDatas(String name, String phone1) {
         this.name = name;
         this.phone1 = phone1;
+    }
+
+    public GuestsDatas(String name, String phone1, String phone2, String email1, String email2, String contact1, String contact2) {
+        this.name = name;
+        this.phone1 = phone1;
+        this.phone2 = phone2;
+        this.email1 = email1;
+        this.email2 = email2;
+        this.contact1 = contact1;
+        this.contact2 = contact2;
+    }
+
+    public GuestsDatas(Parcel in){
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator(){
+                public GuestsDatas createFromParcel(Parcel in){
+                    return new GuestsDatas(in);
+                }
+                public GuestsDatas[] newArray(int size){
+                    return new GuestsDatas[size];
+                }
+            };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(phone1);
+        dest.writeString(phone2);
+        dest.writeString(email1);
+        dest.writeString(email2);
+        dest.writeString(contact1);
+        dest.writeString(contact2);
+    }
+
+    private void readFromParcel(Parcel in){
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.phone1 = in.readString();
+        this.phone2 = in.readString();
+        this.email1 = in.readString();
+        this.email2 = in.readString();
+        this.contact1 = in.readString();
+        this.contact2 = in.readString();
     }
 
     public int getId() {
@@ -94,8 +153,6 @@ public class GuestsDatas {
     public void setContact2(String contact2) {
         this.contact2 = contact2;
     }
-
-
 
     public static class SortByName implements Comparator<GuestsDatas> {
 

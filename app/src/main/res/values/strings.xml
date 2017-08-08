@@ -1,5 +1,62 @@
 <resources>
-    <string name="title_activity_main2">MainActivity2</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="first_start">false</string>
+    <string name="OK">OK</string>
+    <string name="NO">Nincs</string>
+    <string name="iHave">Van</string>
+    <string name="yes">Igen</string>
+    <string name="back">Vissza</string>
+    <string name="app_name">OkosNotesz</string>
+    <string name="settings">Beállítások</string>
+    <string name="activity_main">Home</string>
+    <string name="welcome">Üdvözöllek!</string>
+    <string name="addExpert">Szakember hozzáadása</string>
+    <string name="editExpert">Szakember szerkesztése</string>
+    <string name="addExpertOK">Szakember hozzáadása sikeres!</string>
+    <string name="addTreatment">Kezelés hozzáadása</string>
+    <string name="editTreatment">Kezelés szerkesztése</string>
+    <string name="addTreatmentOK">Kezelés hozzáadása sikeres!</string>
+    <string name="addProduct">Termék hozzáadása</string>
+    <string name="editproduct">Termék szerkesztése</string>
+    <string name="addProductOK">Termék hozzáadása sikeres!</string>
+    <string name="addGuest">Vendég hozzáadása</string>
+    <string name="editGuest">Vendég szerkesztése</string>
+    <string name="addGuestOK">Vendég hozzáadása sikeres!</string>
+    <string name="unsuccessfulOp">Sikertelen művelet!</string>
+    <string name="Name">Név: </string>
+    <string name="Note">Megjegyzés: </string>
+    <string name="treatmentTime">Időtartam percben: </string>
+    <string name="time">Időtartam</string>
+    <string name="price">Ár: </string>
+    <string name="cost">Költség: </string>
+    <string name="cancel">Mégsem</string>
+    <string name="edit">Szerkeszt</string>
+    <string name="delete">Töröl</string>
+    <string name="deleteAlert">Biztosan törlöd?</string>
+    <string name="deleteSuccessful">Sikeresen törölve!</string>
+    <string name="editSuccessful">Szerkesztés sikeres!</string>
+    <string name="exitAlert">Biztosan kilépsz?</string>
+    <string name="guests">Vendégek</string>
+    <string name="calendar">Naptár</string>
+    <string name="reports">Kimutatások</string>
+    <string name="booking">Foglalás</string>
+    <string name="goods">Termékek</string>
+    <string name="commercial">Kereskedelem</string>
+    <string name="product">Termék: </string>
+    <string name="buyer">Vásárló: </string>
+    <string name="quantity">Darabszám: </string>
+    <string name="value">Érték: </string>
+    <string name="expert">Szakemberek</string>
+    <string name="treatment">Kezelések</string>
+    <string name="phone1">Telefonszám</string>
+    <string name="phone2">Másodlagos telefonszám</string>
+    <string name="email1">E-mail</string>
+    <string name="email2">Másodlagos e-mail</string>
+    <string name="contact">Elérhetőség</string>
+    <string name="contact2">Egyéb elérhetőség</string>
+    <string name="guestImportSelect">
+        Akarod a kapcsolataid közül importálni a vendégedet,
+        vagy hozzá adnál egy újat?
+    </string>
+    <string name="importGuest">Importálom</string>
+    <string name="addNewGuest">Hozáadok egy újat</string>
 </resources>

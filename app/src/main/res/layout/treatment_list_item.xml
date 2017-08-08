@@ -14,25 +14,26 @@
         android:textStyle="bold"
 />
 
+
+
+
     <TextView
-        android:id="@+id/treatmentTimeItem"
+        android:id="@+id/treatmentPriceItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@id/treatmentNameItem"
         android:layout_margin="5dp"
-        android:clickable="false"
-/>
-
+ />
     <TextView
-        android:id="@+id/treatmentPriceItem"
+        android:id="@+id/treatmentTimeItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/treatmentNameItem"
         android:layout_margin="5dp"
- />
+        android:clickable="false"/>
 
     <TextView
         android:id="@+id/treatmentNoteItem"

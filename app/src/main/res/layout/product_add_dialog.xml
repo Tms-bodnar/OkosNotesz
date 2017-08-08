@@ -4,12 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/productAddTitle"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        />
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayoutProductName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/productAddTitle">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/productNameInput"
@@ -18,8 +28,9 @@
             android:layout_margin="5dp"
             android:hint="@string/Name"
             android:inputType="text"
+            android:maxLength="20"
             android:textAlignment="center"
-            android:textSize="10sp" />
+            android:textSize="20dp" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -37,9 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:hint="@string/price"
-            android:inputType="text"
+            android:inputType="number"
             android:textAlignment="center"
-            android:textSize="10sp" />
+            android:textSize="20sp" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -57,9 +68,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:hint="@string/cost"
-            android:inputType="text"
+            android:inputType="number"
             android:textAlignment="center"
-            android:textSize="10sp" />
+            android:textSize="20sp" />
     </android.support.design.widget.TextInputLayout>
 
 
@@ -78,8 +89,9 @@
             android:layout_margin="5dp"
             android:hint="@string/Note"
             android:inputType="text"
+            android:maxLength="13"
             android:textAlignment="center"
-            android:textSize="10sp"
+            android:textSize="20sp"
             />
     </android.support.design.widget.TextInputLayout>
 
