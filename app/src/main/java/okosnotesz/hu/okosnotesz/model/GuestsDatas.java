@@ -14,6 +14,7 @@ import java.util.Comparator;
 public class GuestsDatas implements Parcelable {
 
     private int id;
+    private int conId;
     private String name;
     private String phone1;
     private String phone2;
@@ -38,7 +39,8 @@ public class GuestsDatas implements Parcelable {
         this.phone1 = phone1;
     }
 
-    public GuestsDatas(String name, String phone1, String phone2, String email1, String email2, String contact1, String contact2) {
+    public GuestsDatas(int conId, String name, String phone1, String phone2, String email1, String email2, String contact1, String contact2) {
+        this.conId = conId;
         this.name = name;
         this.phone1 = phone1;
         this.phone2 = phone2;
@@ -70,6 +72,7 @@ public class GuestsDatas implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
+        dest.writeInt(conId);
         dest.writeString(name);
         dest.writeString(phone1);
         dest.writeString(phone2);
@@ -81,6 +84,7 @@ public class GuestsDatas implements Parcelable {
 
     private void readFromParcel(Parcel in){
         this.id = in.readInt();
+        this.conId = in.readInt();
         this.name = in.readString();
         this.phone1 = in.readString();
         this.phone2 = in.readString();
@@ -96,6 +100,14 @@ public class GuestsDatas implements Parcelable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getConId() {
+        return conId;
+    }
+
+    public void setConId(int conId) {
+        this.conId = conId;
     }
 
     public String getName() {

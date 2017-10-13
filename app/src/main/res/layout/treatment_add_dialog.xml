@@ -39,6 +39,7 @@
             android:textAlignment="center"
             android:maxLength="20"
             android:textSize="15sp" />
+        <requestFocus/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout

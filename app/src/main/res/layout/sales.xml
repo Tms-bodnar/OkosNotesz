@@ -2,28 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/salesProduct"
+        android:id="@+id/btnSalesProduct"
         android:layout_margin="20dp"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
-        android:text="@string/product"/>
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/salesProduct"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:id="@+id/spnProducts"
-        />
+        android:text="@string/product" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:baselineAligned="false"
-        android:layout_below="@+id/spnProducts"
+        android:layout_below="@+id/btnSalesProduct"
         android:layout_margin="10dp"
         android:id="@+id/salesQuantityLinearlayout">
 
@@ -31,54 +23,53 @@
             android:id="@+id/numPickQuantityLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
+            android:layout_weight="1"
+            android:layout_margin="10dp">
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btnQuantityMinus"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="-"
+                android:textSize="20sp" />
+            </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        >
+            <Button
                 android:id="@+id/salesQuantity"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="10dp"
-                android:text="@string/quantity" />
+                android:text="@string/quantity"
+                android:clickable="false"/>
+
         </RelativeLayout>
+
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            >
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/btnQuantityMinus"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:text="-"
-        android:textSize="20sp"/>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/etSalesQuantity"
-           android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:layout_margin="10dp"
-            />
+            >
         <Button
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/btnQuantityPlus"
-            android:layout_toEndOf="@+id/etSalesQuantity"
-            android:layout_toRightOf="@+id/etSalesQuantity"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:text="+"
             android:textSize="20sp"
             />
-
     </RelativeLayout>
     </LinearLayout>
     <LinearLayout
@@ -90,65 +81,39 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="10dp"
             >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:id="@+id/salesValue"
         android:layout_margin="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/value"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvSalesValue"
+        android:text="@string/value"
+        android:clickable="false"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_margin="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_centerHorizontal="true"
+                android:id="@+id/btnGuests"
+                android:layout_below="@id/salesValue"
+                android:text="@string/customer"
                 />
-
         </RelativeLayout>
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/salesBuyer"
-        android:layout_margin="10dp"
-        android:layout_below="@id/salesValueLayout"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/buyer"/>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/salesBuyer"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:id="@+id/spnGuests"
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/spnGuests"
+        android:layout_below="@id/salesValueLayout"
         android:layout_marginTop="10dp">
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             >
         <Button
             android:layout_width="wrap_content"
@@ -156,7 +121,7 @@
             android:id="@+id/btnSaleOk"
             android:text="@string/OK"
             android:layout_centerHorizontal="true"
-            android:clickable="true"/>
+            android:clickable="true" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
@@ -168,7 +133,7 @@
             android:id="@+id/btnSaleCancel"
             android:text="@string/cancel"
             android:layout_centerHorizontal="true"
-            android:layout_alignRight="@+id/btnSaleOk"/>
+            android:layout_alignRight="@+id/btnSaleOk" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

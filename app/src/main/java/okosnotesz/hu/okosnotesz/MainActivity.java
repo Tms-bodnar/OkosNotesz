@@ -6,21 +6,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,36 +29,20 @@ import okosnotesz.hu.okosnotesz.fragments.AdminGuestsFragment;
 import okosnotesz.hu.okosnotesz.fragments.AdminProductsFragment;
 import okosnotesz.hu.okosnotesz.fragments.AdminTreatmentsFragment;
 import okosnotesz.hu.okosnotesz.fragments.BookingsFragment;
+import okosnotesz.hu.okosnotesz.fragments.ReportsFragment;
 import okosnotesz.hu.okosnotesz.fragments.SalesFragment;
 import okosnotesz.hu.okosnotesz.model.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-
     private boolean mainActivity;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     SharedPreferences sp;
-    private SQLiteDatabase db;
-    private DBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper = DBHelper.getHelper(this);
-        db = helper.getWritableDatabase();
-
         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean firstStart = sp.getBoolean(getString(R.string.first_start), false);
         if (!firstStart) {
@@ -92,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Until you grant the permission, we cannot display the names", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private void mainActivityStart() {
@@ -107,18 +86,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.commercial_pale));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.report_pale));
         tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
-
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapterMain = new SectionsPagerAdapter(getSupportFragmentManager(), 3);
-
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -183,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapterFirstStart);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
@@ -282,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
 
     private class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         int numOfTabs;
-
         public SectionsPagerAdapter(FragmentManager supportFragmentManager, int i) {
             super(supportFragmentManager);
             this.numOfTabs = i;
@@ -317,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                             fragment = new SalesFragment();
                             break;
                         case 2:
-                            fragment = new BookingsFragment();
+                            fragment = new ReportsFragment();
                             break;
                     }
                     break;
@@ -372,105 +344,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-//public static class PlaceholderFragment1 extends Fragment{
-//    private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//    public PlaceholderFragment1() {
-//    }
-//
-//    public static PlaceholderFragment1 newInstance(int sectionNumber){
-//        PlaceholderFragment1 fragment = new PlaceholderFragment1();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-//        View rootView = inflater.inflate(R.layout.first_settings, container, false);
-//        return rootView;
-//    }
-//}
-/*
 
-    *//**
- * A placeholder fragment containing a simple view.
- *//*
-    public static class PlaceholderFragment extends Fragment {
-        *//**
- * The fragment argument representing the section number for this
- * fragment.
- *//*
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        *//**
- * Returns a new instance of this fragment for the given section
- * number.
- *//*
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = null;
-            int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER, 1);
-            switch (sectionNumber){
-                case 1:
-                    rootView = inflater.inflate(R.layout.bookings, container, false);
-                    TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-                    textView.setText(getString(R.string.booking) + " " + getArguments().getInt(ARG_SECTION_NUMBER));
-            }
-            return rootView;
-        }
-    }
-
-    *//**
- * A {@link FragmentStatePagerAdapter} that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- *//*
-    public class SectionsPagerAdapterMain extends FragmentStatePagerAdapter {
-
-        int numOfTabs;
-
-        public SectionsPagerAdapterMain(FragmentManager fm, int numOfTabs) {
-            super(fm);
-            this.numOfTabs=numOfTabs;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            numOfTabs = 3;
-            return numOfTabs;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-                CharSequence pageTitle = "";
-            switch (position) {
-                case 0:
-                    pageTitle= getString(R.string.calendar);
-                    break;
-                case 1:
-                    pageTitle= getString(R.string.commercial);
-                    break;
-                case 2:
-                    pageTitle= getString(R.string.reports);
-                    break;
-            }
-            return pageTitle;
-        }
-    }*/

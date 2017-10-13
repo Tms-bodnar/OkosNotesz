@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:tag="adminTreatments">
 
     <LinearLayout
         android:id="@+id/treatmentNameItemLayout"
@@ -15,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="@string/Name"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -31,7 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/price" />
+            android:text="@string/price"
+            android:textColor="@color/white"/>
         </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -44,7 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/time" />
+            android:text="@string/time"
+            android:textColor="@color/white"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -61,13 +65,14 @@
                 android:layout_marginTop="5dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/white"/>
  </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/textColor"
         android:id="@+id/separatorTre"
+        android:background="@color/colorPrimaryDark"
         android:layout_below="@id/treatmentpriceLayout"/>
     <ListView
         android:id="@+id/treatmentList"
@@ -75,7 +80,9 @@
         android:layout_height="match_parent"
         android:focusable="false"
         android:layout_below="@+id/separatorTre"
-        />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabTre"
         android:layout_width="wrap_content"
@@ -85,7 +92,6 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        app:backgroundTint="@color/Color15"
         app:srcCompat="@android:drawable/ic_input_add"
-        />
+        android:tint="@color/colorPrimary"/>
 </RelativeLayout>

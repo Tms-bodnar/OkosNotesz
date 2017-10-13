@@ -19,7 +19,7 @@ import java.util.Date;
 
 import okosnotesz.hu.okosnotesz.R;
 
-public class Calendar extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private MyDynamicCalendar myCalendar;
@@ -151,7 +151,7 @@ public class Calendar extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.calendar_menu, menu);
         return true;
     }
 

@@ -21,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String GUESTS_DATAS = "guestsDatas";
     private static final String GUE_COL_ID = "guestId";
+    private static final String GUE_COL_CONTID = "contactID";
     private static final String GUE_COL_NAME = "guestName";
     private static final String GUE_COL_PHONE1 = "phone1";
     private static final String GUE_COL_PHONE2 = "phone2";
@@ -55,6 +56,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SALE_COL_GUEST = "saleGuest";
     private static final String SALE_COL_DATE = "saleDate";
     private static final String SALE_COL_NOTE = "saleNote";
+    private static final String SALE_COL_QUANT = "saleQuantity";
+    private static final String SALE_COL_VALUE = "saleValue";
+
 
     private static final String REPORTS_TABLE = "reports";
     private static final String REP_COL_ID = "reportID";
@@ -89,6 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + GUESTS_DATAS + " ("
                 + GUE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + GUE_COL_CONTID + " INTEGER, "
                 + GUE_COL_NAME + " TEXT, "
                 + GUE_COL_PHONE1 + " TEXT, "
                 + GUE_COL_PHONE2 + " TEXT, "
@@ -133,17 +138,20 @@ public class DBHelper extends SQLiteOpenHelper {
                 + SALE_COL_GUEST + " TEXT, "
                 + SALE_COL_DATE + " TEXT, "
                 + SALE_COL_NOTE + " TEXT, "
+                + SALE_COL_VALUE + " INTEGER, "
+                + SALE_COL_QUANT + " INTEGER, "
                 + " FOREIGN KEY (" + SALE_COL_PROD + ") REFERENCES " + PRODUCTS_TABLE + "(" + PRO_COL_ID + "));");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXIST EXPERTS");
-        db.execSQL("DROP TABLE IF EXIST PRODUCTS");
-        db.execSQL("DROP TABLE IF EXIST SALES");
-        db.execSQL("DROP TABLE IF EXIST TREATMENTS");
-        onCreate(db);
-
+        if(oldVersion < newVersion) {
+            db.execSQL("DROP TABLE IF EXIST EXPERTS");
+            db.execSQL("DROP TABLE IF EXIST PRODUCTS");
+            db.execSQL("DROP TABLE IF EXIST SALES");
+            db.execSQL("DROP TABLE IF EXIST TREATMENTS");
+            onCreate(db);
+        }
     }
 
     @Override
@@ -172,6 +180,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean addGuest(GuestsDatas g){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put("contactID", g.getConId());
         cv.put("guestName", g.getName());
         cv.put("phone1", g.getPhone1());
         cv.put("phone2", g.getPhone2());
@@ -186,6 +195,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean updateGuest(GuestsDatas g){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put("contactID", g.getConId());
         cv.put("guestName", g.getName());
         cv.put("phone1", g.getPhone1());
         cv.put("phone2", g.getPhone2());
@@ -304,9 +314,9 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productName ='"+name+"'", null);
         return c;
     }
-    public Cursor getProduct(int price){
+    public Cursor getProduct(int id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productPrice='"+price+"'", null);
+        Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productID ='"+id+"'", null);
         return c;
     }
     public boolean addProduct(Products p){
@@ -356,10 +366,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean addSale(Sales s){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("saleProduct", s.getProduct().getId());
+        cv.put("saleProduct", s.getProductID());
         cv.put("saleGuest", s.getGuestName());
         cv.put("saleDate", s.getDate());
         cv.put("saleNote", s.getNote());
+        cv.put("saleQuantity", s.getQuantity());
+        cv.put("saleValue", s.getValue());
         db.insert("sales",null,cv);
         db.close();
         return true;
@@ -367,10 +379,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean updatSale(Sales s){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("saleProduct", s.getProduct().getName());
+        cv.put("saleProduct", s.getProductID());
         cv.put("saleGuest", s.getGuestName());
         cv.put("saleDate", s.getDate());
         cv.put("saleNote", s.getNote());
+        cv.put("saleQuantity", s.getQuantity());
+        cv.put("saleValue", s.getValue());
         db.update("sales",cv,SALE_COL_ID+"=?",new String[]{String.valueOf(s.getId())});
         db.close();
         return true;

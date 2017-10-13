@@ -1,5 +1,6 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -8,15 +9,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.Calendar;
 
 import okosnotesz.hu.okosnotesz.R;
+import okosnotesz.hu.okosnotesz.model.CalendarActivity;
 
 /**
  * Created by user on 2017.08.05..
  */
 
 public class BookingsFragment extends Fragment {
+
+    long startMillis;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,8 +34,7 @@ public class BookingsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bookings, container, false );
-        TextView tv = (TextView) view.findViewById(R.id.section_label);
-        tv.setText("OK");
+        startMillis = Calendar.getInstance().getTimeInMillis();
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabBooking);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +42,10 @@ public class BookingsFragment extends Fragment {
                 //ide jön az új időpont foglalása
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent i = new Intent(getContext(), CalendarActivity.class);
+                startActivity(i);
+
+
             }
         });
         return view;

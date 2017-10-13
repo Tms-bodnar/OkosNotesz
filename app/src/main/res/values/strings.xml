@@ -43,7 +43,7 @@
     <string name="commercial">Kereskedelem</string>
     <string name="product">Termék: </string>
     <string name="buyer">Vásárló: </string>
-    <string name="quantity">Darabszám: </string>
+    <string name="quantity"> db</string>
     <string name="value">Érték: </string>
     <string name="expert">Szakemberek</string>
     <string name="treatment">Kezelések</string>
@@ -55,8 +55,36 @@
     <string name="contact2">Egyéb elérhetőség</string>
     <string name="guestImportSelect">
         Akarod a kapcsolataid közül importálni a vendégedet,
-        vagy hozzá adnál egy újat?
-    </string>
+        vagy hozzá adnál egy újat?</string>
+    <string name="contacts">A kapcsolataidat szerkesztheted az ismert módokon</string>
     <string name="importGuest">Importálom</string>
     <string name="addNewGuest">Hozáadok egy újat</string>
+    <string name="noDatas">Nincs adat</string>
+    <string name="addNewData">Kattints a pluszra!</string>
+    <string name="pieces"> db.</string>
+    <string name="saleSuccessful">Sikeres eladás</string>
+    <string name="chooseProducet">Válassz egy terméket!</string>
+    <string name="customer">Vásárló</string>
+    <string name="reportsOfWeek">. heti kimtatása</string>
+    <string name="reportsOfMonth">. havi kimutatása</string>
+    <string name="january">Január</string>
+    <string name="february">Február</string>
+    <string name="march">Március</string>
+    <string name="april">Április</string>
+    <string name="may">Május</string>
+    <string name="june">Június</string>
+    <string name="july">Július</string>
+    <string name="august">Augusztus</string>
+    <string name="september">Szeptember</string>
+    <string name="october">Október</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="monday">Hétfő</string>
+    <string name="tuesday">Kedd</string>
+    <string name="wednesday">Szerda</string>
+    <string name="thursday">Csütörtök</string>
+    <string name="friday">Péntek</string>
+    <string name="saturday">Szombat</string>
+    <string name="sunday">Vasárnap</string>
+    <string name="title_activity_calendar">Calendar</string>
 </resources>

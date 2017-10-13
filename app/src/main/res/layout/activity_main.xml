@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="okosnotesz.hu.okosnotesz.MainActivity">
+    tools:context="okosnotesz.hu.okosnotesz.MainActivity"
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background">
+        android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -27,7 +27,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:background="@color/Color15"
                 android:title="@string/settings"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
@@ -39,8 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/toolbar"
-                android:background="@color/Color15"
-
                 android:minHeight="?attr/actionBarSize" />
 
         </android.support.design.widget.AppBarLayout>
@@ -49,7 +46,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/appbar"
-            android:background="@color/Color14"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

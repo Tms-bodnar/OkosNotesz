@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="adminExperts"
     >
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -16,7 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/Name" />
+            android:text="@string/Name"
+            android:textColor="@color/white"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -33,25 +35,23 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="5dp"
-                android:text="@string/Note" />
+                android:text="@string/Note"
+                android:textColor="@color/white"/>
 
         </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/textColor"
         android:id="@+id/separator"
+        android:background="@color/colorPrimaryDark"
         android:layout_below="@id/relativeLayout"/>
 <ListView
-
     android:id="@+id/experts_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="false"
     android:layout_below="@id/separator"
-    android:dividerHeight="1px"
-    android:headerDividersEnabled="true"
-    android:footerDividersEnabled="true"
+
     >
 
     </ListView>
@@ -64,6 +64,6 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/Color15"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:tint="@color/colorPrimary"/>
 </RelativeLayout>

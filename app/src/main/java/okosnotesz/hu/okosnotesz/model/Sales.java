@@ -1,27 +1,38 @@
 package okosnotesz.hu.okosnotesz.model;
 
-import java.util.Date;
-
 /**
  * Created by user on 2017.05.21..
  */
 
 public class Sales {
     private int id;
-    private Products product;
+    private int productID;
     private String guestName;
     private String note;
     private String date;
+    private int quantity;
+    private int value;
+
+    public Sales(){}
 
     public Sales(int id) {
         this.id = id;
     }
 
-    public Sales(Products product, String guestName, String note, String date) {
-        this.product = product;
+    public Sales(int productID, String guestName, String note, String date) {
+        this.productID = productID;
         this.guestName = guestName;
         this.note = note;
         this.date = date;
+    }
+
+    public Sales(int productID, String guestName, String note, String date, int quantity, int value) {
+        this.productID = productID;
+        this.guestName = guestName;
+        this.note = note;
+        this.date = date;
+        this.quantity = quantity;
+        this.value = value;
     }
 
     public String getDate() {
@@ -40,12 +51,12 @@ public class Sales {
         this.id = id;
     }
 
-    public Products getProduct() {
-        return product;
+    public int getProductID() {
+        return productID;
     }
 
-    public void setProduct(Products product) {
-        this.product = product;
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public String getGuestName() {
@@ -62,5 +73,26 @@ public class Sales {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return getGuestName() + ", "+ getProductID() + ", "+getNote() + ", "+getDate() + ", "+ getValue() + ", "+ getQuantity();
     }
 }

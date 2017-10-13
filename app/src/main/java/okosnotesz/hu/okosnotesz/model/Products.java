@@ -31,6 +31,7 @@ public class Products implements Parcelable{
         this.price = price;
         this.cost = cost;
         this.note = note;
+
     }
 
     public Products(Parcel in){
@@ -67,6 +68,7 @@ public class Products implements Parcelable{
         price = in.readInt();
         cost = in.readInt();
         note = in.readString();
+
     }
 
     public int getId() {
