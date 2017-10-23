@@ -11,13 +11,15 @@
         android:layout_above="@+id/btnGuests"
         android:textSize="20sp"
         android:textAlignment="center"
-        android:text="@string/contacts"/>
+        android:text="@string/contacts"
+        android:textColor="@android:color/white"/>
     <Button
         android:id="@+id/btnGuests"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guests"
         android:layout_centerInParent="true"
+        android:backgroundTint="@android:color/white"
         />
 
 </RelativeLayout>

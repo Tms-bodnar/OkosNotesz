@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,11 +22,18 @@ public class CustomTreatmentsAdapter extends BaseAdapter {
 
     ArrayList<Treatments> treatmentsList;
     Context mcontext;
+    int requestCode;
     ViewHolder holder;
 
     public CustomTreatmentsAdapter(Context context, ArrayList<Treatments> treList){
         this.mcontext = context;
         this.treatmentsList = treList;
+    }
+
+    public CustomTreatmentsAdapter(Context context, ArrayList<Treatments> treList, int requestCode){
+        this.mcontext = context;
+        this.treatmentsList = treList;
+        this.requestCode = requestCode;
     }
 
     @Override
@@ -46,34 +54,54 @@ public class CustomTreatmentsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        if(v == null){
-            LayoutInflater inflater = (LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.treatment_list_item, null);
-            holder = new ViewHolder();
-            holder.name = (TextView) v.findViewById(R.id.treatmentNameItem);
-            holder.time = (TextView) v.findViewById(R.id.treatmentTimeItem);
-            holder.price = (TextView) v.findViewById(R.id.treatmentPriceItem);
-            holder.note = (TextView) v.findViewById(R.id.treatmentNoteItem);
-            v.setTag(holder);
-        }
+        if(requestCode==0) {
+            if (v == null) {
+                LayoutInflater inflater = (LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = inflater.inflate(R.layout.treatment_list_item, null);
+                holder = new ViewHolder();
+                holder.name = (TextView) v.findViewById(R.id.treatmentNameItem);
+                holder.time = (TextView) v.findViewById(R.id.treatmentTimeItem);
+                holder.price = (TextView) v.findViewById(R.id.treatmentPriceItem);
+                holder.note = (TextView) v.findViewById(R.id.treatmentNoteItem);
+                v.setTag(holder);
+            }
 
-        Treatments t = treatmentsList.get(position);
-        if (t != null){
-            TextView name = (TextView) v.findViewById(R.id.treatmentNameItem);
-            TextView time = (TextView) v.findViewById(R.id.treatmentTimeItem);
-            TextView price = (TextView) v.findViewById(R.id.treatmentPriceItem);
-            TextView note = (TextView) v.findViewById(R.id.treatmentNoteItem);
-            if(name != null){
-                name.setText(t.getName());
+            Treatments t = treatmentsList.get(position);
+            if (t != null) {
+                TextView name = (TextView) v.findViewById(R.id.treatmentNameItem);
+                TextView time = (TextView) v.findViewById(R.id.treatmentTimeItem);
+                TextView price = (TextView) v.findViewById(R.id.treatmentPriceItem);
+                TextView note = (TextView) v.findViewById(R.id.treatmentNoteItem);
+                if (name != null) {
+                    name.setText(t.getName());
+                }
+                if (time != null) {
+                    time.setText(String.valueOf(t.getTime()));
+                }
+                if (price != null) {
+                    price.setText(String.valueOf(t.getPrice()));
+                }
+                if (note != null) {
+                    note.setText(t.getNote());
+                }
             }
-            if(time != null){
-                time.setText(String.valueOf(t.getTime()));
+        }
+        if(requestCode == 666){
+            if (v == null) {
+                LayoutInflater inflater = (LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = inflater.inflate(R.layout.treatment_booking_list_item, null);
+                holder = new ViewHolder();
+                holder.name = (TextView) v.findViewById(R.id.treatmentNameItem);
+                holder.cb = (CheckBox) v.findViewById(R.id.cbTre);
+                v.setTag(holder);
             }
-            if(price != null){
-                price.setText(String.valueOf(t.getPrice()));
-            }
-            if(note != null){
-                note.setText(t.getNote());
+
+            Treatments t = treatmentsList.get(position);
+            if (t != null) {
+                TextView name = (TextView) v.findViewById(R.id.treatmentNameItem);
+                if (name != null) {
+                    name.setText(t.getName());
+                }
             }
         }
         return v;
@@ -84,5 +112,6 @@ public class CustomTreatmentsAdapter extends BaseAdapter {
         TextView time;
         TextView price;
         TextView note;
+        CheckBox cb;
     }
 }

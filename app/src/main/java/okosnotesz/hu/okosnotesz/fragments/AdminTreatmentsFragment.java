@@ -72,7 +72,7 @@ public class AdminTreatmentsFragment extends Fragment{
         lv = (ListView) view.findViewById(R.id.treatmentList);
         Context context = getActivity();
         treatmentsList = ListHelper.getAllTreatments(context);
-        CustomTreatmentsAdapter adapter = new CustomTreatmentsAdapter(context, treatmentsList);
+        CustomTreatmentsAdapter adapter = new CustomTreatmentsAdapter(context, treatmentsList, 0);
         lv.setAdapter(adapter);
         registerForContextMenu(lv);
         return view;
