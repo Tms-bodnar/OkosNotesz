@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,6 +36,7 @@
         android:layout_margin="10dp"
         android:hint="@string/guest"
         android:textColorHint="@android:color/white"
+        android:textAlignment="center"
         android:textColor="@android:color/white"
         android:layout_centerInParent="true"/>
     <TextView
@@ -46,6 +46,7 @@
         android:layout_below="@+id/tvGuestBooking"
         android:layout_margin="10dp"
         android:textColor="@android:color/white"
+        android:textAlignment="center"
         android:hint="@string/treatment"
         android:textColorHint="@android:color/white"
         android:layout_centerInParent="true"/>
@@ -56,9 +57,11 @@
         android:layout_below="@+id/tvTreatmentBooking"
         android:layout_margin="10dp"
         android:textColor="@android:color/white"
+        android:textAlignment="center"
         android:hint="@string/date"
         android:textColorHint="@android:color/white"
         android:layout_centerInParent="true"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,9 +72,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            >
+            android:layout_weight="1">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

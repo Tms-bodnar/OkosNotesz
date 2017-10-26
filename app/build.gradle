@@ -50,3 +50,9 @@ dependencies {
 dependencies {
     compile 'com.github.vatsaldesai92:MyDynamicCalendarLibrary:1.0.1'
 }
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
+}
+dependencies {
+    compile 'com.github.alamkanak:android-week-view:1.2.6'
+}
