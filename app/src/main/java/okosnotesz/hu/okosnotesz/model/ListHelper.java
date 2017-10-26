@@ -65,6 +65,24 @@ public class ListHelper {
         return explist;
     }
 
+    public static Experts getExpert(int id, Context context){
+        Experts e = new Experts();
+        DBHelper helper = DBHelper.getHelper(context);
+        Cursor c = helper.getExpert(id);
+        c.moveToFirst();
+        try {
+            while(!c.isAfterLast()){
+                e.setId(c.getInt(c.getColumnIndex("expertID")));
+                e.setName(c.getString(c.getColumnIndex("expertName")));
+                e.setNote(c.getString(c.getColumnIndex("expertNote")));
+            }
+        }finally {
+            c.close();
+            helper.close();
+        }
+        return e;
+    }
+
     public static ArrayList<Treatments> getAllTreatments(Context context) {
         ArrayList<Treatments> treatmentList = new ArrayList<>();
         DBHelper helper = DBHelper.getHelper(context);
@@ -92,6 +110,27 @@ public class ListHelper {
         return treatmentList;
     }
 
+    static Treatments getTreatment(int id, Context context){
+        Treatments t = new Treatments();
+        DBHelper helper = DBHelper.getHelper(context);
+        Cursor c = helper.getTreatment(id);
+        c.moveToFirst();
+        try{
+            while(!c.isAfterLast()){
+                t.setId(c.getInt(c.getColumnIndex("treatmentID")));
+                t.setName(c.getString(c.getColumnIndex("treatmentName")));
+                t.setTime(c.getInt(c.getColumnIndex("treatmentTime")));
+                t.setPrice(c.getInt(c.getColumnIndex("treatmentPrice")));
+                t.setCost(c.getInt(c.getColumnIndex("treatmentCost")));
+                t.setNote(c.getString(c.getColumnIndex("treatmentNote")));
+            }
+        }finally {
+            c.close();
+            helper.close();
+        }
+        return t;
+    }
+
     public static ArrayList<Sales> getAllSales(Context context) {
         ArrayList<Sales> sList = new ArrayList<>();
         DBHelper helper = DBHelper.getHelper(context);
@@ -114,5 +153,27 @@ public class ListHelper {
             helper.close();
         }
         return  sList;
+    }
+
+    public static ArrayList<Reports> getAllReports(Context context){
+        ArrayList<Reports> rList = new ArrayList<>();
+        DBHelper helper = DBHelper.getHelper(context);
+        Cursor cursor = helper.getAllReports();
+        cursor.moveToFirst();
+        try{
+            while(!cursor.isAfterLast()){
+                Reports r = new Reports();
+                r.setId(cursor.getInt(cursor.getColumnIndex("reportID")));
+                r.setTreatment(getTreatment(cursor.getInt(cursor.getColumnIndex("reportTreatment")),context));
+                r.setExpert(getExpert(cursor.getInt(cursor.getColumnIndex("reportExpert")),context));
+                r.setGuestName(cursor.getString(cursor.getColumnIndex("reportGuest")));
+                r.setDate(cursor.getLong(cursor.getColumnIndex("reportDate")));
+                r.setNote(cursor.getString(cursor.getColumnIndex("reportNote")));
+            }
+        }finally {
+            cursor.close();
+            helper.close();
+        }
+        return rList;
     }
 }

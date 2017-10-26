@@ -11,15 +11,19 @@ public class Reports {
     private int id;
     private Experts expert;
     private Treatments treatment;
-    private Date date;
+    private Long date;
     private String guestName;
     private String note;
+
+    public Reports(){
+
+    }
 
     public Reports(int id) {
         this.id = id;
     }
 
-    public Reports(Experts expert, Treatments treatment, Date date, String guest, String note) {
+    public Reports(Experts expert, Treatments treatment, Long date, String guest, String note) {
         this.expert = expert;
         this.treatment = treatment;
         this.date = date;
@@ -51,11 +55,11 @@ public class Reports {
         this.treatment = treatment;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

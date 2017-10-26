@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:orientation="vertical"
+    android:padding="2dp">
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="4">
+
+        <TextView
+            android:id="@+id/event_id8"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="0"
+            android:layout_margin="1dp"
+            android:layout_row="0" />
+
+        <TextView
+            android:id="@+id/event_id9"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="1"
+            android:layout_margin="1dp"
+            android:layout_row="0" />
+
+        <TextView
+            android:id="@+id/event_id10"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="2"
+            android:layout_margin="1dp"
+            android:layout_row="0" />
+
+        <TextView
+            android:id="@+id/event_id11"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="3"
+            android:layout_margin="1dp"
+            android:layout_row="0" />
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/event_id12"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_margin="1dp" />
+
+                <TextView
+                    android:id="@+id/event_id14"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/event_id12"
+                    android:layout_margin="1dp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/calendar_date_id"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:text="@string/last_date"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/event_id13"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_margin="1dp" />
+
+                <TextView
+                    android:id="@+id/event_id15"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/event_id13"
+                    android:layout_margin="1dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="4">
+
+        <TextView
+            android:id="@+id/event_id16"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="0"
+            android:layout_margin="1dp"
+            android:layout_row="3" />
+
+        <TextView
+            android:id="@+id/event_id17"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="1"
+            android:layout_margin="1dp"
+            android:layout_row="3" />
+
+        <TextView
+            android:id="@+id/event_id18"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="2"
+            android:layout_margin="1dp"
+            android:layout_row="3" />
+
+        <TextView
+            android:id="@+id/event_id19"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_column="3"
+            android:layout_margin="1dp"
+            android:layout_row="3" />
+    </GridLayout>
+
+
+</LinearLayout>

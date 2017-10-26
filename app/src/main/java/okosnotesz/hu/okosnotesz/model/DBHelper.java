@@ -136,7 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + SALE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + SALE_COL_PROD + " INTEGER NOT NULL, "
                 + SALE_COL_GUEST + " TEXT, "
-                + SALE_COL_DATE + " TEXT, "
+                + SALE_COL_DATE + " INTEGER, "
                 + SALE_COL_NOTE + " TEXT, "
                 + SALE_COL_VALUE + " INTEGER, "
                 + SALE_COL_QUANT + " INTEGER, "
@@ -145,7 +145,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion < newVersion) {
+        if (oldVersion < newVersion) {
             db.execSQL("DROP TABLE IF EXIST EXPERTS");
             db.execSQL("DROP TABLE IF EXIST PRODUCTS");
             db.execSQL("DROP TABLE IF EXIST SALES");
@@ -159,25 +159,25 @@ public class DBHelper extends SQLiteOpenHelper {
         super.onOpen(db);
     }
 
-    public Cursor getAllGuests(){
+    public Cursor getAllGuests() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM GUESTSDATAS", null);
         return c;
     }
 
-    public Cursor getGuest(String name){
+    public Cursor getGuest(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM GUESTSDATAS WHERE name ='" + name + "'", null);
         return c;
     }
 
-    public Cursor getGuest(int id){
+    public Cursor getGuest(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM GUESTSDATAS WHERE guestId ='" + id + "'", null);
         return c;
     }
 
-    public boolean addGuest(GuestsDatas g){
+    public boolean addGuest(GuestsDatas g) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("contactID", g.getConId());
@@ -192,7 +192,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return true;
     }
-    public boolean updateGuest(GuestsDatas g){
+
+    public boolean updateGuest(GuestsDatas g) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("contactID", g.getConId());
@@ -203,12 +204,12 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("email2", g.getEmail2());
         cv.put("contact1", g.getContact1());
         cv.put("contact2", g.getContact2());
-        db.update("guestsDatas", cv, GUE_COL_ID + "=?",  new String[]{String.valueOf(g.getId())});
+        db.update("guestsDatas", cv, GUE_COL_ID + "=?", new String[]{String.valueOf(g.getId())});
         db.close();
         return true;
     }
 
-    public boolean deleteGuest(GuestsDatas g){
+    public boolean deleteGuest(GuestsDatas g) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("guestsDatas", GUE_COL_ID + "=?", new String[]{String.valueOf(g.getId())});
         return true;
@@ -226,9 +227,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public Cursor getTreatment(int price) {
+    public Cursor getTreatment(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM TREATMENTS WHERE treatmentPrice ='" + price + "'", null);
+        Cursor c = db.rawQuery("SELECT * FROM TREATMENTS WHERE treatmentID ='" + id + "'", null);
         return c;
     }
 
@@ -259,10 +260,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean deleteTreatment(Treatments t) {
-        Log.d("xxx","db:"+t.getId());
+        Log.d("xxx", "db:" + t.getId());
         SQLiteDatabase db = this.getWritableDatabase();
         int success = db.delete("treatments", TRE_COL_ID + "=?", new String[]{String.valueOf(t.getId())});
-        if(success!=0){
+        if (success != 0) {
             return true;
         }
         return false;
@@ -274,96 +275,113 @@ public class DBHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public Cursor getExpert(String name){
+    public Cursor getExpert(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM EXPERTS WHERE expertName='"+name+"'", null);
+        Cursor c = db.rawQuery("SELECT * FROM EXPERTS WHERE expertName='" + name + "'", null);
         return c;
     }
-    public boolean addExpert(Experts e){
+
+    public Cursor getExpert(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM EXPERTS WHERE expertID='" + id + "'", null);
+        return c;
+    }
+
+    public boolean addExpert(Experts e) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("expertName", e.getName());
         cv.put("expertNote", e.getNote());
-        db.insert("experts",null,cv);
-        db.close();
-        return true;
-    }
-    public boolean updateExpert(Experts e){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("expertName", e.getName());
-        cv.put("expertNote", e.getNote());
-        db.update("experts",cv,EXP_COL_ID+"=?",new String[]{String.valueOf(e.getId())});
-        db.close();
-        return true;
-    }
-    public boolean deleteExpert(Experts e){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("experts",EXP_COL_ID+"=?", new String[]{String.valueOf(e.getId())});
+        db.insert("experts", null, cv);
         db.close();
         return true;
     }
 
-    public Cursor getAllProducts(){
-        SQLiteDatabase  db = this.getReadableDatabase();
+    public boolean updateExpert(Experts e) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("expertName", e.getName());
+        cv.put("expertNote", e.getNote());
+        db.update("experts", cv, EXP_COL_ID + "=?", new String[]{String.valueOf(e.getId())});
+        db.close();
+        return true;
+    }
+
+    public boolean deleteExpert(Experts e) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("experts", EXP_COL_ID + "=?", new String[]{String.valueOf(e.getId())});
+        db.close();
+        return true;
+    }
+
+    public Cursor getAllProducts() {
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM PRODUCTS", null);
         return c;
     }
-    public Cursor getProduct(String name){
+
+    public Cursor getProduct(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productName ='"+name+"'", null);
+        Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productName ='" + name + "'", null);
         return c;
     }
-    public Cursor getProduct(int id){
+
+    public Cursor getProduct(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productID ='"+id+"'", null);
+        Cursor c = db.rawQuery("SELECT * FROM PRODUCTS WHERE productID ='" + id + "'", null);
         return c;
     }
-    public boolean addProduct(Products p){
+
+    public boolean addProduct(Products p) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("productName", p.getName());
         cv.put("productPrice", p.getPrice());
         cv.put("productCost", p.getCost());
         cv.put("productNote", p.getNote());
-        db.insert("products",null,cv);
-        db.close();
-        return true;
-    }
-    public boolean updateProduct(Products p){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("productName", p.getName());
-        cv.put("productPrice", p.getPrice());
-        cv.put("productCost", p.getCost());
-        cv.put("productNote", p.getNote());
-        db.update("products",cv,PRO_COL_ID+"=?",new String[]{String.valueOf(p.getId())});
-        db.close();
-        return true;
-    }
-    public boolean deleteProduct(Products p){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("products", PRO_COL_ID+"=?", new String[]{String.valueOf(p.getId())});
+        db.insert("products", null, cv);
         db.close();
         return true;
     }
 
-    public Cursor getAllSales(){
+    public boolean updateProduct(Products p) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("productName", p.getName());
+        cv.put("productPrice", p.getPrice());
+        cv.put("productCost", p.getCost());
+        cv.put("productNote", p.getNote());
+        db.update("products", cv, PRO_COL_ID + "=?", new String[]{String.valueOf(p.getId())});
+        db.close();
+        return true;
+    }
+
+    public boolean deleteProduct(Products p) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("products", PRO_COL_ID + "=?", new String[]{String.valueOf(p.getId())});
+        db.close();
+        return true;
+    }
+
+    public Cursor getAllSales() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM SALES",null);
+        Cursor c = db.rawQuery("SELECT * FROM SALES", null);
         return c;
     }
-    public Cursor getSales(Products p){
+
+    public Cursor getSales(Products p) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM SALES WHERE saleProduct ='"+p.getId()+"'",null);
+        Cursor c = db.rawQuery("SELECT * FROM SALES WHERE saleProduct ='" + p.getId() + "'", null);
         return c;
     }
-    public Cursor getSale(Products p){
+
+    public Cursor getSale(long l) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM SALES WHERE saleProduct ='"+p.getId()+"'", null);
+        Cursor c = db.rawQuery("SELECT * FROM SALES WHERE saleProduct ='" + l + "'", null);
         return c;
     }
-    public boolean addSale(Sales s){
+
+    public boolean addSale(Sales s) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("saleProduct", s.getProductID());
@@ -372,11 +390,12 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("saleNote", s.getNote());
         cv.put("saleQuantity", s.getQuantity());
         cv.put("saleValue", s.getValue());
-        db.insert("sales",null,cv);
+        db.insert("sales", null, cv);
         db.close();
         return true;
     }
-    public boolean updatSale(Sales s){
+
+    public boolean updatSale(Sales s) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("saleProduct", s.getProductID());
@@ -385,13 +404,70 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("saleNote", s.getNote());
         cv.put("saleQuantity", s.getQuantity());
         cv.put("saleValue", s.getValue());
-        db.update("sales",cv,SALE_COL_ID+"=?",new String[]{String.valueOf(s.getId())});
+        db.update("sales", cv, SALE_COL_ID + "=?", new String[]{String.valueOf(s.getId())});
         db.close();
         return true;
     }
-    public boolean deleteSale(Sales s){
+
+    public boolean deleteSale(Sales s) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("sales", SALE_COL_ID+"=?", new String[]{String.valueOf(s.getId())});
+        db.delete("sales", SALE_COL_ID + "=?", new String[]{String.valueOf(s.getId())});
+        db.close();
+        return true;
+    }
+
+    public Cursor getAllReports() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM REPORTS", null);
+        return c;
+    }
+
+    public Cursor getReportTratment(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM REPORTS WHERE reportTreatment ='" + id + "'", null);
+        return c;
+    }
+
+    public Cursor getReportExpert(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM REPORTS WHERE reportExpert ='" + id + "'", null);
+        return c;
+    }
+
+
+    public Cursor getReport(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM REPORTS WHERE reportID ='" + id + "'", null);
+        return c;
+    }
+
+    public boolean addReport(Reports r) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("reportTreatment", r.getTreatment().getId());
+        cv.put("reportExpert", r.getExpert().getId());
+        cv.put("reportGuest", r.getGuestName());
+        cv.put("reportDate", r.getDate());
+        db.insert("reports", null, cv);
+        db.close();
+        return true;
+    }
+
+    public boolean updateReport(Reports r) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("reportTreatment", r.getTreatment().getId());
+        cv.put("reportExpert", r.getExpert().getId());
+        cv.put("reportGuest", r.getGuestName());
+        cv.put("reportDate", r.getDate());
+        db.update("reports", cv, REP_COL_ID + "=?", new String[]{String.valueOf(r.getId())});
+        db.close();
+        return true;
+    }
+
+    public boolean deleteReport(Reports r) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("products", REP_COL_ID + "=?", new String[]{String.valueOf(r.getId())});
         db.close();
         return true;
     }

@@ -88,8 +88,20 @@
     <string name="friday">Péntek</string>
     <string name="saturday">Szombat</string>
     <string name="sunday">Vasárnap</string>
+    <string name="mo">H</string>
+    <string name="tu">K</string>
+    <string name="we">Sze</string>
+    <string name="th">Cs</string>
+    <string name="fr">P</string>
+    <string name="sa">Szo</string>
+    <string name="su">V</string>
+    <string name="month"> </string>
+    <string name="year">2017</string>
     <string name="title_activity_calendar">Calendar</string>
-    <string name="datePicker">Időpont választása</string>
+    <string name="date_picker">Időpont választása</string>
     <string name="date">Időpont</string>
     <string name="title_activity_booking">BookingActivity</string>
+    <string name="next"> \u003e \u003e </string>
+    <string name="prev"> \u003c \u003c</string>
+    <string name="last_date">31</string>
 </resources>
