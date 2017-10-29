@@ -57,8 +57,12 @@ public class BookingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        final Context context = getActivity();
-        View view = inflater.inflate(R.layout.booking, container, false );
+       View v = inflater.inflate(R.layout.custom_calendar_view,container,false);
+        return v;
+
+    }
+}
+        /*View view = inflater.inflate(R.layout.booking, container, false );
         startMillis = Calendar.getInstance().getTimeInMillis();
         tvGuestName = (TextView) view.findViewById(R.id.tvGuestBooking);
         tvTreatmentsName = (TextView) view.findViewById(R.id.tvTreatmentBooking);
@@ -86,13 +90,13 @@ public class BookingsFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(context, CalendarActivity.class);
                 startActivity(i);
-               /*Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+               *//*Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
                 builder.appendPath("time");
                 ContentUris.appendId(builder, startMillis);
                 Intent i = new Intent(Intent.ACTION_VIEW).setData(builder.build());
-                startActivityForResult(i, PICK_DATE );*/
+                startActivityForResult(i, PICK_DATE );*//*
 
-              /*  Intent intent = new Intent(Intent.ACTION_INSERT)
+              *//*  Intent intent = new Intent(Intent.ACTION_INSERT)
                         .setData(Events.CONTENT_URI)
                         .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
                         .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, startMillis+treatmentDuration)
@@ -100,7 +104,7 @@ public class BookingsFragment extends Fragment {
                         .putExtra(Events.DISPLAY_COLOR, )
                         .putExtra(Events.DESCRIPTION, guestName);
 
-                startActivity(intent);*/
+                startActivity(intent);*//*
 
             }
         });
@@ -155,8 +159,7 @@ public class BookingsFragment extends Fragment {
         List<ResolveInfo> list =
                 packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
-    }
-}
+    }*/
 
 /*
                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
