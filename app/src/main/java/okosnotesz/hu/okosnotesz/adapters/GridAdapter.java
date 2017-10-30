@@ -6,12 +6,18 @@ import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,18 +30,15 @@ import okosnotesz.hu.okosnotesz.model.Reports;
  * Created by user on 2017.10.26..
  */
 
-public class GridAdapter extends ArrayAdapter{
+public class GridAdapter extends BaseAdapter {
     LayoutInflater inflater;
     Context mContext;
     List<Date> monthlyDates;
     Calendar currentDate;
     List<Reports> allReports;
 
-    public GridAdapter(@NonNull Context context, @LayoutRes int resource) {
-        super(context, resource);
-    }
     public GridAdapter(Context context, List<Date> monthlyDates, Calendar currentDate, List<Reports> allReports) {
-        super(context, R.layout.custom_calendar_grid_item);
+        this.mContext=context;
         this.monthlyDates = monthlyDates;
         this.currentDate = currentDate;
         this.allReports = allReports;
@@ -44,13 +47,15 @@ public class GridAdapter extends ArrayAdapter{
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
         Date mDate = monthlyDates.get(position);
         Calendar mCal = Calendar.getInstance();
         mCal.setTime(mDate);
         int dayValue = mCal.get(Calendar.DAY_OF_MONTH);
-       // Log.d("xxxx", dayValue+"dayvalue");
+        //Log.d("xxxx", dayValue+": dayvalue adapter");
         int monthValue = mCal.get(Calendar.MONTH) + 1;
+        //Log.d("xxxx", monthValue + ": monthvalue adapter");
         int yearValue = mCal.get(Calendar.YEAR);
         int currentMonth = currentDate.get(Calendar.MONTH) + 1;
         int currentYear = currentDate.get(Calendar.YEAR);
@@ -59,9 +64,9 @@ public class GridAdapter extends ArrayAdapter{
             v =  inflater.inflate(R.layout.custom_calendar_grid_item, parent,false);
         }
         if(monthValue == currentMonth && yearValue == currentYear){
-            v.setBackgroundColor(Color.parseColor("#5C6BC0"));
-        }else{
             v.setBackgroundColor(Color.WHITE);
+        }else{
+            v.setBackgroundColor(Color.parseColor("#5C6BC0"));
         }
         TextView cellDate = (TextView) v.findViewById(R.id.calendar_date_id);
         cellDate.setText(String.valueOf(dayValue));
@@ -74,6 +79,12 @@ public class GridAdapter extends ArrayAdapter{
 
             }
         }
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext,"clicked "+ monthlyDates.get(position).getTime(),Toast.LENGTH_SHORT).show();
+            }
+        });
         return v;
     }
     @Override
@@ -85,9 +96,11 @@ public class GridAdapter extends ArrayAdapter{
     public Object getItem(int position) {
         return monthlyDates.get(position);
     }
+
     @Override
-    public int getPosition(Object item) {
-        return monthlyDates.indexOf(item);
+    public long getItemId(int position) {
+        return 0;
     }
+
 }
 

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,8 @@ public class CalendarActivity extends Fragment {
     private TextView prevMonth;
     private TextView currDate;
     private GridView calGrid;
-    private Calendar cal = Calendar.getInstance(Locale.FRANCE);
+    private Calendar cal = Calendar.getInstance();
+
     private final int MAX_CALENDAR_CELLS = 42;
     private GridAdapter gridAdapter;
     private ViewGroup container;
@@ -51,18 +53,61 @@ public class CalendarActivity extends Fragment {
         this.container = container;
         View v = initUiLayout();
         setupCalAdapter();
+        setPrevMonth();
+        setNextMonth();
+
         return v;
 
     }
 
+    private void setNextMonth() {
+        nextMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cal.add(Calendar.MONTH, 1);
+                setupCalAdapter();
+            }
+        });
+    }
+
+    private void setPrevMonth() {
+        prevMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cal.add(Calendar.MONTH, -1);
+                setupCalAdapter();
+            }
+        });
+    }
+
     private void setupCalAdapter() {
-        List<Date> dayCells = new ArrayList<>();
+
+        List<Date> dayValueInCells = new ArrayList<Date>();
+        List<Reports> reportsList = ListHelper.getAllReports(getContext());
+        Calendar mCal = (Calendar)cal.clone();
+        //mCal.setFirstDayOfWeek(Calendar.MONDAY);
+        mCal.set(Calendar.DAY_OF_MONTH, 1);
+        int firstDayOfTheMonth = mCal.get(Calendar.DAY_OF_WEEK)+4;
+        Log.d("xxxx", firstDayOfTheMonth+"firstof month");
+        mCal.set(Calendar.DAY_OF_MONTH, -firstDayOfTheMonth);
+        Log.d("xxxx", "firstday: " +mCal.getFirstDayOfWeek()+ ", dayofweek: "+ mCal.get(Calendar.DAY_OF_WEEK)+
+                ", dayofw inMonth: " + mCal.get(Calendar.DAY_OF_WEEK_IN_MONTH) + "dayofmonth "+mCal.get(Calendar.DAY_OF_MONTH));
+        while(dayValueInCells.size() < MAX_CALENDAR_CELLS){
+            dayValueInCells.add(mCal.getTime());
+            mCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy");
+        String sDate = formatter.format(cal.getTime());
+        currDate.setText(sDate);
+        gridAdapter = new GridAdapter(getContext(), dayValueInCells, cal, reportsList);
+        calGrid.setAdapter(gridAdapter);
+    }
+
+ /*       List<Date> dayCells = new ArrayList<>();
         List<Reports> reportsList = ListHelper.getAllReports(getContext());
         Calendar tempCal = (Calendar) cal.clone();
-
         tempCal.set(Calendar.DAY_OF_MONTH, 1);
-
-       // tempCal.set(Calendar.DAY_OF_WEEK, tempCal.get(Calendar.DAY_OF_WEEK)+1);
+     // tempCal.set(Calendar.DAY_OF_WEEK, tempCal.get(Calendar.DAY_OF_WEEK)+1);
         Log.d("xxxx",tempCal.get(Calendar.DAY_OF_MONTH)+"dayofmonth");
         int dayOfMonth = tempCal.get(Calendar.DAY_OF_MONTH);
         Log.d("xxxx", tempCal.get(Calendar.WEEK_OF_YEAR)+ "weekofyear");
@@ -75,12 +120,15 @@ public class CalendarActivity extends Fragment {
         tempCal.add(Calendar.DAY_OF_MONTH, -firstDayOfMonth);
 
             if (dayOfWeek!= 7) {
-                Log.d("xxxx", dayOfWeek+"dayofweek");
+                Log.d("xxxx", dayOfWeek+": dayofweek activity");
+                Calendar prevMonthDays = (GregorianCalendar) cal.clone();
+                prevMonthDays.set(Calendar.DAY_OF_MONTH, prevMonthDays.getActualMaximum(Calendar.DAY_OF_MONTH)-dayOfWeek);
+                prevMonthDays.add(Calendar.MONTH, -1);
                 for (int i = dayOfWeek; i > 0; i--) {
                     Log.d("xxxx", i+" i");
-                    Calendar prevMonthDays = (Calendar) cal.clone();
                     dayCells.add(prevMonthDays.getTime());
-                    prevMonthDays.add(Calendar.DATE, -i);
+                    prevMonthDays.add(Calendar.DATE, +1);
+                    Log.d("xxxx",prevMonthDays.get(Calendar.MONTH)+": Month Activity");
 
                 }
             }
@@ -89,16 +137,17 @@ public class CalendarActivity extends Fragment {
                 tempCal.add(Calendar.DAY_OF_MONTH, 1);
         }
         for (Date d : dayCells) {
-        //Log.d("xxxx", d.toString());
+        Log.d("xxxx", d.toString());
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy, MM");
         Date d = cal.getTime();
         String currentDate = formatter.format(d);
         currDate.setText(currentDate);
-        gridAdapter = new GridAdapter(getContext(), dayCells, cal, reportsList);
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        gridAdapter = new GridAdapter(getContext(), dayCells, cal, reportsList, dm);
         calGrid.setAdapter(gridAdapter);
-
-    }
+    }*/
 
     private View initUiLayout() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
@@ -109,4 +158,7 @@ public class CalendarActivity extends Fragment {
         calGrid = (GridView) v.findViewById(R.id.calendar_grid);
         return v;
     }
+
+
 }
+
