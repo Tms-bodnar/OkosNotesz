@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,9 +28,9 @@ import okosnotesz.hu.okosnotesz.fragments.AdminGuestsFragment;
 import okosnotesz.hu.okosnotesz.fragments.AdminProductsFragment;
 import okosnotesz.hu.okosnotesz.fragments.AdminTreatmentsFragment;
 import okosnotesz.hu.okosnotesz.fragments.BookingsFragment;
+import okosnotesz.hu.okosnotesz.fragments.CalendarActivity;
 import okosnotesz.hu.okosnotesz.fragments.ReportsFragment;
 import okosnotesz.hu.okosnotesz.fragments.SalesFragment;
-import okosnotesz.hu.okosnotesz.model.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,13 +78,14 @@ public class MainActivity extends AppCompatActivity {
         mainActivity = true;
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.calendar);
+        toolbar.setTitle(R.string.commercial);
         setSupportActionBar(toolbar);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.calendar_focus));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.commercial_pale));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.calendar_focus));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.report_pale));
         tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
+
         mSectionsPagerAdapterMain = new SectionsPagerAdapter(getSupportFragmentManager(), 3);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
@@ -98,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 mViewPager.setCurrentItem(tab.getPosition());
                 toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
                 switch (tab.getPosition()) {
-                    case 0:
+                    case 1:
                         tab.setIcon(R.drawable.calendar_focus);
                         toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
                         break;
-                    case 1:
+                    case 0:
                         tab.setIcon(R.drawable.commercial_focus);
                         toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
                         break;
@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        mViewPager.setCurrentItem(1);
     }
 
 
@@ -283,10 +284,10 @@ public class MainActivity extends AppCompatActivity {
                 case 3:
                     switch (position) {
                         case 0:
-                            fragment = new CalendarActivity();
+                            fragment = new SalesFragment();
                             break;
                         case 1:
-                            fragment = new SalesFragment();
+                            fragment = new CalendarActivity();
                             break;
                         case 2:
                             fragment = new ReportsFragment();
@@ -294,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 default:
-                    fragment = new BookingsFragment();
+                    fragment = new CalendarActivity();
                     break;
             }
             return fragment;
@@ -329,10 +330,10 @@ public class MainActivity extends AppCompatActivity {
                 case 3:
                     switch (position) {
                         case 0:
-                            pageTitle = getString(R.string.calendar);
+                            pageTitle = getString(R.string.commercial);
                             break;
                         case 1:
-                            pageTitle = getString(R.string.commercial);
+                            pageTitle = getString(R.string.calendar);
                             break;
                         case 2:
                             pageTitle = getString(R.string.reports);

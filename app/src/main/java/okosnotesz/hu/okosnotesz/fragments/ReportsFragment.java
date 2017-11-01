@@ -52,6 +52,12 @@ public class ReportsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("TAG", "onCreate Reports");
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +70,7 @@ public class ReportsFragment extends Fragment {
 
         CustomChartsAdapter cca = new CustomChartsAdapter(getContext(),0, barDataList);
         lv.setAdapter(cca);
+        Log.d("TAG", "onCreateView Reports");
         return view;
     }
 
@@ -150,6 +157,36 @@ public class ReportsFragment extends Fragment {
         return null;
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("TAG", "onActivityCreated Reports");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("TAG", "onStart Reports");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "onresume Reports");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("TAG", "onPause Reports");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("TAG", "onStop Reports");
+    }
 }
 
 /*    @Override

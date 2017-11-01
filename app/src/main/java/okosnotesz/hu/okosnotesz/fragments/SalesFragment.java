@@ -54,13 +54,20 @@ public class SalesFragment extends Fragment {
 
     public SalesFragment(){
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("TAG", "onCreate Sales");
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final Context context = getActivity();
-
+        Log.d("TAG", "onCreateView Sales");
         final View[] view = {inflater.inflate(R.layout.sales, container, false)};
         guestName = getString(R.string.guests);
 
@@ -152,6 +159,7 @@ public class SalesFragment extends Fragment {
                     prod = null;
                     guestName = getString(R.string.guests);
                     quantity = 1;
+                    btnQuantity.setText(R.string.pieces);
                     btnValue.setText(getString(R.string.chooseProducet));
                     btnProd.setText(getString(R.string.product));
                     btnGuest.setText(getString(R.string.guests));
@@ -199,6 +207,36 @@ public class SalesFragment extends Fragment {
         List<ResolveInfo> list =
                 packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("TAG", "onActivityCreated Sales");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("TAG", "onStart Sales");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG", "onresume Sales");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("TAG", "onPause Sales");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("TAG", "onStop Sales");
     }
 }
 

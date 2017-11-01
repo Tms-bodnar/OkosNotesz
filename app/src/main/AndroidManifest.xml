@@ -32,7 +32,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".BookingActivity" />
-        <activity android:name=".CalendarActivity"></activity>
+        <activity android:name=".fragments.CalendarActivity"></activity>
     </application>
 
 </manifest>
