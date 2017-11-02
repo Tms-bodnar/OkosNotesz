@@ -52,7 +52,7 @@ public class WeekGridAdapter extends BaseAdapter {
             weekView = inflater.inflate(R.layout.custom_calendar_week_grid_item, parent, false);
         }
         TextView dailyHour = (TextView) weekView.findViewById(R.id.tv_week_hour);
-        dailyHour.setText(hoursArray[position].getHour());
+        dailyHour.setText(hoursArray[position].getHour() + ":" + hoursArray[position].getMinute());
         return weekView;
     }
 }

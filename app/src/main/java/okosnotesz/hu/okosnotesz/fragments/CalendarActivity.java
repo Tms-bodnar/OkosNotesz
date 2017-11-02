@@ -1,5 +1,6 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,7 @@ public class CalendarActivity extends Fragment {
     private float coord = 0;
     private DisplayMetrics dm;
     private Calendar cal = Calendar.getInstance();
+    private Calendar clickedCal = Calendar.getInstance();
     private final int MAX_CALENDAR_CELLS = 42;
     private GridAdapter gridAdapter;
     private WeekGridAdapter weekGridAdapter;
@@ -59,7 +61,7 @@ public class CalendarActivity extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = initUiMonthlyLayout();
-        setupCalMonthlyAdapter(0);
+        setupCalMonthlyAdapter(cal, 0);
         setPrevMonth();
         setNextMonth();
         Log.d("TAG", "oncreateview Calendar");
@@ -67,28 +69,30 @@ public class CalendarActivity extends Fragment {
 
     }
 
-    private void setupCalMonthlyAdapter(int animCode) {
+    private void setupCalMonthlyAdapter(Calendar day, int animCode) {
         reportsList = ListHelper.getAllReports(getContext());
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy");
-        String dateString = formatter.format(cal.getTime());
+        String dateString = formatter.format(day.getTime());
         currDate.setText(dateString);
+        final Calendar finalDay = day;
         currDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
                 coord = dm.heightPixels;
-                setupCalMonthlyAdapter(0);
+                setupCalMonthlyAdapter(finalDay,0);
 
             }
         });
-        final List<Date> dayValueInCells = getDayValueInCells();
-        gridAdapter = new GridAdapter(getContext(), dayValueInCells, cal, reportsList);
+
+        final List<Date> dayValueInCells = getDayValueInCells(cal);
+        gridAdapter = new GridAdapter(getContext(), dayValueInCells, day, reportsList);
         calGrid.setAdapter(gridAdapter);
         calGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Calendar clickedCal = Calendar.getInstance();
                 clickedCal.setTimeInMillis(dayValueInCells.get(position).getTime());
+                cal=clickedCal;
                 Log.d("xx", clickedCal.get(Calendar.DAY_OF_MONTH)+" click");
                 setupCalWeeklyAdapter(clickedCal, 0);
 
@@ -102,17 +106,21 @@ public class CalendarActivity extends Fragment {
         Log.d("xx", "MonthlyLoad");
     }
 
-    private void setupCalWeeklyAdapter(Calendar clickedCal, int animCode) {
+    private void setupCalWeeklyAdapter(final Calendar clickedDate, int animCode) {
         Calendar tempCal = Calendar.getInstance();
-        int weekNumber = clickedCal.get(Calendar.WEEK_OF_YEAR);
-        List<Date> weekDates = new ArrayList<>(7);
-        List<Date> dayValueInCells = getDayValueInCells();
-        Log.d("xx", dayValueInCells.size()+" dayvaluesincells");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy ww");
+        String dateString = formatter.format(clickedDate.getTime());
+        currDate.setText(dateString +". "+ getResources().getString(R.string.week));
+        int weekNumber = clickedDate.get(Calendar.WEEK_OF_YEAR);
+        final List<Date> weekDates = new ArrayList<>(7);
+        List<Date> dayValueInCells = getDayValueInCells(clickedDate);
         for(int i = 0; i < dayValueInCells.size(); i++){
             tempCal.setTimeInMillis(dayValueInCells.get(i).getTime());
             int tempWeekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
             if(tempWeekNumber == weekNumber){
-                weekDates.add(dayValueInCells.get(i));
+                Date temp = new Date(86400000+tempCal.getTimeInMillis());
+
+                weekDates.add(temp);
             }
         }
         Log.d("xx",weekDates.size()+"weekdatessize");
@@ -124,9 +132,27 @@ public class CalendarActivity extends Fragment {
             //Log.d("xx",weeklyDates.get(i).getText().toString());
         }
         weekGridAdapter = new WeekGridAdapter(getContext(), Hours.values(), reportsList);
-        for (GridView gv : weekGridList) {
-            gv.setAdapter(weekGridAdapter);
-            gv.setFocusable(false);
+        for (int i = 0; i < weekGridList.size(); i++) {
+            weekGridList.get(i).setAdapter(weekGridAdapter);
+            weekGridList.get(i).setFocusable(false);
+            final int finalI = i;
+            weekGridList.get(i).setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    Calendar temp = Calendar.getInstance();
+                    temp.setTime(weekDates.get(finalI));
+                    Hours h = (Hours) weekGridList.get(finalI).getAdapter().getItem(position);
+                    int hour = h.getHour();
+                    int minute = h.getMinute();
+
+                    Log.d("xx", hour+":"+minute + "temp: "+temp.getTime().toString());
+                    temp.set(Calendar.HOUR_OF_DAY, hour);
+                    temp.set(Calendar.MINUTE, minute);
+                    Log.d("xx", temp.getTime().toString());
+                    booking(temp);
+                    return false;
+                }
+            });
         }
         if(animCode==0) {
             vf.setInAnimation(inToTopAnimation());
@@ -134,9 +160,13 @@ public class CalendarActivity extends Fragment {
             vf.setDisplayedChild(1);
     }
 
-    private List<Date> getDayValueInCells(){
+    private void booking(Calendar temp) {
+
+    }
+
+    private List<Date> getDayValueInCells(Calendar day){
         List<Date> dayValueInCells = new ArrayList<Date>();
-        Calendar tempCal = (Calendar)cal.clone();
+        Calendar tempCal = (Calendar)day.clone();
         tempCal.set(Calendar.DAY_OF_MONTH, 1);
         int firstDayOfTheMonth = tempCal.get(Calendar.DAY_OF_WEEK)+4;
         tempCal.set(Calendar.DAY_OF_MONTH, -firstDayOfTheMonth);
@@ -183,12 +213,12 @@ public class CalendarActivity extends Fragment {
                 if(vf.getDisplayedChild()==0) {
                     cal.add(Calendar.MONTH, 1);
                     vf.setInAnimation(toLeftAnimation());
-                    setupCalMonthlyAdapter(1);
+                    setupCalMonthlyAdapter(cal,1);
 
                 }else{
-                    cal.add(Calendar.WEEK_OF_YEAR, 1);
+                    clickedCal.add(Calendar.WEEK_OF_YEAR, 1);
                     vf.setInAnimation(toLeftAnimation());
-                    setupCalWeeklyAdapter(cal,1);
+                    setupCalWeeklyAdapter(clickedCal,1);
 
                 }
             }
@@ -202,12 +232,12 @@ public class CalendarActivity extends Fragment {
                 if(vf.getDisplayedChild()==0) {
                     cal.add(Calendar.MONTH, -1);
                     vf.setInAnimation(toRightAnimation());
-                    setupCalMonthlyAdapter(1);
+                    setupCalMonthlyAdapter(cal,1);
 
                 }else{
-                    cal.add(Calendar.WEEK_OF_YEAR, -1);
+                    clickedCal.add(Calendar.WEEK_OF_YEAR, -1);
                     vf.setInAnimation(toRightAnimation());
-                    setupCalWeeklyAdapter(cal,1);
+                    setupCalWeeklyAdapter(clickedCal,1);
 
                 }
             }
@@ -277,18 +307,28 @@ public class CalendarActivity extends Fragment {
 
     public enum Hours{
 
-        SIX("06:00"), SEVEN("07:00"), EIGTH("08:00"), NINE("09:00"), TEN("10:00"), ELEVEN("11:00"),
-        TWELVE("12:00"), THIRTEEN("13:00"), FOURTEEN("14:00"), FIFTEEN("15:00"), SIXTEEN("16:00"),
-        SEVENTEEN("17:00"), EIGHTEEN("18:00"), NINETEEN("19:00"), TWENTY("20:00"), TWENTYONE("21:00"),
-        TWENTYTWO("22:00");
+        SIX(6,00), SIXTTY(6,30), SEVEN(7,00), SEVENTTY(7,30), EIGTH(8 ,00), EIGTHTTY(8,30),
+        NINE(9,00), NINETTY(9,30), TEN(10,00), TENTTY(10,30), ELEVEN(11,00), ELEVENTTY(11,30),
+        TWELVE(12,00), TWELVETTY(12,30), THIRTEEN(13,00), THIRTEENTTY(13,30), FOURTEEN(14,00),
+        FOURTEENTTY(14,30), FIFTEEN(15,00), FIFTEENTTY(15,30), SIXTEEN(16,00), SIXTEENTTY(16,30),
+        SEVENTEEN(17,00), SEVENTEENTTY(17,30), EIGHTEEN(18,00), EIGHTEENTTY(18,30), NINETEEN(19,00),
+        NINETEENTTY(19,30), TWENTY(20,00), TWENTYTTY(20,30), TWENTYONE(21,00), TWENTYONETTY(21,30);
 
-        private String hour;
-        Hours(String s) {
-            this.hour=s;
+
+        private int hour;
+        private int minute;
+
+        Hours(int hour, int minute) {
+            this.hour=hour;
+            this.minute=minute;
         }
 
-        public String getHour(){
+        public int getHour() {
             return hour;
+        }
+
+        public int getMinute() {
+            return minute;
         }
     }
 

@@ -18,7 +18,7 @@
         android:paddingTop="4dp">
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
 
             <TextView
@@ -51,7 +51,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/tue_week_date"
@@ -81,7 +81,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/wed_week_date"
@@ -113,7 +113,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/thu_week_date"
@@ -143,7 +143,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/fri_week_date"
@@ -173,7 +173,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/sat_week_date"
@@ -203,7 +203,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="1400dp"
+            android:layout_height="1000dp"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/sun_week_date"

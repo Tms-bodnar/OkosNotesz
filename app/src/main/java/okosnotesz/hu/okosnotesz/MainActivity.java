@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 0:
+                    case 1:
                         tab.setIcon(R.drawable.calendar_pale);
                         break;
-                    case 1:
+                    case 0:
                         tab.setIcon(R.drawable.commercial_pale);
                         break;
                     case 2:
