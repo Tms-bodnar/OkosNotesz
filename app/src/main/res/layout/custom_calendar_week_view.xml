@@ -4,6 +4,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/mon_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/mo"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tue_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tu"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/wed_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/we"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/thu_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/th"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/fri_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/fr"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sat_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sa"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sun_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/su"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,24 +101,12 @@
             android:layout_height="1000dp"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/mon_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textColor="@color/colorPrimaryDark"
-                android:textAlignment="center"
-                android:background="@color/white"
-                android:textStyle="bold"
-                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
                 android:id="@+id/week_border1"
-                android:layout_below="@id/mon_week_date"
+
                 />
             <GridView
                 android:id="@+id/week_mon_grid"
@@ -53,23 +121,11 @@
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/tue_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@color/white"
-                android:textStyle="bold" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border2"
-                android:layout_below="@id/tue_week_date"/>
+                android:id="@+id/week_border2" />
             <GridView
                 android:id="@+id/week_tue_grid"
                 android:layout_width="49dp"
@@ -83,24 +139,11 @@
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/wed_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@color/white"
-                android:textStyle="bold"
-                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
                 android:id="@+id/week_border3"
-                android:layout_below="@id/wed_week_date"
                 />
             <GridView
                 android:id="@+id/week_wed_grid"
@@ -115,23 +158,11 @@
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/thu_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@color/white"
-                android:textStyle="bold" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border4"
-                android:layout_below="@id/thu_week_date"/>
+                android:id="@+id/week_border4" />
             <GridView
                 android:id="@+id/week_thu_grid"
                 android:layout_width="49dp"
@@ -145,23 +176,11 @@
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/fri_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@color/white"
-                android:textStyle="bold" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border5"
-                android:layout_below="@id/fri_week_date"/>
+                android:id="@+id/week_border5" />
             <GridView
                 android:id="@+id/week_fri_grid"
                 android:layout_width="49dp"
@@ -175,23 +194,11 @@
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/sat_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@color/white"
-                android:textStyle="bold" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border6"
-                android:layout_below="@id/sat_week_date"/>
+                android:id="@+id/week_border6" />
             <GridView
                 android:id="@+id/week_sat_grid"
                 android:layout_width="49dp"
@@ -205,23 +212,11 @@
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <TextView
-                android:id="@+id/sun_week_date"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_centerHorizontal="true"
-                android:text="@string/week"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@color/white"
-                android:textStyle="bold" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border7"
-                android:layout_below="@id/sun_week_date"/>
+                android:id="@+id/week_border7" />
             <GridView
                 android:id="@+id/week_sun_grid"
                 android:layout_width="49dp"

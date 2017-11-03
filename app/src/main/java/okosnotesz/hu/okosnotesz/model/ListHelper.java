@@ -164,8 +164,8 @@ public class ListHelper {
             while(!cursor.isAfterLast()){
                 Reports r = new Reports();
                 r.setId(cursor.getInt(cursor.getColumnIndex("reportID")));
-                r.setTreatment(getTreatment(cursor.getInt(cursor.getColumnIndex("reportTreatment")),context));
-                r.setExpert(getExpert(cursor.getInt(cursor.getColumnIndex("reportExpert")),context));
+                r.setTreatment(cursor.getString(cursor.getColumnIndex("reportTreatment")));
+                r.setExpert(cursor.getInt(cursor.getColumnIndex("reportExpert")));
                 r.setGuestName(cursor.getString(cursor.getColumnIndex("reportGuest")));
                 r.setDate(cursor.getLong(cursor.getColumnIndex("reportDate")));
                 r.setNote(cursor.getString(cursor.getColumnIndex("reportNote")));

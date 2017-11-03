@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:id="@+id/tvBookingDate"
+        />
+
+    <Button
+        android:id="@+id/btnBookingGuest"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/tvBookingDate"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:backgroundTint="@android:color/white"
+        android:text="@string/guest" />
+
+    <Button
+        android:id="@+id/btnBookingTreatment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnBookingGuest"
+        android:layout_margin="10dp"
+        android:backgroundTint="@android:color/white"
+        android:text="@string/tre" />
+
+    <Button
+        android:id="@+id/btnBookingExpert"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/btnBookingTreatment"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@android:color/white"
+        android:text="@string/exp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnBookingExpert"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnBookingCance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="@android:color/white"
+                android:clickable="true"
+                android:text="@string/cancel" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnBookingOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/btnSaleCancel"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="@android:color/white"
+                android:text="@string/OK" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

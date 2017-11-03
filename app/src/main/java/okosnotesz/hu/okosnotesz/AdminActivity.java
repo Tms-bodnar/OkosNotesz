@@ -211,7 +211,7 @@ public class AdminActivity extends AppCompatActivity {
             proCost.setText(String.valueOf(p.getCost()));
             proNote.setText(p.getNote());
         }
-        Button btnOK = (Button) this.findViewById(R.id.btnAddPoductsOK);
+        Button btnOK = (Button) this.findViewById(R.id.btnAddProductsOK);
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,7 +302,7 @@ public class AdminActivity extends AppCompatActivity {
                 }
             }
         });
-        Button btnCancel = (Button) this.findViewById(R.id.btnAdProductsCancel);
+        Button btnCancel = (Button) this.findViewById(R.id.btnAddProductsCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

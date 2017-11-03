@@ -20,8 +20,11 @@ import okosnotesz.hu.okosnotesz.model.Reports;
 public class WeekGridAdapter extends BaseAdapter {
     private final Context mContext;
     private final List<Reports> allReports;
-    CalendarActivity.Hours[] hoursArray;
-    LayoutInflater inflater;
+    private CalendarActivity.Hours[] hoursArray;
+    private LayoutInflater inflater;
+    private String hour;
+    private String minute;
+
 
     public WeekGridAdapter(Context context, CalendarActivity.Hours[] array, List<Reports> allReports){
         this.mContext = context;
@@ -52,7 +55,17 @@ public class WeekGridAdapter extends BaseAdapter {
             weekView = inflater.inflate(R.layout.custom_calendar_week_grid_item, parent, false);
         }
         TextView dailyHour = (TextView) weekView.findViewById(R.id.tv_week_hour);
-        dailyHour.setText(hoursArray[position].getHour() + ":" + hoursArray[position].getMinute());
+        if(hoursArray[position].getHour()<10){
+            hour= "0"+String.valueOf(hoursArray[position].getHour());
+        }else{
+            hour = String.valueOf(hoursArray[position].getHour());
+        }
+        if(hoursArray[position].getMinute()<1){
+            minute = "0"+String.valueOf(hoursArray[position].getMinute());
+        }else{
+            minute = String.valueOf(hoursArray[position].getMinute());
+        }
+        dailyHour.setText(hour + ":" + minute);
         return weekView;
     }
 }

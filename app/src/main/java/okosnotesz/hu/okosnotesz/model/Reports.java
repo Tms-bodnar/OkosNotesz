@@ -1,34 +1,75 @@
 package okosnotesz.hu.okosnotesz.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by user on 2017.05.21..
  */
 
-public class Reports {
+public class Reports implements Parcelable{
 
     private int id;
-    private Experts expert;
-    private Treatments treatment;
+    private int expertId;
+    private String treatmentId;
     private Long date;
     private String guestName;
     private String note;
 
     public Reports(){
-
     }
 
     public Reports(int id) {
         this.id = id;
     }
 
-    public Reports(Experts expert, Treatments treatment, Long date, String guest, String note) {
-        this.expert = expert;
-        this.treatment = treatment;
+    public Reports(int expert, String treatment, Long date, String guest, String note) {
+        this.expertId = expert;
+        this.treatmentId = treatment;
         this.date = date;
         this.guestName = guest;
         this.note = note;
+    }
+
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator(){
+                public Object createFromParcel(Parcel in) {
+                    return new Reports(in);
+                }
+                public Object[] newArray(int size) {
+                    return new Reports[size];
+                }
+            };
+
+    public Reports (Parcel in){
+        readFromParcel(in);
+    }
+
+    private void readFromParcel(Parcel in) {
+        id = in.readInt();
+        expertId = in.readInt();
+        treatmentId = in.readString();
+        date = in.readLong();
+        guestName = in.readString();
+        note = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(expertId);
+        dest.writeString(treatmentId);
+        dest.writeLong(date);
+        dest.writeString(guestName);
+        dest.writeString(note);
+
     }
 
     public int getId() {
@@ -39,20 +80,20 @@ public class Reports {
         this.id = id;
     }
 
-    public Experts getExpert() {
-        return expert;
+    public int getExpert() {
+        return expertId;
     }
 
-    public void setExpert(Experts expert) {
-        this.expert = expert;
+    public void setExpert(int expertId) {
+        this.expertId = expertId;
     }
 
-    public Treatments getTreatment() {
-        return treatment;
+    public String getTreatment() {
+        return treatmentId;
     }
 
-    public void setTreatment(Treatments treatment) {
-        this.treatment = treatment;
+    public void setTreatment(String treatmentId) {
+        this.treatmentId = treatmentId;
     }
 
     public Long getDate() {
@@ -78,4 +119,6 @@ public class Reports {
     public void setNote(String note) {
         this.note = note;
     }
+
+
 }

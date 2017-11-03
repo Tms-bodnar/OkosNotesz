@@ -1,5 +1,4 @@
 package okosnotesz.hu.okosnotesz.fragments;
-import com.github.mikephil.charting.data.BarData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,16 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import okosnotesz.hu.okosnotesz.ChartHelper;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.CustomProductsAdapter;
 import okosnotesz.hu.okosnotesz.model.DBHelper;
@@ -69,7 +65,7 @@ public class SalesFragment extends Fragment {
         final Context context = getActivity();
         Log.d("TAG", "onCreateView Sales");
         final View[] view = {inflater.inflate(R.layout.sales, container, false)};
-        guestName = getString(R.string.guests);
+        guestName = getString(R.string.customer);
 
         productsList = ListHelper.getAllProducts(context);
         final Products[] p = new Products[1];
@@ -82,7 +78,7 @@ public class SalesFragment extends Fragment {
             public void onClick(View v) {
                 new AlertDialog.Builder(getContext())
                         .setTitle(getString(R.string.product))
-                        .setAdapter(productsAdapter, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(productsAdapter, 0, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 p[0]= productsList.get(which);
@@ -145,7 +141,7 @@ public class SalesFragment extends Fragment {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(prod!=null && !guestName.equals(getString(R.string.guests))) {
+                if(prod!=null) {
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
                     String date = sdf.format(cal.getTime());
@@ -157,14 +153,28 @@ public class SalesFragment extends Fragment {
                     } else
                         Toast.makeText(getContext(), getString(R.string.unsuccessfulOp), Toast.LENGTH_LONG).show();
                     prod = null;
-                    guestName = getString(R.string.guests);
+                    guestName = getString(R.string.customer);
                     quantity = 1;
                     btnQuantity.setText(R.string.pieces);
                     btnValue.setText(getString(R.string.chooseProducet));
                     btnProd.setText(getString(R.string.product));
-                    btnGuest.setText(getString(R.string.guests));
+                    btnGuest.setText(getString(R.string.customer));
                 }else
-                    Toast.makeText(getContext(), getString(R.string.unsuccessfulOp), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.unsuccessfulOp) + "  " + getString(R.string.chooseProducet), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Button btnCancel = (Button) view[0].findViewById(R.id.btnSaleCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prod = null;
+                guestName = getString(R.string.customer);
+                quantity = 1;
+                btnQuantity.setText(R.string.pieces);
+                btnValue.setText(getString(R.string.chooseProducet));
+                btnProd.setText(getString(R.string.product));
+                btnGuest.setText(getString(R.string.customer));
             }
         });
         return view[0];
@@ -191,9 +201,9 @@ public class SalesFragment extends Fragment {
             cursor.moveToFirst();
             String[] cnames = cursor.getColumnNames();
             guestName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-            Log.d("xxxx", cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
             int contId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             cursor.close();
+
             btnGuest.setText(guestName);
         }else {
             btnGuest.setText(guestName);

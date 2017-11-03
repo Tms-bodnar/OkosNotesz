@@ -125,12 +125,11 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + REPORTS_TABLE + " ("
                 + REP_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + REP_COL_EXP + " INTEGER NOT NULL, "
-                + REP_COL_TRE + " INTEGER NOT NULL, "
+                + REP_COL_TRE + " TEXT, "
                 + REP_COL_GUEST + " TEXT ,"
                 + REP_COL_DATE + " INTEGER, "
                 + REP_COL_NOTE + " TEXT, "
-                + "FOREIGN KEY (" + REP_COL_EXP + ") REFERENCES " + EXPERT_TABLE + "(" + EXP_COL_ID + "), "
-                + "FOREIGN KEY (" + REP_COL_TRE + ") REFERENCES " + REPORTS_TABLE + "(" + REP_COL_ID + "));");
+                + "FOREIGN KEY (" + REP_COL_EXP + ") REFERENCES " + EXPERT_TABLE + "(" + EXP_COL_ID + ")); ");
 
         db.execSQL("CREATE TABLE " + SALES_TABLE + " ("
                 + SALE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -422,7 +421,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public Cursor getReportTratment(int id) {
+    public Cursor getReportTratment(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM REPORTS WHERE reportTreatment ='" + id + "'", null);
         return c;
@@ -444,8 +443,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean addReport(Reports r) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("reportTreatment", r.getTreatment().getId());
-        cv.put("reportExpert", r.getExpert().getId());
+        cv.put("reportTreatment", r.getTreatment());
+        cv.put("reportExpert", r.getExpert());
         cv.put("reportGuest", r.getGuestName());
         cv.put("reportDate", r.getDate());
         db.insert("reports", null, cv);
@@ -456,8 +455,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean updateReport(Reports r) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("reportTreatment", r.getTreatment().getId());
-        cv.put("reportExpert", r.getExpert().getId());
+        cv.put("reportTreatment", r.getTreatment());
+        cv.put("reportExpert", r.getExpert());
         cv.put("reportGuest", r.getGuestName());
         cv.put("reportDate", r.getDate());
         db.update("reports", cv, REP_COL_ID + "=?", new String[]{String.valueOf(r.getId())});

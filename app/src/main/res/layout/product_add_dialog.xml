@@ -112,8 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:id="@+id/btnAddPoductsOK"
-                android:text="@string/OK"
+                android:id="@+id/btnAddProductsCancel"
+                android:text="@string/cancel"
                 android:clickable="true"/>
         </RelativeLayout>
         <RelativeLayout
@@ -123,11 +123,11 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/btnAddPoductsOK"
+                android:layout_alignRight="@+id/btnAddProductsCancel"
                 android:layout_centerInParent="true"
-                android:id="@+id/btnAdProductsCancel"
+                android:id="@+id/btnAddProductsOK"
                 android:clickable="true"
-                android:text="@string/cancel"/>
+                android:text="@string/OK"/>
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

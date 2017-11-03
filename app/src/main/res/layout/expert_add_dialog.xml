@@ -70,8 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:id="@+id/btnAddExpertOK"
-                android:text="@string/OK"
+                android:id="@+id/btnAddExpertCancel"
+                android:text="@string/cancel"
                 android:clickable="true"
                 />
         </RelativeLayout>
@@ -82,10 +82,10 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@id/btnAddExpertOK"
+                android:layout_alignRight="@id/btnAddExpertCancel"
                 android:layout_centerInParent="true"
-                android:id="@+id/btnAddExpertCancel"
-                android:text="@string/cancel"
+                android:id="@+id/btnAddExpertOK"
+                android:text="@string/OK"
                 android:clickable="true"
                 />
         </RelativeLayout>

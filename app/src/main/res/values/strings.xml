@@ -47,6 +47,7 @@
     <string name="quantity"> db</string>
     <string name="value">Érték: </string>
     <string name="expert">Szakemberek</string>
+    <string name="exp">Szakember</string>
     <string name="treatment">Kezelések</string>
     <string name="tre">Kezelés</string>
     <string name="phone1">Telefonszám</string>
@@ -67,6 +68,7 @@
     <string name="saleSuccessful">Sikeres eladás</string>
     <string name="chooseProducet">Válassz egy terméket!</string>
     <string name="customer">Vásárló</string>
+    <string name="customer_choice">Válassz egy vásárlót!</string>
     <string name="reportsOfWeek">. heti kimtatása</string>
     <string name="reportsOfMonth">. havi kimutatása</string>
     <string name="january">Január</string>

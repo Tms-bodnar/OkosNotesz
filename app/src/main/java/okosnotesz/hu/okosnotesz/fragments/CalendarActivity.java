@@ -1,13 +1,13 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
-import android.content.res.Resources;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -16,6 +16,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import okosnotesz.hu.okosnotesz.BookingActivity;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.GridAdapter;
 import okosnotesz.hu.okosnotesz.adapters.WeekGridAdapter;
@@ -48,6 +50,8 @@ public class CalendarActivity extends Fragment {
     private GridAdapter gridAdapter;
     private WeekGridAdapter weekGridAdapter;
     private List<Reports> reportsList;
+    private Reports report;
+    private final int REQ_CODE = 9;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +75,7 @@ public class CalendarActivity extends Fragment {
 
     private void setupCalMonthlyAdapter(Calendar day, int animCode) {
         reportsList = ListHelper.getAllReports(getContext());
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMMM");
         String dateString = formatter.format(day.getTime());
         currDate.setText(dateString);
         final Calendar finalDay = day;
@@ -118,18 +122,15 @@ public class CalendarActivity extends Fragment {
             tempCal.setTimeInMillis(dayValueInCells.get(i).getTime());
             int tempWeekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
             if(tempWeekNumber == weekNumber){
-                Date temp = new Date(86400000+tempCal.getTimeInMillis());
-
-                weekDates.add(temp);
+                //Date temp = new Date(86400000+tempCal.getTimeInMillis());
+                weekDates.add(tempCal.getTime());
             }
         }
         Log.d("xx",weekDates.size()+"weekdatessize");
         for(int i = 0; i < weekDates.size();i++){
             Calendar temp = Calendar.getInstance();
             temp.setTime(weekDates.get(i));
-            //Log.d("xx", temp.get(Calendar.DAY_OF_MONTH)+": dom");
             weeklyDates.get(i).setText(String.valueOf(temp.get(Calendar.DAY_OF_MONTH)));
-            //Log.d("xx",weeklyDates.get(i).getText().toString());
         }
         weekGridAdapter = new WeekGridAdapter(getContext(), Hours.values(), reportsList);
         for (int i = 0; i < weekGridList.size(); i++) {
@@ -144,11 +145,8 @@ public class CalendarActivity extends Fragment {
                     Hours h = (Hours) weekGridList.get(finalI).getAdapter().getItem(position);
                     int hour = h.getHour();
                     int minute = h.getMinute();
-
-                    Log.d("xx", hour+":"+minute + "temp: "+temp.getTime().toString());
                     temp.set(Calendar.HOUR_OF_DAY, hour);
                     temp.set(Calendar.MINUTE, minute);
-                    Log.d("xx", temp.getTime().toString());
                     booking(temp);
                     return false;
                 }
@@ -161,8 +159,14 @@ public class CalendarActivity extends Fragment {
     }
 
     private void booking(Calendar temp) {
-
+        Toast.makeText(getContext(), temp.getTime().toString()+ "",Toast.LENGTH_SHORT).show();
+        report = new Reports();
+        report.setDate(temp.getTimeInMillis());
+        Intent i = new Intent(getContext(), BookingActivity.class);
+        i.putExtra("newRep", report);
+        startActivityForResult(i, REQ_CODE);
     }
+
 
     private List<Date> getDayValueInCells(Calendar day){
         List<Date> dayValueInCells = new ArrayList<Date>();
@@ -195,13 +199,14 @@ public class CalendarActivity extends Fragment {
         weekGridList.add((GridView) v.findViewById(R.id.week_sat_grid));
         weekGridList.add((GridView) v.findViewById(R.id.week_sun_grid));
         weeklyDates = new ArrayList<>(7);
-        weeklyDates.add((TextView) v.findViewById(R.id.mon_week_date));
-        weeklyDates.add((TextView) v.findViewById(R.id.tue_week_date));
-        weeklyDates.add((TextView) v.findViewById(R.id.wed_week_date));
-        weeklyDates.add((TextView) v.findViewById(R.id.thu_week_date));
-        weeklyDates.add((TextView) v.findViewById(R.id.fri_week_date));
-        weeklyDates.add((TextView) v.findViewById(R.id.sat_week_date));
-        weeklyDates.add((TextView) v.findViewById(R.id.sun_week_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.mon_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.tue_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.wed_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.thu_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.fri_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.sat_date));
+        weeklyDates.add((TextView) v.findViewById(R.id.sun_date));
+
         vf = (ViewFlipper) v.findViewById(R.id.vf);
         return v;
     }
