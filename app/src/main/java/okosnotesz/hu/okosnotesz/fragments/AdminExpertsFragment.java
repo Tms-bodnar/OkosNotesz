@@ -69,7 +69,7 @@ public class AdminExpertsFragment extends Fragment {
         lv = (ListView) view.findViewById(R.id.experts_list);
         Context context = getActivity();
         expertsList = ListHelper.getAllExperts(context);
-        CustomExpertsAdapter adapter = new CustomExpertsAdapter(expertsList, context);
+        CustomExpertsAdapter adapter = new CustomExpertsAdapter(expertsList, context,0);
         registerForContextMenu(lv);
         lv.setAdapter(adapter);
         return view;
@@ -88,7 +88,7 @@ public class AdminExpertsFragment extends Fragment {
     public View refreshView(ArrayList<Experts> expList){
         lv = (ListView) getActivity().findViewById(R.id.experts_list);
         Context context = getActivity();
-        CustomExpertsAdapter adapter = new CustomExpertsAdapter(expList, context);
+        CustomExpertsAdapter adapter = new CustomExpertsAdapter(expList, context,0);
         lv.setAdapter(adapter);
         registerForContextMenu(lv);
         return getView();

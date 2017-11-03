@@ -122,7 +122,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final ArrayList<Experts> experts = ListHelper.getAllExperts(v.getContext());
-                CustomExpertsAdapter expertsAdapter = new CustomExpertsAdapter(experts, v.getContext());
+                CustomExpertsAdapter expertsAdapter = new CustomExpertsAdapter(experts, v.getContext(), 1);
                 final String[] expertNames = new String[experts.size()];
                 final String[] selectedExpert = {""};
                 for(int i = 0; i < expertNames.length; i++){
@@ -160,6 +160,13 @@ public class BookingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("xx", report.getGuestName()  +", "+ formatter.format(new Date(report.getDate()))+", "+ report.getExpert() +", "+ report.getTreatment());
                 bookingOK(report);
+            }
+        });
+        Button btnCancel = (Button) this.findViewById(R.id.btnBookingCance);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

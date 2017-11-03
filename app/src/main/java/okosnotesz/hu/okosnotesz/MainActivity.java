@@ -1,6 +1,7 @@
 package okosnotesz.hu.okosnotesz;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -9,9 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,14 +21,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import okosnotesz.hu.okosnotesz.fragments.AdminExpertsFragment;
-import okosnotesz.hu.okosnotesz.fragments.AdminGuestsFragment;
-import okosnotesz.hu.okosnotesz.fragments.AdminProductsFragment;
-import okosnotesz.hu.okosnotesz.fragments.AdminTreatmentsFragment;
-import okosnotesz.hu.okosnotesz.fragments.BookingsFragment;
-import okosnotesz.hu.okosnotesz.fragments.CalendarActivity;
-import okosnotesz.hu.okosnotesz.fragments.ReportsFragment;
-import okosnotesz.hu.okosnotesz.fragments.SalesFragment;
+import okosnotesz.hu.okosnotesz.adapters.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private ViewPager mViewPager;
     SharedPreferences sp;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getApplicationContext();
         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean firstStart = sp.getBoolean(getString(R.string.first_start), false);
         if (!firstStart) {
@@ -74,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mainActivityStart() {
-        final SectionsPagerAdapter mSectionsPagerAdapterMain;
+        final PagerAdapter mSectionsPagerAdapterMain;
         mainActivity = true;
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.report_pale));
         tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
 
-        mSectionsPagerAdapterMain = new SectionsPagerAdapter(getSupportFragmentManager(), 3);
+        mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 3);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
 
@@ -138,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void firstStart() {
-        final SectionsPagerAdapter mSectionsPagerAdapterFirstStart;
+        final PagerAdapter mSectionsPagerAdapterFirstStart;
         mainActivity = false;
         setContentView(R.layout.first_settings);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_first_settings);
@@ -151,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.commercial_pale));
         tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
 
-        mSectionsPagerAdapterFirstStart = new SectionsPagerAdapter(getSupportFragmentManager(), 4);
+        mSectionsPagerAdapterFirstStart = new PagerAdapter(mContext, getSupportFragmentManager(), 4);
 
         mViewPager = (ViewPager) findViewById(R.id.containerFirstSettings);
         mViewPager.setAdapter(mSectionsPagerAdapterFirstStart);
@@ -253,96 +246,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-        int numOfTabs;
-        public SectionsPagerAdapter(FragmentManager supportFragmentManager, int i) {
-            super(supportFragmentManager);
-            this.numOfTabs = i;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = null;
-            switch(numOfTabs) {
-                case 4:
-                    switch (position) {
-                        case 0:
-                            fragment = new AdminGuestsFragment();
-                            break;
-                        case 1:
-                            fragment = new AdminExpertsFragment();
-                            break;
-                        case 2:
-                            fragment = new AdminTreatmentsFragment();
-                            break;
-                        case 3:
-                            fragment = new AdminProductsFragment();
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (position) {
-                        case 0:
-                            fragment = new SalesFragment();
-                            break;
-                        case 1:
-                            fragment = new CalendarActivity();
-                            break;
-                        case 2:
-                            fragment = new ReportsFragment();
-                            break;
-                    }
-                    break;
-                default:
-                    fragment = new CalendarActivity();
-                    break;
-            }
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-
-            return numOfTabs;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            CharSequence pageTitle = "";
-            switch (numOfTabs) {
-                case 4:
-                    switch (position) {
-                        case 0:
-                            pageTitle = getString(R.string.guests);
-                            break;
-                        case 1:
-                            pageTitle = getString(R.string.expert);
-                            break;
-                        case 2:
-                            pageTitle = getString(R.string.treatment);
-                            break;
-                        case 3:
-                            pageTitle = getString(R.string.goods);
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (position) {
-                        case 0:
-                            pageTitle = getString(R.string.commercial);
-                            break;
-                        case 1:
-                            pageTitle = getString(R.string.calendar);
-                            break;
-                        case 2:
-                            pageTitle = getString(R.string.reports);
-                            break;
-                    }
-                    break;
-            }
-            return pageTitle;
-        }
-    }
 }
-

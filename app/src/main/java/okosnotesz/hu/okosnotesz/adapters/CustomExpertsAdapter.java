@@ -1,6 +1,7 @@
 package okosnotesz.hu.okosnotesz.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,12 @@ public class CustomExpertsAdapter extends BaseAdapter {
     private ArrayList<Experts> expertsList;
     Context mContext;
     ViewHolder holder;
+    int reqCode;
 
-    public CustomExpertsAdapter(ArrayList<Experts> expertsList, Context mContext) {
+    public CustomExpertsAdapter(ArrayList<Experts> expertsList, Context mContext, int reqCode) {
         this.expertsList = expertsList;
         this.mContext = mContext;
+        this.reqCode = reqCode;
     }
 
     @Override
@@ -64,6 +67,10 @@ public class CustomExpertsAdapter extends BaseAdapter {
             if(note != null){
                 note.setText(e.getNote());
             }
+        }
+        if(reqCode==1){
+            holder.name.setTextColor(Color.BLACK);
+            holder.note.setTextColor(Color.BLACK);
         }
         return v;
     }
