@@ -1,9 +1,7 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -70,25 +68,18 @@ public class CalendarActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d("xxx", "oncreateview 1 Calendar");
         View v = initUiMonthlyLayout();
-        Log.d("xxx", "oncreateview 2 Calendar");
         setupCalMonthlyAdapter(cal, 0);
-        Log.d("xxx", "oncreateview 3 Calendar");
         setPrevMonth();
         setNextMonth();
-        Log.d("xxx", "oncreateview 4 Calendar");
         return v;
 
     }
 
 
     private void setupCalMonthlyAdapter(Calendar day, int animCode) {
-        Log.d("xxx", "Monthlyadapter repList1");
         reportsList = ListHelper.getAllReports(getContext());
-        Log.d("xxx", "Monthlyadapter repList2");
         treatmentsList = ListHelper.getAllTreatments(getContext());
-        Log.d("xxx", "Monthlyadapter treList1");
         formatter = new SimpleDateFormat("yyyy MMMM");
         String dateString = formatter.format(day.getTime());
         currDate.setText(dateString);
@@ -121,8 +112,6 @@ public class CalendarActivity extends Fragment {
         }
 
         vf.setDisplayedChild(0);
-        Log.d("xxxxx", "MonthlyLoad");
-        Log.d("xxxxx", "replistsize: " + reportsList.size() );
     }
 
     private void setupCalWeeklyAdapter(final Calendar clickedDate, int animCode) {
@@ -137,20 +126,35 @@ public class CalendarActivity extends Fragment {
             tempCal.setTimeInMillis(dayValueInCells.get(i).getTime());
             int tempWeekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
             if(tempWeekNumber == weekNumber){
-                //Date temp = new Date(86400000+tempCal.getTimeInMillis());
                 weekDates.add(tempCal.getTime());
             }
         }
-        Log.d("xx",weekDates.size()+"weekdatessize");
         for(int i = 0; i < weekDates.size();i++){
             Calendar temp = Calendar.getInstance();
             temp.setTime(weekDates.get(i));
             weeklyDates.get(i).setText(String.valueOf(temp.get(Calendar.DAY_OF_MONTH)));
         }
-        weekGridAdapter = new WeekGridAdapter(getContext(), Hours.values(), reportsList);
+
         for (int i = 0; i < weekGridList.size(); i++) {
-            weekGridList.get(i).setAdapter(weekGridAdapter);
-            weekGridList.get(i).setFocusable(false);
+            List<Reports> dailyReports = null;
+
+                    dailyReports = new ArrayList<>();
+                    Calendar tempCalWD = Calendar.getInstance();
+                    tempCalWD.setTime(weekDates.get(i));
+                    for (int j = 0; j < reportsList.size(); j++){
+                        Date temp = new Date(reportsList.get(j).getDate());
+                        Calendar tempCalRepD = Calendar.getInstance();
+                        tempCalRepD.setTime(temp);
+                    if(tempCalWD.get(Calendar.DAY_OF_MONTH)==tempCalRepD.get(Calendar.DAY_OF_MONTH)){
+                        dailyReports.add(reportsList.get(j));
+                    }
+                }
+
+                Log.d("wxx", dailyReports.size()+": drs");
+                weekGridAdapter = new WeekGridAdapter(getContext(), Hours.values(), dailyReports);
+                weekGridList.get(i).setAdapter(weekGridAdapter);
+                weekGridList.get(i).setFocusable(false);
+
             final int finalI = i;
             weekGridList.get(i).setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
@@ -306,12 +310,7 @@ public class CalendarActivity extends Fragment {
             DBHelper helper = DBHelper.getHelper(getContext());
             helper.addReport(backRep);
             helper.close();
-            for (Reports r : reportsList) {
-                Log.d("xxxxx", "replist entry: "+ r.getGuestName() + ", " + formatter.format(new Date(r.getDate())) + ", " + r.getExpert() + ", " + r.getTreatment());
-
-            }
-            Log.d("xxxxx", "replistsize  : " + reportsList.size() );
-            setupCalMonthlyAdapter(repCal, 0);
+            setupCalWeeklyAdapter(repCal,0);
         }
 
     }
@@ -350,12 +349,13 @@ public class CalendarActivity extends Fragment {
 
     public enum Hours{
 
-        SIX(6,00), SIXTTY(6,30), SEVEN(7,00), SEVENTTY(7,30), EIGTH(8 ,00), EIGTHTTY(8,30),
+        SEVEN(7,00), SEVENTTY(7,30), EIGTH(8 ,00), EIGTHTTY(8,30),
         NINE(9,00), NINETTY(9,30), TEN(10,00), TENTTY(10,30), ELEVEN(11,00), ELEVENTTY(11,30),
         TWELVE(12,00), TWELVETTY(12,30), THIRTEEN(13,00), THIRTEENTTY(13,30), FOURTEEN(14,00),
         FOURTEENTTY(14,30), FIFTEEN(15,00), FIFTEENTTY(15,30), SIXTEEN(16,00), SIXTEENTTY(16,30),
         SEVENTEEN(17,00), SEVENTEENTTY(17,30), EIGHTEEN(18,00), EIGHTEENTTY(18,30), NINETEEN(19,00),
-        NINETEENTTY(19,30), TWENTY(20,00), TWENTYTTY(20,30), TWENTYONE(21,00), TWENTYONETTY(21,30);
+        NINETEENTTY(19,30), TWENTY(20,00), TWENTYTTY(20,30), TWENTYONE(21,00), TWENTYONETTY(21,30),
+        TWENTYTWO(22,00);
 
 
         private int hour;

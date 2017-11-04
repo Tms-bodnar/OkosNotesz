@@ -4,15 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import okosnotesz.hu.okosnotesz.R;
-import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
 import okosnotesz.hu.okosnotesz.model.Treatments;
 
@@ -79,39 +75,14 @@ public class GridAdapter extends BaseAdapter {
                 cellDate.setText(String.valueOf(dayValue));
                 Calendar eventCal = Calendar.getInstance();
                 Map<Integer, TextView> eventMap =  getEventViewMap(monthView);
-                Log.d("xxx", allReports.size()+" gridreports.size" );
                 for (int i = 0; i < allReports.size(); i++) {
                     eventCal.setTimeInMillis(allReports.get(i).getDate());
                     //cellDate.setText(eventCal.getTime().toString());
-                    Log.d("xxx", i+" grid i");
                     if (dayValue == eventCal.get(Calendar.DAY_OF_MONTH) && monthValue == eventCal.get(Calendar.MONTH) + 1
                             && yearValue == eventCal.get(Calendar.YEAR)) {
                         int startHour = eventCal.get(Calendar.HOUR_OF_DAY);
-                        int startMinute = eventCal.get(Calendar.MINUTE);
-                        Log.d("xxx", allReports.get(i).getTreatment()+" grid tre");
-                        String treatments[] = (allReports.get(i).getTreatment()).split(",");
-                        Log.d("xxx", treatments.length+" treLength");
-                        int treatmentPeriod = 0;
-                        for (int j = 0; j < treatments.length; j++){
-                            Log.d("xxx", " treLength j " + j);
-                            Log.d("xxx", " tre at j " + treatments[j]);
-                            treatments[j] = treatments[j].trim();
-                            Log.d("xxx", " tre at j " + treatments[j].length());
-                            Treatments t = null;
-                            if(!treatments[j].isEmpty()|| treatments[j].length()>0) {
-                                t = ListHelper.getTreatment(Integer.valueOf(treatments[j]), mContext);
-                            }
-                            if(t!=null) {
-                                treatmentPeriod = treatmentPeriod + t.getTime();
-                                Log.d("xxx", treatmentPeriod + " treperiod");
-                            }
-                        }
-                        int endHour = treatmentPeriod / 60;
-                        int endMinute =treatmentPeriod % 60;
-                        Log.d("xxx", startHour + " starthour" );
-                        for(int j = 8; j<22; j++){
+                        for(int j = 7; j<22; j++){
                             if(j==startHour){
-                                Log.d("xxx", j + "starthour" );
                                 eventMap.get(j).setBackgroundColor(Color.MAGENTA);
                             }
                         }
@@ -123,7 +94,9 @@ public class GridAdapter extends BaseAdapter {
     }
 
     private Map<Integer,TextView> getEventViewMap(View monthView){
-        Map<Integer, TextView> eventMap = new HashMap<>(14);
+        Map<Integer, TextView> eventMap = new HashMap<>(16);
+//        eventMap.put(6, (TextView) monthView.findViewById(R.id.event_id6));
+        eventMap.put(7, (TextView) monthView.findViewById(R.id.event_id7));
         eventMap.put(8,(TextView) monthView.findViewById(R.id.event_id8));
         eventMap.put(9,(TextView) monthView.findViewById(R.id.event_id9));
         eventMap.put(10,(TextView) monthView.findViewById(R.id.event_id10));
@@ -138,6 +111,7 @@ public class GridAdapter extends BaseAdapter {
         eventMap.put(19,(TextView) monthView.findViewById(R.id.event_id19));
         eventMap.put(20,(TextView) monthView.findViewById(R.id.event_id20));
         eventMap.put(21,(TextView) monthView.findViewById(R.id.event_id21));
+        eventMap.put(22,(TextView) monthView.findViewById(R.id.event_id22));
         return eventMap;
     }
 

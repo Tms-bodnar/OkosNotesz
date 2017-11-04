@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Created by user on 2017.05.19..
@@ -260,7 +258,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean deleteTreatment(Treatments t) {
-        Log.d("xxx", "db:" + t.getId());
         SQLiteDatabase db = this.getWritableDatabase();
         int success = db.delete("treatments", TRE_COL_ID + "=?", new String[]{String.valueOf(t.getId())});
         if (success != 0) {
@@ -419,7 +416,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getAllReports(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM REPORTS", null);
-        Log.d("xxx", "Monthlyadapter repList dbh");
         return c;
     }
 
