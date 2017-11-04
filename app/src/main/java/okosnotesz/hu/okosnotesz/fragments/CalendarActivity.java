@@ -1,5 +1,6 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -29,8 +30,10 @@ import okosnotesz.hu.okosnotesz.BookingActivity;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.GridAdapter;
 import okosnotesz.hu.okosnotesz.adapters.WeekGridAdapter;
+import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
+import okosnotesz.hu.okosnotesz.model.Treatments;
 
 public class CalendarActivity extends Fragment {
 
@@ -50,13 +53,16 @@ public class CalendarActivity extends Fragment {
     private GridAdapter gridAdapter;
     private WeekGridAdapter weekGridAdapter;
     private List<Reports> reportsList;
-    private Reports report;
+    private List<Treatments> treatmentsList;
+    private Reports sendReport;
+    private Reports getReport;
     private final int REQ_CODE = 9;
+    SimpleDateFormat formatter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TAG", "oncreate Calendar");
+        Log.d("xxx", "oncreate Calendar");
     }
 
     @Nullable
@@ -64,18 +70,26 @@ public class CalendarActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Log.d("xxx", "oncreateview 1 Calendar");
         View v = initUiMonthlyLayout();
+        Log.d("xxx", "oncreateview 2 Calendar");
         setupCalMonthlyAdapter(cal, 0);
+        Log.d("xxx", "oncreateview 3 Calendar");
         setPrevMonth();
         setNextMonth();
-        Log.d("TAG", "oncreateview Calendar");
+        Log.d("xxx", "oncreateview 4 Calendar");
         return v;
 
     }
 
+
     private void setupCalMonthlyAdapter(Calendar day, int animCode) {
+        Log.d("xxx", "Monthlyadapter repList1");
         reportsList = ListHelper.getAllReports(getContext());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMMM");
+        Log.d("xxx", "Monthlyadapter repList2");
+        treatmentsList = ListHelper.getAllTreatments(getContext());
+        Log.d("xxx", "Monthlyadapter treList1");
+        formatter = new SimpleDateFormat("yyyy MMMM");
         String dateString = formatter.format(day.getTime());
         currDate.setText(dateString);
         final Calendar finalDay = day;
@@ -90,7 +104,7 @@ public class CalendarActivity extends Fragment {
         });
 
         final List<Date> dayValueInCells = getDayValueInCells(cal);
-        gridAdapter = new GridAdapter(getContext(), dayValueInCells, day, reportsList);
+        gridAdapter = new GridAdapter(getContext(), dayValueInCells, day, reportsList, treatmentsList);
         calGrid.setAdapter(gridAdapter);
         calGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,7 +121,8 @@ public class CalendarActivity extends Fragment {
         }
 
         vf.setDisplayedChild(0);
-        Log.d("xx", "MonthlyLoad");
+        Log.d("xxxxx", "MonthlyLoad");
+        Log.d("xxxxx", "replistsize: " + reportsList.size() );
     }
 
     private void setupCalWeeklyAdapter(final Calendar clickedDate, int animCode) {
@@ -157,16 +172,6 @@ public class CalendarActivity extends Fragment {
         }
             vf.setDisplayedChild(1);
     }
-
-    private void booking(Calendar temp) {
-        Toast.makeText(getContext(), temp.getTime().toString()+ "",Toast.LENGTH_SHORT).show();
-        report = new Reports();
-        report.setDate(temp.getTimeInMillis());
-        Intent i = new Intent(getContext(), BookingActivity.class);
-        i.putExtra("newRep", report);
-        startActivityForResult(i, REQ_CODE);
-    }
-
 
     private List<Date> getDayValueInCells(Calendar day){
         List<Date> dayValueInCells = new ArrayList<Date>();
@@ -279,6 +284,37 @@ public class CalendarActivity extends Fragment {
         return toRight;
     }
 
+    private void booking(Calendar temp) {
+        Toast.makeText(getContext(), temp.getTime().toString()+ "",Toast.LENGTH_SHORT).show();
+        sendReport = new Reports();
+        sendReport.setDate(temp.getTimeInMillis());
+        Intent i = new Intent(getContext(), BookingActivity.class);
+        i.putExtra("newRep", sendReport);
+        startActivityForResult(i, REQ_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        formatter = new SimpleDateFormat("yyyy MM dd HH:mm");
+        Calendar repCal = Calendar.getInstance();
+        Reports backRep = null;
+        if(resultCode==22){
+            backRep = data.getParcelableExtra("backRep");
+            Date repDate = new Date(backRep.getDate());
+            repCal.setTime(repDate);
+            reportsList.add(backRep);
+            DBHelper helper = DBHelper.getHelper(getContext());
+            helper.addReport(backRep);
+            helper.close();
+            for (Reports r : reportsList) {
+                Log.d("xxxxx", "replist entry: "+ r.getGuestName() + ", " + formatter.format(new Date(r.getDate())) + ", " + r.getExpert() + ", " + r.getTreatment());
+
+            }
+            Log.d("xxxxx", "replistsize  : " + reportsList.size() );
+            setupCalMonthlyAdapter(repCal, 0);
+        }
+
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -309,6 +345,8 @@ public class CalendarActivity extends Fragment {
         super.onStop();
         Log.d("TAG", "onStop Calendar");
     }
+
+
 
     public enum Hours{
 

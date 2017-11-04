@@ -1,11 +1,15 @@
 package okosnotesz.hu.okosnotesz;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +25,8 @@ import java.util.List;
 
 import okosnotesz.hu.okosnotesz.adapters.CustomExpertsAdapter;
 import okosnotesz.hu.okosnotesz.adapters.CustomTreatmentsAdapter;
+import okosnotesz.hu.okosnotesz.adapters.PagerAdapter;
+import okosnotesz.hu.okosnotesz.fragments.CalendarActivity;
 import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.Experts;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
@@ -33,7 +39,6 @@ public class BookingActivity extends AppCompatActivity {
     private final int CONTACT_REQ_CODE = 55;
     private final int TREATMENT_REQ_CODE = 44;
     Button btnGuest;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +164,12 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("xx", report.getGuestName()  +", "+ formatter.format(new Date(report.getDate()))+", "+ report.getExpert() +", "+ report.getTreatment());
-                bookingOK(report);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("backRep", report);
+                Intent backIntent = new Intent();
+                backIntent.putExtra("backRep", report);
+                setResult(22, backIntent);
+                onBackPressed();
             }
         });
         Button btnCancel = (Button) this.findViewById(R.id.btnBookingCance);
@@ -189,7 +199,4 @@ public class BookingActivity extends AppCompatActivity {
         }
     }
 
-    private void bookingOK(Reports r){
-
-    }
 }

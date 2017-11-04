@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -145,10 +146,10 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
-            db.execSQL("DROP TABLE IF EXIST EXPERTS");
-            db.execSQL("DROP TABLE IF EXIST PRODUCTS");
-            db.execSQL("DROP TABLE IF EXIST SALES");
-            db.execSQL("DROP TABLE IF EXIST TREATMENTS");
+            db.execSQL("DROP TABLE IF EXISTS EXPERTS");
+            db.execSQL("DROP TABLE IF EXISTS PRODUCTS");
+            db.execSQL("DROP TABLE IF EXISTS SALES");
+            db.execSQL("DROP TABLE IF EXISTS TREATMENTS");
             onCreate(db);
         }
     }
@@ -415,9 +416,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public Cursor getAllReports() {
+    public Cursor getAllReports(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM REPORTS", null);
+        Log.d("xxx", "Monthlyadapter repList dbh");
         return c;
     }
 

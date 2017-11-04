@@ -3,6 +3,7 @@ package okosnotesz.hu.okosnotesz.model;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,7 @@ public class ListHelper {
         return treatmentList;
     }
 
-    static Treatments getTreatment(int id, Context context){
+    public static Treatments getTreatment(int id, Context context){
         Treatments t = new Treatments();
         DBHelper helper = DBHelper.getHelper(context);
         Cursor c = helper.getTreatment(id);
@@ -123,6 +124,7 @@ public class ListHelper {
                 t.setPrice(c.getInt(c.getColumnIndex("treatmentPrice")));
                 t.setCost(c.getInt(c.getColumnIndex("treatmentCost")));
                 t.setNote(c.getString(c.getColumnIndex("treatmentNote")));
+                c.moveToNext();
             }
         }finally {
             c.close();
@@ -156,24 +158,40 @@ public class ListHelper {
     }
 
     public static ArrayList<Reports> getAllReports(Context context){
+        Log.d("xxx", "Monthlyadapter repList1.1");
         ArrayList<Reports> rList = new ArrayList<>();
         DBHelper helper = DBHelper.getHelper(context);
+        Log.d("xxx", "Monthlyadapter repList1.2");
         Cursor cursor = helper.getAllReports();
+        Log.d("xxx", "Monthlyadapter repList1.3");
+
         cursor.moveToFirst();
+        Log.d("xxx", "Monthlyadapter repList cursor"+cursor.getColumnCount());
         try{
             while(!cursor.isAfterLast()){
+                Log.d("xxx", "Monthlyadapter repList cursor"+cursor.getCount());
                 Reports r = new Reports();
                 r.setId(cursor.getInt(cursor.getColumnIndex("reportID")));
+                Log.d("xxx", "Monthlyadapter repList cursorID"+r.getId());
                 r.setTreatment(cursor.getString(cursor.getColumnIndex("reportTreatment")));
+                Log.d("xxx", "Monthlyadapter repList cursorTRe"+r.getTreatment());
                 r.setExpert(cursor.getInt(cursor.getColumnIndex("reportExpert")));
+                Log.d("xxx", "Monthlyadapter repList cursorEXp"+r.getExpert());
                 r.setGuestName(cursor.getString(cursor.getColumnIndex("reportGuest")));
+                Log.d("xxx", "Monthlyadapter repList cursorGUE"+r.getGuestName());
                 r.setDate(cursor.getLong(cursor.getColumnIndex("reportDate")));
+                Log.d("xxx", "Monthlyadapter repList cursorDAt"+r.getDate());
                 r.setNote(cursor.getString(cursor.getColumnIndex("reportNote")));
+                Log.d("xxx", "Monthlyadapter repList cursorNote"+r.getNote());
+                rList.add(r);
+                cursor.moveToNext();
             }
+
         }finally {
             cursor.close();
             helper.close();
         }
+        Log.d("xxx", "Monthlyadapter repList1.5");
         return rList;
     }
 }
