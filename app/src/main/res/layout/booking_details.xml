@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Color13">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/booking_date_details"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        />
+
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/booking_guest_datails"
+         android:layout_gravity="center_horizontal"
+         android:textAlignment="center"
+         android:layout_margin="10dp"
+         android:textSize="15sp"
+         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/booking_treatment_details"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/booking_expert_details"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/booking_details_button"
+        android:textSize="15sp"
+        android:text="@string/OK"/>
+</LinearLayout>

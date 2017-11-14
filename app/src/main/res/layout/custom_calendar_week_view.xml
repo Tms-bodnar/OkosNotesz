@@ -84,10 +84,6 @@
             android:textColor="@android:color/white"
             android:textStyle="bold" />
     </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
     <LinearLayout
         android:baselineAligned="false"
         android:layout_width="match_parent"
@@ -97,135 +93,109 @@
         android:paddingBottom="4dp"
         android:paddingTop="4dp">
         <RelativeLayout
+            android:id="@+id/mon_grid"
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-
-            <View
+            <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border1"
-
-                />
-            <GridView
-                android:id="@+id/week_mon_grid"
-                android:layout_width="49dp"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_below="@+id/week_border1"/>
+                android:id="@+id/monvf">
+                <include android:id="@+id/mon_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/tue_grid"
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <View
+            <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border2" />
-            <GridView
-                android:id="@+id/week_tue_grid"
-                android:layout_width="49dp"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_below="@+id/week_border2"/>
+                android:id="@+id/tuenvf">
+                <include android:id="@+id/tue_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/wed_grid"
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <View
+            <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border3"
-                />
-            <GridView
-                android:id="@+id/week_wed_grid"
-                android:layout_width="49dp"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_below="@+id/week_border3"/>
+                android:id="@+id/wedvf">
+                <include android:id="@+id/wed_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/thu_grid"
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <View
+            <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border4" />
-            <GridView
-                android:id="@+id/week_thu_grid"
-                android:layout_width="49dp"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_below="@+id/week_border4"/>
+                android:id="@+id/thuvf">
+                <include android:id="@+id/thu_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
         </RelativeLayout>
         <RelativeLayout
+        android:id="@+id/fri_grid"
+        android:layout_width="0dp"
+        android:layout_height="1000dp"
+        android:layout_weight="1">
+            <ViewFlipper
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/frivf">
+                <include android:id="@+id/fri_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
+    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/sat_grid"
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <View
+            <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border5" />
-            <GridView
-                android:id="@+id/week_fri_grid"
-                android:layout_width="49dp"
                 android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_below="@+id/week_border5"/>
+                android:id="@+id/satvf">
+                <include android:id="@+id/sat_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/sun_grid"
             android:layout_width="0dp"
             android:layout_height="1000dp"
             android:layout_weight="1">
-            <View
+            <ViewFlipper
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border6" />
-            <GridView
-                android:id="@+id/week_sat_grid"
-                android:layout_width="49dp"
                 android:layout_height="match_parent"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/week_border6"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark"
-                android:id="@+id/week_border7" />
-            <GridView
-                android:id="@+id/week_sun_grid"
-                android:layout_width="49dp"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:columnCount="0"
-                android:rowCount="28"
-                android:layout_below="@+id/week_border7"/>
+                android:id="@+id/sunvf">
+                <include android:id="@+id/sun_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+                <include android:id="@+id/mon_empty"
+                    layout="@layout/custom_calendar_week_empty_grid_view"/>
+            </ViewFlipper>
         </RelativeLayout>
     </LinearLayout>
-    </ScrollView>
 </LinearLayout>

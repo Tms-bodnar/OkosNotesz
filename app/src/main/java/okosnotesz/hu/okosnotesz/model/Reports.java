@@ -3,8 +3,6 @@ package okosnotesz.hu.okosnotesz.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 /**
  * Created by user on 2017.05.21..
  */
@@ -120,5 +118,8 @@ public class Reports implements Parcelable{
         this.note = note;
     }
 
-
+    @Override
+    public String toString() {
+        return date+"";
+    }
 }

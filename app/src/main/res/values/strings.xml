@@ -107,4 +107,9 @@
     <string name="next"> \u003e \u003e </string>
     <string name="prev"> \u003c \u003c</string>
     <string name="last_date">31</string>
+    <string name="loading">Adatok betöltése</string>
+<string name="website">http://www.okosnotesz.hu</string>
+
+    <item type="id" name="TRE_ARRAY"/>
+    <item type="id" name="REPORT"/>
 </resources>

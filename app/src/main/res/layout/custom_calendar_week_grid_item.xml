@@ -6,32 +6,38 @@
     android:background="@android:color/white">
 
     <RelativeLayout
+        android:id="@+id/week_drid_item_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/week_drid_item_layout">
-
-   <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:id="@+id/week_border1"
-        />
- <TextView
-     android:id="@+id/tv_week_hour"
-     android:layout_width="match_parent"
-     android:layout_height="10dp"
-     android:layout_centerInParent="true"
-     android:layout_toRightOf="@+id/week_border1"
-     android:textColor="@color/colorPrimaryDark"
-     android:textAlignment="center"
-     android:textSize="9sp"/>
+        android:layout_height="match_parent">
 
         <View
+            android:id="@+id/week_border_top"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorPrimary"
+            android:layout_alignParentTop="true"
+            android:background="@color/whiteDark2" />
+
+        <View
+            android:id="@+id/week_border1"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/whiteDark2" />
+
+        <TextView
+            android:id="@+id/tv_week_hour"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/week_border1"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="9sp" />
+
+        <View
             android:id="@+id/week_border2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            />
+            android:background="@color/whiteDark2" />
     </RelativeLayout>
 </LinearLayout>

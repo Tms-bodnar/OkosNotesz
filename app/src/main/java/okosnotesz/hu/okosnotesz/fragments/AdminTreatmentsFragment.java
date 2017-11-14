@@ -3,7 +3,6 @@ package okosnotesz.hu.okosnotesz.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import okosnotesz.hu.okosnotesz.AdminActivity;
-import okosnotesz.hu.okosnotesz.adapters.CustomTreatmentsAdapter;
 import okosnotesz.hu.okosnotesz.R;
+import okosnotesz.hu.okosnotesz.adapters.CustomTreatmentsAdapter;
 import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Treatments;

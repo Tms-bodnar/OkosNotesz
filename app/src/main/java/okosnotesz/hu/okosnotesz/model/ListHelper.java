@@ -74,6 +74,7 @@ public class ListHelper {
                 e.setId(c.getInt(c.getColumnIndex("expertID")));
                 e.setName(c.getString(c.getColumnIndex("expertName")));
                 e.setNote(c.getString(c.getColumnIndex("expertNote")));
+                c.moveToNext();
             }
         }finally {
             c.close();

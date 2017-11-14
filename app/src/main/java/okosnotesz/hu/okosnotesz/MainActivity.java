@@ -8,14 +8,17 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     SharedPreferences sp;
     Context mContext;
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    ActionBarDrawerToggle barDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putBoolean(getString(R.string.first_start), true);
                 edit.commit();
+
                 firstStart();
             }
         } else {
+
             mainActivityStart();
         }
     }
@@ -66,42 +74,63 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void mainActivityStart() {
-        final PagerAdapter mSectionsPagerAdapterMain;
-        mainActivity = true;
+    private void setnavigationDrawer(){
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_home_calendar:
+                        mainActivityStart();
+                        break;
+                    case R.id.nav_commercial:
+                        comActivityStart();
+                        break;
+                    case R.id.nav_settings:
+                        firstStart();
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void comActivityStart(){
+        PagerAdapter mSectionsPagerAdapterSales;
+        mainActivity = false;
         setContentView(R.layout.activity_main);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        setnavigationDrawer();
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.commercial);
-        setSupportActionBar(toolbar);
+
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        barDrawerToggle.setDrawerIndicatorEnabled(true);
+        drawer.addDrawerListener(barDrawerToggle);
+        barDrawerToggle.syncState();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.commercial_pale));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.calendar_focus));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.report_pale));
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
         tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
-
-        mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 3);
+        mSectionsPagerAdapterSales = new PagerAdapter(mContext, getSupportFragmentManager(), 2);
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapterMain);
-
+        mViewPager.setAdapter(mSectionsPagerAdapterSales);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setupWithViewPager(mViewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
+                tab.setText(mSectionsPagerAdapterSales.getPageTitle(tab.getPosition()));
                 switch (tab.getPosition()) {
                     case 1:
-                        tab.setIcon(R.drawable.calendar_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
+                        //  tab.setIcon(R.drawable.calendar_focus);
+                        tab.setText(mSectionsPagerAdapterSales.getPageTitle(tab.getPosition()));
                         break;
                     case 0:
-                        tab.setIcon(R.drawable.commercial_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
-                        break;
-                    case 2:
-                        tab.setIcon(R.drawable.report_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
+                        //tab.setIcon(R.drawable.commercial_focus);
+                        tab.setText(mSectionsPagerAdapterSales.getPageTitle(tab.getPosition()));
                         break;
                 }
             }
@@ -110,13 +139,80 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 1:
-                        tab.setIcon(R.drawable.calendar_pale);
+                        // tab.setIcon(R.drawable.calendar_pale);
                         break;
                     case 0:
-                        tab.setIcon(R.drawable.commercial_pale);
+                        //tab.setIcon(R.drawable.commercial_pale);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        mViewPager.setCurrentItem(0);
+    }
+
+
+    private void mainActivityStart() {
+        final PagerAdapter mSectionsPagerAdapterMain;
+        mainActivity = true;
+        setContentView(R.layout.activity_main);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        setnavigationDrawer();
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        barDrawerToggle.setDrawerIndicatorEnabled(true);
+        drawer.addDrawerListener(barDrawerToggle);
+        barDrawerToggle.syncState();
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
+
+        mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 3);
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapterMain);
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+                tab.setText(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
+                switch (tab.getPosition()) {
+                    case 1:
+                      //  tab.setIcon(R.drawable.calendar_focus);
+                        tab.setText(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
+                        break;
+                    case 0:
+                        //tab.setIcon(R.drawable.commercial_focus);
+                        tab.setText(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
                         break;
                     case 2:
-                        tab.setIcon(R.drawable.report_pale);
+                        //tab.setIcon(R.drawable.report_focus);
+                        tab.setText(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 1:
+                       // tab.setIcon(R.drawable.calendar_pale);
+                        break;
+                    case 0:
+                        //tab.setIcon(R.drawable.commercial_pale);
+                        break;
+                    case 2:
+                        //tab.setIcon(R.drawable.report_pale);
                         break;
                 }
             }
@@ -130,18 +226,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     public void firstStart() {
         final PagerAdapter mSectionsPagerAdapterFirstStart;
         mainActivity = false;
         setContentView(R.layout.first_settings);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        setnavigationDrawer();
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_first_settings);
-        toolbar.setTitle(R.string.guests);
-        setSupportActionBar(toolbar);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        barDrawerToggle.setDrawerIndicatorEnabled(true);
+        drawer.addDrawerListener(barDrawerToggle);
+        barDrawerToggle.syncState();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_first_settings);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.guests_focus));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.expert_pale));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.treatment_pale));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.commercial_pale));
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
         tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
 
         mSectionsPagerAdapterFirstStart = new PagerAdapter(mContext, getSupportFragmentManager(), 4);
@@ -150,27 +252,26 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapterFirstStart);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setupWithViewPager(mViewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                tab.setText(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                 switch (tab.getPosition()) {
                     case 0:
-                        tab.setIcon(R.drawable.guests_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+
+                        tab.setText(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                     case 1:
-                        tab.setIcon(R.drawable.expert_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+
+                        tab.setText(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                     case 2:
-                        tab.setIcon(R.drawable.treatment_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                        tab.setText(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                     case 3:
-                        tab.setIcon(R.drawable.commercial_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                        tab.setText(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                 }
             }
@@ -180,16 +281,14 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        tab.setIcon(R.drawable.guests_pale);
+
                         break;
                     case 1:
-                        tab.setIcon(R.drawable.expert_pale);
+
                         break;
                     case 2:
-                        tab.setIcon(R.drawable.treatment_pale);
-                        break;
+                    break;
                     case 3:
-                        tab.setIcon(R.drawable.commercial_pale);
                         break;
                 }
             }
@@ -229,20 +328,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            firstStart();
-        }
-        if (id == R.id.action_main_activity) {
-            mainActivityStart();
+        if(barDrawerToggle.onOptionsItemSelected(item)){
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

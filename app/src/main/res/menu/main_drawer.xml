@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home_calendar"
+            android:icon="@drawable/calendar_pale"
+            android:title="@string/calendar" />
+        <item
+            android:id="@+id/nav_commercial"
+            android:icon="@drawable/commercial_pale"
+            android:title="@string/commercial" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="@string/settings" />
+    </group>
+
+    <item android:title="Info:">
+        <menu>
+            <item
+                android:id="@+id/nav_about_us"
+                android:title="@string/website" />
+        </menu>
+    </item>
+</menu>

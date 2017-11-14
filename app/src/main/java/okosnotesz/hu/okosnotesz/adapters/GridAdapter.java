@@ -77,7 +77,6 @@ public class GridAdapter extends BaseAdapter {
                 Map<Integer, TextView> eventMap =  getEventViewMap(monthView);
                 for (int i = 0; i < allReports.size(); i++) {
                     eventCal.setTimeInMillis(allReports.get(i).getDate());
-                    //cellDate.setText(eventCal.getTime().toString());
                     if (dayValue == eventCal.get(Calendar.DAY_OF_MONTH) && monthValue == eventCal.get(Calendar.MONTH) + 1
                             && yearValue == eventCal.get(Calendar.YEAR)) {
                         int startHour = eventCal.get(Calendar.HOUR_OF_DAY);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.fragments.AdminExpertsFragment;
@@ -53,18 +52,25 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 3:
                 switch (position) {
                     case 0:
-                        fragment = new SalesFragment();
+                        fragment = new CalendarActivity();
                         break;
                     case 1:
                         fragment = new CalendarActivity();
                         break;
                     case 2:
-                        fragment = new ReportsFragment();
+                        fragment = new CalendarActivity();
                         break;
                 }
                 break;
-            default:
-                fragment = new CalendarActivity();
+            case 2:
+                switch (position){
+                    case 0:
+                        fragment = new SalesFragment();
+                        break;
+                    case 1:
+                        fragment = new ReportsFragment();
+                        break;
+                }
                 break;
         }
         return fragment;
@@ -99,16 +105,24 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 3:
                 switch (position) {
                     case 0:
-                        pageTitle = mContext.getResources().getString(R.string.commercial);
+                        pageTitle = mContext.getResources().getString(R.string.calendar);
                         break;
                     case 1:
                         pageTitle = mContext.getResources().getString(R.string.calendar);
                         break;
                     case 2:
-                        pageTitle = mContext.getResources().getString(R.string.reports);
+                        pageTitle = mContext.getResources().getString(R.string.calendar);
                         break;
                 }
                 break;
+            case 2:
+                switch (position){
+                    case 0:
+                        pageTitle = mContext.getResources().getString(R.string.commercial);
+                        break;
+                    case 1:
+                        pageTitle = mContext.getResources().getString(R.string.reports);
+                }
         }
         return pageTitle;
     }
