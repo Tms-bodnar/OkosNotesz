@@ -8,13 +8,14 @@
     <color name="buttonColor1">#BB73F4</color>
     <color name="textColor1">#4B1A72</color>
     <color name="background2">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="buttonColor2">#F2D5B2</color>
     <color name="textColor2">#410B0B</color>
     <color name="textColor">#6BA57C</color>
     <color name="background">#F8FFFA</color>
     <color name="buttonColor">#D4F2DC</color>
     <color name="Color11">#6BA57C</color>
-    <color name="Color12">#F8FFFA</color>
+    <color name="whiteDark2">#F8FFFA</color>
     <color name="Color13">#D4F2DC</color>
     <color name="Color14">#F2C5C5</color>
     <color name="Color15">#410B0B</color>
@@ -24,4 +25,5 @@
     <color name="Color24">#ffffff</color>
     <color name="Color25">#B4A7BF</color>
     <color name="Color26">#42EAB2</color>
+    <color name="black">#000000</color>
     </resources>

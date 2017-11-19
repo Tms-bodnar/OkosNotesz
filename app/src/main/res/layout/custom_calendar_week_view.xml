@@ -101,8 +101,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/monvf">
-                <include android:id="@+id/mon_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
+
+                <include
+                    android:id="@+id/mon_flipper"
+                    layout="@layout/custom_calendar_week_simple_grid_wiev" />
+
                 <include android:id="@+id/mon_empty"
                     layout="@layout/custom_calendar_week_empty_grid_view"/>
             </ViewFlipper>

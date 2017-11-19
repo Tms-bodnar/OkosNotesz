@@ -23,13 +23,29 @@
             android:layout_alignParentTop="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
+
            <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:title="@string/settings"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+               android:layout_gravity="end"
+               >
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/toolbar_textView"
+                   android:layout_gravity="center"/>
+               <Button
+                   android:id="@+id/tollbar_button"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:text="today"
+                   android:textColor="@color/white"
+                   android:background="@color/colorPrimaryDark"/>
 
             </android.support.v7.widget.Toolbar>
 
@@ -37,7 +53,8 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/toolbar"/>
+                android:layout_below="@+id/toolbar"
+                />
                <!-- android:minHeight="?attr/actionBarSize" -->/>
 
         </android.support.design.widget.AppBarLayout>

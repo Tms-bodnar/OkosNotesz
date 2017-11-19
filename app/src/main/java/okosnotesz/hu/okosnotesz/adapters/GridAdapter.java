@@ -71,6 +71,9 @@ public class GridAdapter extends BaseAdapter {
                         monthView.setBackgroundColor(Color.parseColor("#9FA8DA"));
                     }
                 }
+                if(dayValue == (Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) && monthValue == Calendar.getInstance().get(Calendar.MONTH)+1){
+                    monthView.setBackgroundColor(Color.parseColor("#F2C5C5"));
+                }
                 TextView cellDate = (TextView) monthView.findViewById(R.id.calendar_date_id);
                 cellDate.setText(String.valueOf(dayValue));
                 Calendar eventCal = Calendar.getInstance();
@@ -88,6 +91,7 @@ public class GridAdapter extends BaseAdapter {
                     }
 
                 }
+
 
         return monthView;
     }

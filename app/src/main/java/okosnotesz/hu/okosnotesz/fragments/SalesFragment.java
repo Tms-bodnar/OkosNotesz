@@ -76,6 +76,7 @@ public class SalesFragment extends Fragment {
         btnProd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                quantity=1;
                 new AlertDialog.Builder(getContext())
                         .setTitle(getString(R.string.product))
                         .setSingleChoiceItems(productsAdapter, 0, new DialogInterface.OnClickListener() {
@@ -85,12 +86,13 @@ public class SalesFragment extends Fragment {
                                 prod = p[0];
                                 btnProd.setText(p[0].getName());
                                 btnValue.setText(p[0].getPrice() + "");
+                                btnQuantity.setText(String.valueOf(quantity) + " " + getString(R.string.pieces));
                                 dialog.dismiss();
                             }
                         }).create().show();
             }
         });
-        btnQuantity.setText(1 + " " + getString(R.string.pieces));
+        btnQuantity.setText(String.valueOf(quantity) + " " + getString(R.string.pieces));
         Button quantityPlus = (Button) view[0].findViewById(R.id.btnQuantityPlus);
         quantityPlus.setOnClickListener(new View.OnClickListener() {
             @Override

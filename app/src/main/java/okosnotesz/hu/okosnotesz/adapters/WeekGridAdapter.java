@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import okosnotesz.hu.okosnotesz.R;
-import okosnotesz.hu.okosnotesz.fragments.CalendarActivity;
+import okosnotesz.hu.okosnotesz.fragments.CalendarFragment;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
 import okosnotesz.hu.okosnotesz.model.Treatments;
@@ -27,7 +27,7 @@ import okosnotesz.hu.okosnotesz.model.Treatments;
 public class WeekGridAdapter extends BaseAdapter {
     private final Context mContext;
     private final List<Reports> dailyReports;
-    private CalendarActivity.Hours[] hoursArray;
+    private CalendarFragment.Hours[] hoursArray;
     private LayoutInflater inflater;
     private String hour;
     private String minute;
@@ -39,7 +39,7 @@ public class WeekGridAdapter extends BaseAdapter {
 
 
 
-    public WeekGridAdapter(Context context, CalendarActivity.Hours[] array, List<Reports> dailyReports) {
+    public WeekGridAdapter(Context context, CalendarFragment.Hours[] array, List<Reports> dailyReports) {
         this.mContext = context;
         this.hoursArray = array;
         this.dailyReports = dailyReports;
