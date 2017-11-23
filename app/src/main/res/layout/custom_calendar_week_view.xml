@@ -1,12 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_custom_calendar_week"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/days_layout">
+
+        <TextView
+            android:id="@+id/mon_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/mo"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tue_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tu"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/wed_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/we"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/thu_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/th"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/fri_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/fr"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sat_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sa"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sun_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/su"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dates_layout"
+        android:layout_below="@+id/days_layout">
         <TextView
             android:id="@+id/mon_date"
             android:layout_width="0dp"
@@ -16,7 +103,8 @@
             android:gravity="center"
             android:text="@string/mo"
             android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tue_date"
@@ -91,114 +179,106 @@
         android:background="@color/colorPrimaryDark"
         android:orientation="horizontal"
         android:paddingBottom="4dp"
-        android:paddingTop="4dp">
-        <RelativeLayout
-            android:id="@+id/mon_grid"
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/monvf">
+        android:paddingTop="4dp"
+        android:layout_below="@+id/dates_layout">
 
-                <include
-                    android:id="@+id/mon_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev" />
+        <RelativeLayout
+            android:id="@+id/weekly_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/week_view_recycle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <!--<ListView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:id="@+id/week_list">
+           </ListView>-->
+
+
+                </android.support.v7.widget.RecyclerView>
+            </ScrollView>
         </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/tue_grid"
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tuenvf">
-                <include android:id="@+id/tue_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/wed_grid"
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/wedvf">
-                <include android:id="@+id/wed_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/thu_grid"
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/thuvf">
-                <include android:id="@+id/thu_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
-        </RelativeLayout>
-        <RelativeLayout
-        android:id="@+id/fri_grid"
-        android:layout_width="0dp"
-        android:layout_height="1000dp"
-        android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/frivf">
-                <include android:id="@+id/fri_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
-    </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/sat_grid"
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/satvf">
-                <include android:id="@+id/sat_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/sun_grid"
-            android:layout_width="0dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1">
-            <ViewFlipper
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/sunvf">
-                <include android:id="@+id/sun_flipper"
-                    layout="@layout/custom_calendar_week_simple_grid_wiev"/>
-                <include android:id="@+id/mon_empty"
-                    layout="@layout/custom_calendar_week_empty_grid_view"/>
-            </ViewFlipper>
-        </RelativeLayout>
+        <!--     <RelativeLayout
+                 android:id="@+id/tue_grid"
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1">
+                 <ListView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/tue_list">
+
+                 </ListView>
+             </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/wed_grid"
+                 android:layout_width="0dp"
+                 android:layout_height="1000dp"
+                 android:layout_weight="1">
+                 <ListView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/wed_list">
+
+                 </ListView>
+             </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/thu_grid"
+                 android:layout_width="0dp"
+                 android:layout_height="1000dp"
+                 android:layout_weight="1">
+                 <ListView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/thu_list">
+
+                 </ListView>
+             </RelativeLayout>
+             <RelativeLayout
+             android:id="@+id/fri_grid"
+             android:layout_width="0dp"
+             android:layout_height="1000dp"
+             android:layout_weight="1">
+                 <ListView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/fri_list">
+
+                 </ListView>
+             </RelativeLayout>
+
+             <RelativeLayout
+                 android:id="@+id/sat_grid"
+                 android:layout_width="0dp"
+                 android:layout_height="1000dp"
+                 android:layout_weight="1">
+                 <ListView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/sat_list">
+
+                 </ListView>
+             </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/sun_grid"
+                 android:layout_width="0dp"
+                 android:layout_height="1000dp"
+                 android:layout_weight="1">
+                 <ListView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/sun_list"
+                     android:focusable="false">
+
+                 </ListView>
+             </RelativeLayout>-->
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

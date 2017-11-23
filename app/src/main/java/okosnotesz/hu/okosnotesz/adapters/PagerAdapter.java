@@ -17,6 +17,7 @@ import okosnotesz.hu.okosnotesz.fragments.AdminTreatmentsFragment;
 import okosnotesz.hu.okosnotesz.fragments.CalendarFragment;
 import okosnotesz.hu.okosnotesz.fragments.ReportsFragment;
 import okosnotesz.hu.okosnotesz.fragments.SalesFragment;
+import okosnotesz.hu.okosnotesz.fragments.WeekFragment;
 
 /**
  * Created by user on 2017.11.03..
@@ -26,11 +27,19 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     Context mContext;
     int numOfTabs;
+    long clickedDate;
 
     public PagerAdapter(Context context, FragmentManager supportFragmentManager, int i) {
         super(supportFragmentManager);
         this.numOfTabs = i;
         this.mContext = context;
+    }
+
+    public PagerAdapter(Context context, FragmentManager supportFragmentManager, int i, long date) {
+        super(supportFragmentManager);
+        this.numOfTabs = i;
+        this.mContext = context;
+        this.clickedDate = date;
     }
 
     @Override
@@ -80,6 +89,10 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                         break;
                 }
                 break;
+            case 53:
+
+                fragment = WeekFragment.newInstance(clickedDate);
+
         }
         return fragment;
     }
@@ -141,6 +154,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                     break;
                 }
                 break;
+
         }
         return pageTitle;
     }

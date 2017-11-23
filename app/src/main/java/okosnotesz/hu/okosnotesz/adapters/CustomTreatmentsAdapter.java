@@ -1,7 +1,6 @@
 package okosnotesz.hu.okosnotesz.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,13 +57,14 @@ public class CustomTreatmentsAdapter extends BaseAdapter {
             if (v == null) {
                 LayoutInflater inflater = (LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = inflater.inflate(R.layout.treatment_list_item, null);
-                holder = new ViewHolder();
-                holder.name = (TextView) v.findViewById(R.id.treatmentNameItem);
-                holder.time = (TextView) v.findViewById(R.id.treatmentTimeItem);
-                holder.price = (TextView) v.findViewById(R.id.treatmentPriceItem);
-                holder.note = (TextView) v.findViewById(R.id.treatmentNoteItem);
-                v.setTag(holder);
+
             }
+            holder = new ViewHolder();
+            holder.name = (TextView) v.findViewById(R.id.treatmentNameItem);
+            holder.time = (TextView) v.findViewById(R.id.treatmentTimeItem);
+            holder.price = (TextView) v.findViewById(R.id.treatmentPriceItem);
+            holder.note = (TextView) v.findViewById(R.id.treatmentNoteItem);
+            v.setTag(holder);
 
             Treatments t = treatmentsList.get(position);
             if (t != null) {

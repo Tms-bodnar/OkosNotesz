@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(0);
     }
 
-
     private void mainActivityStart() {
         final PagerAdapter mSectionsPagerAdapterMain;
         mainActivity = true;
@@ -168,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setnavigationDrawer();
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // toolbar.setTitle(R.string.calendar);
         barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
@@ -176,9 +174,6 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setVisibility(View.INVISIBLE);
         tabLayout.setSelectedTabIndicatorColor(ResourcesCompat.getColor(getResources(),R.color.colorPrimaryDark, null));
-        //tabLayout.addTab(tabLayout.newTab());
-      //  tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.calendar_pale));
-        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.calendar_pale));
         mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 49);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
@@ -200,52 +195,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-       // mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        //tabLayout.setupWithViewPager(mViewPager);
-       /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-                toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
-                switch (tab.getPosition()) {
-                    case 1:
-                      //tab.setIcon(R.drawable.calendar_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
-                        break;
-                    case 0:
-                        //tab.setIcon(R.drawable.calendar_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
-                        break;
-                    case 2:
-                        //tab.setIcon(R.drawable.calendar_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(tab.getPosition()));
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 1:
-                     //  tab.setIcon(R.drawable.calendar_pale);
-                        break;
-                    case 0:
-                       // tab.setIcon(R.drawable.calendar_pale);
-                        break;
-                    case 2:
-                       // tab.setIcon(R.drawable.calendar_pale);
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });*/
        Button todayButton = (Button) findViewById(R.id.tollbar_button);
        todayButton.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -338,7 +287,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!mainActivity) {
             mainActivityStart();
-        } else {
+        }else if(mViewPager.getAdapter().getCount()==53){
+            mainActivityStart();
+        }
+
+        else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = getLayoutInflater();
             View alertVIew = inflater.inflate(R.layout.admin_ok_dialog, null);

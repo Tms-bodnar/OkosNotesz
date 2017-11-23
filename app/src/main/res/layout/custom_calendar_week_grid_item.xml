@@ -1,43 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="50dp"
-    android:layout_height="30dp"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
     android:orientation="vertical"
+    android:id="@+id/week_list_item_layout"
     android:background="@android:color/white">
 
-    <RelativeLayout
-        android:id="@+id/week_drid_item_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/week_list_item_layout_mon"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
-        <View
-            android:id="@+id/week_border_top"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/whiteDark2" />
+                <View
+                    android:id="@+id/week_border1_mon"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
 
-        <View
-            android:id="@+id/week_border1"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/whiteDark2" />
+                <TextView
+                    android:id="@+id/tv_week_hour_mon"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    />
 
-        <TextView
-            android:id="@+id/tv_week_hour"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/week_border1"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="9sp" />
+                <View
+                    android:id="@+id/weekhalfMon"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_mon" />
+        </RelativeLayout>
 
-        <View
-            android:id="@+id/week_border2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/whiteDark2" />
-    </RelativeLayout>
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/week_list_item_layout_tue"
+            android:background="@android:color/white"
+            android:layout_toEndOf="@+id/week_list_item_layout_mon"
+            android:layout_toRightOf="@+id/week_list_item_layout_mon">
+                <View
+                    android:id="@+id/week_border1_tue"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/tv_week_hour_tue"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_tue"
+                    android:id="@+id/weekhalf_tue"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/week_list_item_layout_wed"
+            android:background="@android:color/white"
+            android:layout_toEndOf="@+id/week_list_item_layout_tue"
+            android:layout_toRightOf="@+id/week_list_item_layout_tue">
+                <View
+                    android:id="@+id/week_border1_wed"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/tv_week_hour_wed"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_wed"
+                    android:id="@+id/weekhalf_wed"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/week_list_item_layout_thu"
+            android:background="@android:color/white"
+            android:layout_toEndOf="@+id/week_list_item_layout_wed"
+            android:layout_toRightOf="@+id/week_list_item_layout_wed">
+                <View
+                    android:id="@+id/week_border_thu"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/tv_week_hour_thu"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_thu"
+                    android:id="@+id/weekhalf_thu"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/week_list_item_layout_fri"
+            android:background="@android:color/white"
+            android:layout_toEndOf="@+id/week_list_item_layout_thu"
+            android:layout_toRightOf="@+id/week_list_item_layout_thu">
+                <View
+                    android:id="@+id/week_border_fri"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:id="@+id/tv_week_hour_fri"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_fri"
+                    android:id="@+id/weekhalf_fri"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/week_list_item_layout_sat"
+            android:background="@android:color/white"
+            android:layout_toEndOf="@+id/week_list_item_layout_fri"
+            android:layout_toRightOf="@+id/week_list_item_layout_fri">
+                <View
+                    android:id="@+id/week_border_sat"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/tv_week_hour_sat"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_sat"
+                    android:id="@+id/weekhalf_sat"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/week_list_item_layout_sun"
+            android:background="@android:color/white"
+            android:layout_toEndOf="@+id/week_list_item_layout_sat"
+            android:layout_toRightOf="@+id/week_list_item_layout_sat">
+                <View
+                    android:id="@+id/week_border_sun"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimaryDark" />
+                <TextView
+                    android:id="@+id/tv_week_hour_sun"
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_below="@id/tv_week_hour_sun"
+                    android:id="@+id/weekhalf_sun"/>
+        </RelativeLayout>
+
+</RelativeLayout>

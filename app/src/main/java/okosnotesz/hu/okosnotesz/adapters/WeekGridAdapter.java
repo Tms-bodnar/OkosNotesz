@@ -1,36 +1,32 @@
 package okosnotesz.hu.okosnotesz.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import okosnotesz.hu.okosnotesz.R;
-import okosnotesz.hu.okosnotesz.fragments.CalendarFragment;
-import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
-import okosnotesz.hu.okosnotesz.model.Treatments;
 
 /**
  * Created by user on 2017.10.31..
  */
 
 public class WeekGridAdapter extends BaseAdapter {
+
     private final Context mContext;
     private final List<Reports> dailyReports;
-    private CalendarFragment.Hours[] hoursArray;
+    private WeekViewAdapter.Hours[] hoursArray;
     private LayoutInflater inflater;
     private String hour;
     private String minute;
+    Calendar cal = Calendar.getInstance();
     private String startMinute = "";
     private String endMinute = "";
     private String startHour = "";
@@ -39,7 +35,7 @@ public class WeekGridAdapter extends BaseAdapter {
 
 
 
-    public WeekGridAdapter(Context context, CalendarFragment.Hours[] array, List<Reports> dailyReports) {
+    public WeekGridAdapter(Context context, WeekViewAdapter.Hours[] array, List<Reports> dailyReports) {
         this.mContext = context;
         this.hoursArray = array;
         this.dailyReports = dailyReports;
@@ -64,19 +60,47 @@ public class WeekGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d("week", "getview: "+ position);
         View weekView = convertView;
-        if (weekView == null) {
+        if (convertView == null) {
             weekView = inflater.inflate(R.layout.custom_calendar_week_grid_item, parent, false);
-            holder = new ViewHolder();
-            holder.weekHour = (TextView) weekView.findViewById(R.id.tv_week_hour);
-            holder.gridItem = (RelativeLayout) weekView.findViewById(R.id.week_drid_item_layout);
-            holder.bottomBorder = weekView.findViewById(R.id.week_border2);
-            holder.topBorder = weekView.findViewById(R.id.week_border_top);
         }
+        holder = new ViewHolder();
+        holder.weekHourMon = (TextView) weekView.findViewById(R.id.tv_week_hour_mon);
+        holder.weekHourTue = (TextView) weekView.findViewById(R.id.tv_week_hour_tue);
+        holder.weekHourWed = (TextView) weekView.findViewById(R.id.tv_week_hour_wed);
+        holder.weekHourThu = (TextView) weekView.findViewById(R.id.tv_week_hour_thu);
+        holder.weekHourFri = (TextView) weekView.findViewById(R.id.tv_week_hour_fri);
+        holder.weekHourSat = (TextView) weekView.findViewById(R.id.tv_week_hour_sat);
+        holder.weekHourSun = (TextView) weekView.findViewById(R.id.tv_week_hour_sun);
+        holder.weekHalfMon = weekView.findViewById(R.id.weekhalfMon);
+        holder.weekHalfTue = weekView.findViewById(R.id.weekhalf_tue);
+        holder.weekHalfWed = weekView.findViewById(R.id.weekhalf_wed);
+        holder.weekHalfThu = weekView.findViewById(R.id.weekhalf_thu);
+        holder.weekHalfFri = weekView.findViewById(R.id.weekhalf_fri);
+        holder.weekHalfSat = weekView.findViewById(R.id.weekhalf_sat);
+        holder.weekHalfSun = weekView.findViewById(R.id.weekhalf_sun);
         hour = hoursArray[position].getHour();
         minute = hoursArray[position].getMinute();
-        holder.weekHour.setText(hour + ":" + minute);
-        if(dailyReports!= null) {
+        Log.d("week", hour + ":" + minute);
+        holder.weekHourMon.setText(hour + ":" + minute);
+        holder.weekHourTue.setText(hour + ":" + minute);
+        holder.weekHourWed.setText(hour + ":" + minute);
+        holder.weekHourThu.setText(hour + ":" + minute);
+        holder.weekHourFri.setText(hour + ":" + minute);
+        holder.weekHourSat.setText(hour + ":" + minute);
+        holder.weekHourSun.setText(hour + ":" + minute);
+        if(dailyReports != null){
+            for (int i = 0; i < dailyReports.size(); i++){
+                cal.setTimeInMillis(dailyReports.get(i).getDate());
+                int day = cal.get(Calendar.DAY_OF_WEEK)-1;
+                switch (day){
+                    case 0:
+
+                }
+            }
+        }
+        /*if(dailyReports!= null) {
             View finalWeekView = weekView;
             for (int i = 0; i < dailyReports.size(); i++) {
                 Date tempRep = new Date(dailyReports.get(i).getDate());
@@ -190,16 +214,26 @@ public class WeekGridAdapter extends BaseAdapter {
 
             return finalWeekView;
         }else {
-            Log.d("wwx", "animLoad 1 adapter" + position);
+            Log.d("wwx", "animLoad 1 adapter" + position);*/
             return weekView;
         }
-    }
+
 
     class ViewHolder {
-        TextView weekHour;
-        RelativeLayout gridItem;
-        View bottomBorder;
-        View topBorder;
+        TextView weekHourMon;
+        TextView weekHourTue;
+        TextView weekHourWed;
+        TextView weekHourThu;
+        TextView weekHourFri;
+        TextView weekHourSat;
+        TextView weekHourSun;
+        View weekHalfMon;
+        View weekHalfTue;
+        View weekHalfWed;
+        View weekHalfThu;
+        View weekHalfFri;
+        View weekHalfSat;
+        View weekHalfSun;
     }
 
 }
