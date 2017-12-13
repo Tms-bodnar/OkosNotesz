@@ -57,6 +57,7 @@ public class BookingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final ArrayList<Treatments> treatmentList = ListHelper.getAllTreatments(v.getContext());
                 final List<String> selectedTreatmentNames = new ArrayList<>(treatmentList.size());
+                final int[] duration = {0};
                 final String treatmentNames[] = new String[treatmentList.size()];
                 final StringBuilder sbNames = new StringBuilder();
                 final StringBuilder sbIds = new StringBuilder();
@@ -84,17 +85,19 @@ public class BookingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (String  name: selectedTreatmentNames) {
-                            sbNames.append(name+", ");
+                            sbNames.append(name+" ");
                         }
                         btnTreatment.setText(sbNames.toString());
                         for (Treatments t : treatmentList) {
                             for (String name : selectedTreatmentNames) {
                                 if (t.getName().equals(name)) {
-                                    sbIds.append(String.valueOf(t.getId()) + ", ");
+                                    sbIds.append(String.valueOf(t.getName()) + " ");
+                                    duration[0] += t.getTime();
                                 }
                             }
                         }
                         report.setTreatment(sbIds.toString());
+                        report.setDuration(duration[0]);
                         dialog.dismiss();
                     }
                 });
@@ -135,6 +138,7 @@ public class BookingActivity extends AppCompatActivity {
                             if(e.getName().equals(selectedExpert[0])){
                                 id = e.getId();
                                 report.setExpert(id);
+                                report.setExpertName(e.getName());
                                 btnExpert.setText(selectedExpert[0]);
                                 dialog.dismiss();
                             }
@@ -155,7 +159,7 @@ public class BookingActivity extends AppCompatActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("xx", report.getGuestName()  +", "+ formatter.format(new Date(report.getDate()))+", "+ report.getExpert() +", "+ report.getTreatment());
+                Log.d("xxxxxx", report.getGuestName()  +", "+ formatter.format(new Date(report.getDate()))+", "+ report.getExpertname() +", "+ report.getTreatment() + ", "+ report.getDuration());
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("backRep", report);
                 Intent backIntent = new Intent();
@@ -186,6 +190,7 @@ public class BookingActivity extends AppCompatActivity {
             cursor.close();
             btnGuest.setText(guestName);
             report.setGuestName(guestName);
+            report.setConID(contId);
         } else {
             btnGuest.setText(guestName);
         }

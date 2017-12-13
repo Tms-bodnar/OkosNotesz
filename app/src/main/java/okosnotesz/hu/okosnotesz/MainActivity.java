@@ -27,6 +27,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import okosnotesz.hu.okosnotesz.adapters.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -199,7 +201,27 @@ public class MainActivity extends AppCompatActivity {
        todayButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               mViewPager.setCurrentItem(24);
+               if(mViewPager.getAdapter().getCount()==49) {
+                   mViewPager.setCurrentItem(24,true);
+               }if(mViewPager.getAdapter().getCount()==53){
+                   Calendar today = Calendar.getInstance();
+                   long todayInMillis = today.getTimeInMillis();
+                   PagerAdapter weekAdapter = new PagerAdapter(mContext,getSupportFragmentManager(), 53, todayInMillis);
+                   mViewPager.setAdapter(weekAdapter);
+                   mViewPager.setCurrentItem(26,true);
+                   mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                       @Override
+                       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                           toolbar.setTitle(weekAdapter.getPageTitle(mViewPager.getCurrentItem()));
+                       }
+                       @Override
+                       public void onPageSelected(int position) {
+                       }
+                       @Override
+                       public void onPageScrollStateChanged(int state) {
+                       }
+                   });
+               }
            }
        });
         mViewPager.setCurrentItem(24);

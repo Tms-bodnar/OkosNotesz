@@ -11,9 +11,12 @@ public class Reports implements Parcelable{
 
     private int id;
     private int expertId;
-    private String treatmentId;
+    private String expertName;
+    private String treatmentNames;
     private Long date;
     private String guestName;
+    private int conID;
+    private int duration;
     private String note;
 
     public Reports(){
@@ -23,11 +26,14 @@ public class Reports implements Parcelable{
         this.id = id;
     }
 
-    public Reports(int expert, String treatment, Long date, String guest, String note) {
+    public Reports(int expert, String expertName, String treatment, Long date, String guest, int duration, int conID, String note) {
         this.expertId = expert;
-        this.treatmentId = treatment;
+        this.expertName = expertName;
+        this.treatmentNames = treatment;
         this.date = date;
         this.guestName = guest;
+        this.duration = duration;
+        this.conID = conID;
         this.note = note;
     }
 
@@ -48,9 +54,12 @@ public class Reports implements Parcelable{
     private void readFromParcel(Parcel in) {
         id = in.readInt();
         expertId = in.readInt();
-        treatmentId = in.readString();
+        expertName = in.readString();
+        treatmentNames = in.readString();
         date = in.readLong();
         guestName = in.readString();
+        duration = in.readInt();
+        conID = in.readInt();
         note = in.readString();
     }
 
@@ -63,9 +72,12 @@ public class Reports implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeInt(expertId);
-        dest.writeString(treatmentId);
+        dest.writeString(expertName);
+        dest.writeString(treatmentNames);
         dest.writeLong(date);
         dest.writeString(guestName);
+        dest.writeInt(duration);
+        dest.writeInt(conID);
         dest.writeString(note);
 
     }
@@ -86,12 +98,20 @@ public class Reports implements Parcelable{
         this.expertId = expertId;
     }
 
+    public String getExpertname(){
+        return expertName;
+    }
+
+    public void setExpertName(String expertName){
+        this.expertName = expertName;
+    }
+
     public String getTreatment() {
-        return treatmentId;
+        return treatmentNames;
     }
 
     public void setTreatment(String treatmentId) {
-        this.treatmentId = treatmentId;
+        this.treatmentNames = treatmentId;
     }
 
     public Long getDate() {
@@ -118,8 +138,24 @@ public class Reports implements Parcelable{
         this.note = note;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getConID() {
+        return conID;
+    }
+
+    public void setConID(int conID) {
+        this.conID = conID;
+    }
+
     @Override
     public String toString() {
-        return date+"";
+        return date+", "+ expertName+", "+treatmentNames+", "+ duration;
     }
 }

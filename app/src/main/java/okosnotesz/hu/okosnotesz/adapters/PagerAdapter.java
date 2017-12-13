@@ -45,7 +45,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = new CalendarFragment();
-        switch(numOfTabs) {
+        switch (numOfTabs) {
             case 4:
                 switch (position) {
                     case 0:
@@ -65,22 +65,20 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 49:
                 Calendar cal = Calendar.getInstance();
                 long calLong = cal.getTimeInMillis();
-                Log.d("eee", cal.getTime()+"adapter first");
-                if(position == 24){
-                    Log.d("eee", cal.getTime()+"adapter first, Position: " + position + ", numOftabs/2: " + numOfTabs/2);
+                Log.d("eee", cal.getTime() + "adapter first");
+                if (position == 24) {
+                    Log.d("eee", cal.getTime() + "adapter first, Position: " + position + ", numOftabs/2: " + numOfTabs / 2);
                     fragment = CalendarFragment.newInstance(calLong);
 
+                } else {
+                    cal.add(Calendar.MONTH, position - numOfTabs / 2);
+                    calLong = cal.getTimeInMillis();
+                    Log.d("eee", cal.getTime() + "adapter moving, Position: " + position + ", numOftabs/2: " + numOfTabs / 2);
+                    fragment = CalendarFragment.newInstance(calLong);
                 }
-
-                else{
-                        cal.add(Calendar.MONTH, position-numOfTabs/2);
-                        calLong = cal.getTimeInMillis();
-                    Log.d("eee", cal.getTime()+"adapter moving, Position: " + position + ", numOftabs/2: " + numOfTabs/2);
-                        fragment = CalendarFragment.newInstance(calLong);
-                    }
                 break;
             case 2:
-                switch (position){
+                switch (position) {
                     case 0:
                         fragment = new SalesFragment();
                         break;
@@ -90,13 +88,17 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 }
                 break;
             case 53:
-
-                fragment = WeekFragment.newInstance(clickedDate);
-
+                if (position == 26) {
+                    fragment = WeekFragment.newInstance(clickedDate);
+                } else {
+                    Calendar clickedDay = Calendar.getInstance();
+                    clickedDay.setTimeInMillis(clickedDate);
+                    clickedDay.add(Calendar.DAY_OF_YEAR, (position - numOfTabs / 2) * 7);
+                    fragment = WeekFragment.newInstance(clickedDay.getTimeInMillis());
+                }
         }
         return fragment;
     }
-
 
 
     @Override
@@ -108,6 +110,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         CharSequence pageTitle = "";
+        SimpleDateFormat formatter;
         switch (numOfTabs) {
             case 4:
                 switch (position) {
@@ -137,23 +140,31 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 }
                 break;
             case 49:
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMMM");
+                formatter = new SimpleDateFormat("yyyy MMMM");
                 Calendar cal = Calendar.getInstance();
-                Log.d("eee", cal.getTime()+"adapter gettitle first");
-                switch (position){
+                switch (position) {
                     case 24:
-                    Log.d("eee", cal.getTime()+"gettitle first, Position: " + position + ", numOftabs/2: " + numOfTabs/2);
-                    pageTitle = formatter.format(cal.getTime());
-                    Log.d("eee","pagetitle: "+pageTitle.toString());
-                    break;
-                default:
-                    cal.add(Calendar.MONTH, position-numOfTabs/2);
-                    Log.d("eee", cal.getTime()+"gettitle moving, Position: " + position + ", numOftabs/2: " + numOfTabs/2);
-                    pageTitle = formatter.format(cal.getTime());
-                    Log.d("eee","pagetitle: "+pageTitle.toString());
-                    break;
+                        pageTitle = formatter.format(cal.getTime());
+                        break;
+                    default:
+                        cal.add(Calendar.MONTH, position - numOfTabs / 2);
+                        pageTitle = formatter.format(cal.getTime());
+                        break;
                 }
                 break;
+            case 53:
+                formatter = new SimpleDateFormat("yyyy MMM, ww");
+                Calendar clickedDay = Calendar.getInstance();
+                clickedDay.setTimeInMillis(clickedDate);
+                switch (position) {
+                    case 26:
+                        pageTitle = formatter.format(clickedDay.getTime()) +"."+ mContext.getString(R.string.week);
+                        break;
+                    default:
+                        clickedDay.add(Calendar.DAY_OF_YEAR, (position- numOfTabs/2)*7);
+                        pageTitle = formatter.format(clickedDay.getTime()) +"."+ mContext.getString(R.string.week);
+                        break;
+                }
 
         }
         return pageTitle;

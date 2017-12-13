@@ -1,35 +1,54 @@
 package okosnotesz.hu.okosnotesz.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import okosnotesz.hu.okosnotesz.BookingActivity;
 import okosnotesz.hu.okosnotesz.ChartHelper;
 import okosnotesz.hu.okosnotesz.R;
+import okosnotesz.hu.okosnotesz.WeekItemClickListener;
+import okosnotesz.hu.okosnotesz.model.DBHelper;
+import okosnotesz.hu.okosnotesz.model.Reports;
 
 /**
  * Created by user on 2017.11.23..
  */
 
-public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHolder> {
+public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHolder> implements WeekItemClickListener{
 
-
-
+    Fragment fragment;
+    private final Context context;
    ChartHelper.Days[] days;
-   Map<Integer, boolean[]> dailymap;
+   Map<Integer, Reports[]> dailymap;
+   List<Calendar> calendarsOfWeek;
    List<TextView> textViewList;
+    private final int REQ_CODE = 9;
 
-    public WeekViewAdapter(ChartHelper.Days[] days, Map<Integer, boolean[]> dailymap){
+    public WeekViewAdapter(Fragment fragment, Context context, ChartHelper.Days[] days, Map<Integer, Reports[]> dailymap, List<Calendar> calendarsOfWeeek){
+        this.fragment = fragment;
+        this.context = context;
         this.days = days;
         this.dailymap = dailymap;
+        this.calendarsOfWeek = calendarsOfWeeek;
     }
 
 
@@ -49,20 +68,36 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 holder.textView16, holder.textView1630, holder.textView17, holder.textView1730,
                 holder.textView18, holder.textView1830, holder.textView19, holder.textView1930,
                 holder.textView20, holder.textView2030, holder.textView21, holder.textView2130,
-                holder.textView22, holder.textView2230));
+                holder.textView22));
+        Log.d("weeek", "size: "+calendarsOfWeek.size());
         Hours[] hours = Hours.values();
         for(int i = 0; i < hours.length; i++){
-            if(i%2==0) {
+            if(i%2==0 && position==0) {
                 textViewList.get(i).setText(hours[i].getHour() + ":" + hours[i].getMinute());
             }
         }
-        boolean[] bookingTimes = dailymap.get(position);
-        for(int i = 0; i < bookingTimes.length; i++){
-            if(bookingTimes[i]){
+        Reports[] dailyReports = dailymap.get(position);
+        for(int i = 0; i < dailyReports.length; i++){
+            if(dailyReports[i]!=null){
                 textViewList.get(i).setBackgroundColor(Color.LTGRAY);
             }
         }
+//        Log.d("weeek", "1: "+calendarsOfWeek.size() +", 2: " + hours.length +", 3: " + textViewList.size());
+        for ( int i = 0; i < textViewList.size(); i++ ) {
+            int finalI = i;
 
+            textViewList.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    calendarsOfWeek.get(position).set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours[finalI].getHour()));
+                    calendarsOfWeek.get(position).set(Calendar.MINUTE, Integer.parseInt(hours[finalI].getMinute()));
+                    calendarsOfWeek.get(position).set(Calendar.SECOND, 0);
+                    WeekViewAdapter.this.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI]);
+
+                }
+            });
+
+        }
 
     }
 
@@ -71,18 +106,71 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         return days.length;
     }
 
+    @Override
+    public void onClick(Calendar cal, int index, Reports temp) {
+            if (temp != null) {
+                View detailsView = LayoutInflater.from(context).inflate(R.layout.booking_details, null);
+                Button detailsOK = (Button) detailsView.findViewById(R.id.booking_details_button);
+                TextView detailsDate = (TextView) detailsView.findViewById(R.id.booking_date_details);
+                TextView detailsGuest = (TextView) detailsView.findViewById(R.id.booking_guest_datails);
+                TextView detailsTreatment = (TextView) detailsView.findViewById(R.id.booking_treatment_details);
+                TextView detailsExp = (TextView) detailsView.findViewById(R.id.booking_expert_details);
+                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy MMMM dd, HH:mm");
+                detailsDate.setText(formatter2.format(new Date(temp.getDate())));
+                if (temp.getGuestName() != null) {
+                    detailsGuest.setText(temp.getGuestName());
+                } else detailsGuest.setText(R.string.noDatas);
+                if(temp.getTreatment() != null) {
+                    detailsTreatment.setText(temp.getTreatment());
+                }else detailsTreatment.setText(R.string.noDatas);
+                if (temp.getExpertname() != null) {
+                    detailsExp.setText(temp.getExpertname());
+                } else detailsExp.setText(R.string.noDatas);
+                final PopupWindow pop = new PopupWindow(detailsView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                pop.showAtLocation(detailsView, Gravity.CENTER, 0, 0);
+                detailsOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pop.dismiss();
+                    }
+                });
+            } else {
+                Reports sendReport = new Reports();
+                sendReport.setDate(cal.getTime().getTime());
+                Intent i = new Intent(context, BookingActivity.class);
+                i.putExtra("newRep", sendReport);
+                fragment.startActivityForResult(i, REQ_CODE);
+            }
+        }
+    @Override
+    public void onLongClick(Calendar cal) {
+    }
+
+
+    public  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("xxxxxx", "onActivityResult");
+        Reports backRep = null;
+        if (resultCode == 22) {
+            backRep = data.getParcelableExtra("backRep");
+            DBHelper helper = DBHelper.getHelper(context);
+            helper.addReport(backRep);
+            helper.close();
+        }
+    }
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView textView7, textView730, textView8,textView830,  textView9,textView930,  textView10,
                 textView1030, textView11,textView1130, textView12, textView1230, textView13,
                 textView1330, textView14, textView1430, textView15, textView1530, textView16,
                 textView1630, textView17, textView1730, textView18, textView1830, textView19,
-                textView1930, textView20, textView2030, textView21, textView2130, textView22, textView2230;
-
-
-
+                textView1930, textView20, textView2030, textView21, textView2130, textView22;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             textView7 = (TextView) itemView.findViewById(R.id.tv_week_hour_7);
             textView730 = (TextView) itemView.findViewById(R.id.weekhalf7);
             textView8 = (TextView) itemView.findViewById(R.id.tv_week_hour_8);
@@ -114,7 +202,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             textView21 = (TextView) itemView.findViewById(R.id.tv_week_hour_21);
             textView2130 = (TextView) itemView.findViewById(R.id.weekhalf21);
             textView22 = (TextView) itemView.findViewById(R.id.tv_week_hour_22);
-            textView2230 = (TextView) itemView.findViewById(R.id.weekhalf22);
+
 
         }
     }
@@ -147,5 +235,4 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             return minute;
         }
     }
-
 }

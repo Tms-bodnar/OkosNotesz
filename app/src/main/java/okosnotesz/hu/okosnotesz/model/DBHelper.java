@@ -63,8 +63,11 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String REP_COL_ID = "reportID";
     private static final String REP_COL_TRE = "reportTreatment";
     private static final String REP_COL_EXP = "reportExpert";
+    private static final String REP_COL_EXPNAME = "reportExpertName";
     private static final String REP_COL_GUEST = "reportGuest";
     private static final String REP_COL_DATE = "reportDate";
+    private static final String REP_COL_DURA = "reportDuration";
+    private static final String REP_COL_CONID = "reportConID";
     private static final String REP_COL_NOTE = "reportNote";
 
 
@@ -124,9 +127,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + REPORTS_TABLE + " ("
                 + REP_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + REP_COL_EXP + " INTEGER NOT NULL, "
+                + REP_COL_EXPNAME + " TEXT ,"
                 + REP_COL_TRE + " TEXT, "
                 + REP_COL_GUEST + " TEXT ,"
+                + REP_COL_CONID + " INTEGER, "
                 + REP_COL_DATE + " INTEGER, "
+                + REP_COL_DURA + " INTEGER, "
                 + REP_COL_NOTE + " TEXT, "
                 + "FOREIGN KEY (" + REP_COL_EXP + ") REFERENCES " + EXPERT_TABLE + "(" + EXP_COL_ID + ")); ");
 
@@ -443,8 +449,12 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put("reportTreatment", r.getTreatment());
         cv.put("reportExpert", r.getExpert());
+        cv.put("reportExpertName", r.getExpertname());
         cv.put("reportGuest", r.getGuestName());
+        cv.put("reportConID", r.getConID());
         cv.put("reportDate", r.getDate());
+        cv.put("reportDuration", r.getDuration());
+        cv.put("reportNote", r.getNote());
         db.insert("reports", null, cv);
         db.close();
         return true;
@@ -455,8 +465,12 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put("reportTreatment", r.getTreatment());
         cv.put("reportExpert", r.getExpert());
+        cv.put("reportExpertName", r.getExpertname());
         cv.put("reportGuest", r.getGuestName());
+        cv.put("reportConID", r.getConID());
         cv.put("reportDate", r.getDate());
+        cv.put("reportDuration", r.getDuration());
+        cv.put("reportNote", r.getNote());
         db.update("reports", cv, REP_COL_ID + "=?", new String[]{String.valueOf(r.getId())});
         db.close();
         return true;

@@ -48,10 +48,12 @@ public class GridAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 Date mDate = datesList.get(position);
+                Calendar today = Calendar.getInstance();
                 Calendar mCal = Calendar.getInstance();
                 mCal.setTime(mDate);
                 int dayValue = mCal.get(Calendar.DAY_OF_MONTH);
                 final int monthValue = mCal.get(Calendar.MONTH) + 1;
+                final int year = mCal.get(Calendar.YEAR);
                 int yearValue = mCal.get(Calendar.YEAR);
                 int currentMonth = currentDate.get(Calendar.MONTH) + 1;
                 int currentYear = currentDate.get(Calendar.YEAR);
@@ -71,7 +73,9 @@ public class GridAdapter extends BaseAdapter {
                         monthView.setBackgroundColor(Color.parseColor("#9FA8DA"));
                     }
                 }
-                if(dayValue == (Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) && monthValue == Calendar.getInstance().get(Calendar.MONTH)+1){
+                if(dayValue == today.get(Calendar.DAY_OF_MONTH) &&
+                        monthValue == today.get(Calendar.MONTH)+1 &&
+                        year == today.get(Calendar.YEAR)){
                     monthView.setBackgroundColor(Color.parseColor("#F2C5C5"));
                 }
                 TextView cellDate = (TextView) monthView.findViewById(R.id.calendar_date_id);
@@ -89,10 +93,7 @@ public class GridAdapter extends BaseAdapter {
                             }
                         }
                     }
-
                 }
-
-
         return monthView;
     }
 
