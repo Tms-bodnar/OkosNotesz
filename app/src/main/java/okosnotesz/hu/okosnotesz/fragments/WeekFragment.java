@@ -176,64 +176,108 @@ public class WeekFragment extends Fragment {
         Calendar weekCal = Calendar.getInstance();
         Calendar tempCal = Calendar.getInstance();
         tempCal.setTime(d);
+        int hour = -1;
         int dayHour = -1;
         int dayMinute = -1;
-        int duration = -1;
         for(Reports r : reportsList) {
             weekCal.setTimeInMillis(r.getDate());
+
             if (weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR) &&
                     weekCal.get(Calendar.MONTH) == tempCal.get(Calendar.MONTH)&&
                     weekCal.get(Calendar.WEEK_OF_YEAR)== tempCal.get(Calendar.WEEK_OF_YEAR)) {
-                int weekDay = weekCal.get(Calendar.DAY_OF_WEEK)-1;
-                dayHour = weekCal.get(Calendar.HOUR_OF_DAY) - 7;
+                int weekDay = weekCal.get(Calendar.DAY_OF_WEEK);
+                hour = weekCal.get(Calendar.HOUR_OF_DAY);
+                Log.d("hour", hour + ": hour, ");
+                switch(hour){
+                    case 14:
+                        dayHour = hour;
+                        break;
+                    case 7:
+                        dayHour = 0;
+                        break;
+                    default:
+                        dayHour = hour < 14 ? hour - (14 % hour) : hour + (hour % 14);
+                        break;
+                }
+
+                Log.d("hour", dayHour + ": dayHour, ");
                 dayMinute = weekCal.get(Calendar.MINUTE);
-                duration = r.getDuration();
-                Log.d("weekrep", r.toString());
+                int cellMod = dayMinute < 30 ? 0 : 1;
+                int duration = r.getDuration();
                 int cellCount = duration/30;
-                int temp = 0;
+                Log.d("dur", duration + ", "+ cellCount + r.getTreatment());
                 if(dayHour> -1){
+                    int temp = 0;
                     switch (weekDay){
                         case 1:
-                            do{
-                                mon[dayHour + temp] = r;
+                            if(dayHour+cellCount + cellMod <sun.length) {
+                            do {
+                                sun[dayHour + cellMod + temp] = r;
                                 temp += 1;
-                            }while(temp < cellCount);
+                                } while (temp < cellCount);
+                            }else{
+                                sun[dayHour] = r;
+                            }
                             break;
                         case 2:
-                            do{
-                                tue[dayHour + temp] = r;
-                                temp += 1;
-                            }while(temp < cellCount);
+                            if(dayHour + cellCount<sat.length) {
+                                do {
+                                    mon[dayHour + cellMod + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
+                            }else{
+                                mon[dayHour] = r;
+                            }
                             break;
                         case 3:
-                            do{
-                                wed[dayHour + temp] = r;
-                                temp += 1;
-                            }while(temp < cellCount);
+                            if(dayHour + cellCount<tue.length) {
+                                do {
+                                    tue[dayHour + cellMod + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
+                            }else{
+                                tue[dayHour] = r;
+                            }
                             break;
                         case 4:
-                            do{
-                                thu[dayHour + temp] = r;
-                                temp += 1;
-                            }while(temp < cellCount);
+                            if(dayHour + cellCount<wed.length) {
+                                do {
+                                    wed[dayHour + cellMod + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
+                            }else{
+                                wed[dayHour] = r;
+                            }
                             break;
                         case 5:
-                            do{
-                                fri[dayHour + temp] = r;
-                                temp += 1;
-                            }while(temp < cellCount);
+                            if(dayHour + cellCount < thu.length) {
+                                do {
+                                    thu[dayHour + cellMod + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
+                            }else{
+                                thu[dayHour] = r;
+                            }
                             break;
                         case 6:
-                            do{
-                                sat[dayHour + temp] = r;
-                                temp += 1;
-                            }while(temp < cellCount);
+                            if(dayHour + cellCount<fri.length) {
+                                do {
+                                    fri[dayHour + cellMod + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
+                            }else{
+                                fri[dayHour] = r;
+                            }
                             break;
                         case 7:
-                            do{
-                                sun[dayHour + temp] = r;
-                                temp += 1;
-                            }while(temp < cellCount);
+                            if(dayHour + cellCount<sat.length) {
+                                do {
+                                    sat[dayHour + cellMod + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
+                            }else{
+                                sat[dayHour] = r;
+                            }
                             break;
                     }
                 }
@@ -252,11 +296,13 @@ public class WeekFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
        adapter.onActivityResult(requestCode, resultCode, data);
+        Log.d("xxxxxx", "onActivityResult 3" );
         Reports backRep = null;
         if (resultCode == 22) {
             backRep = data.getParcelableExtra("backRep");
             Date temp = new Date(backRep.getDate());
             setDailyReports(temp);
+            weeklyCalendarsDatas = setWeekCalendars(temp);
         }
        // formatter = new SimpleDateFormat("yyyy MM dd HH:mm");
     }

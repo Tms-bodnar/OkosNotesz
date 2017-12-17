@@ -478,7 +478,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean deleteReport(Reports r) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("products", REP_COL_ID + "=?", new String[]{String.valueOf(r.getId())});
+        db.delete("reports", REP_COL_ID + "=?", new String[]{String.valueOf(r.getId())});
         db.close();
         return true;
     }

@@ -2,7 +2,6 @@ package okosnotesz.hu.okosnotesz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,6 +68,13 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 holder.textView18, holder.textView1830, holder.textView19, holder.textView1930,
                 holder.textView20, holder.textView2030, holder.textView21, holder.textView2130,
                 holder.textView22));
+        List <Integer> colorList = new ArrayList<>();
+        colorList.add(context.getResources().getColor(R.color.Color13));
+        colorList.add(context.getResources().getColor(R.color.Color14));
+        colorList.add(context.getResources().getColor(R.color.Color25));
+        colorList.add(context.getResources().getColor(R.color.Color26));
+        colorList.add(context.getResources().getColor(R.color.Color22));
+        colorList.add(context.getResources().getColor(R.color.buttonColor));
         Log.d("weeek", "size: "+calendarsOfWeek.size());
         Hours[] hours = Hours.values();
         for(int i = 0; i < hours.length; i++){
@@ -77,10 +83,13 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             }
         }
         Reports[] dailyReports = dailymap.get(position);
+        int j = (int) (Math.random()*10/2);
         for(int i = 0; i < dailyReports.length; i++){
             if(dailyReports[i]!=null){
-                textViewList.get(i).setBackgroundColor(Color.LTGRAY);
+                textViewList.get(i).setBackgroundColor(colorList.get(j));
+                textViewList.get(i).setText((CharSequence) dailyReports[i].getGuestName());
             }
+
         }
 //        Log.d("weeek", "1: "+calendarsOfWeek.size() +", 2: " + hours.length +", 3: " + textViewList.size());
         for ( int i = 0; i < textViewList.size(); i++ ) {
@@ -148,12 +157,13 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
 
 
     public  void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("xxxxxx", "onActivityResult");
+        Log.d("xxxxxx", "onActivityResult 1");
         Reports backRep = null;
         if (resultCode == 22) {
             backRep = data.getParcelableExtra("backRep");
             DBHelper helper = DBHelper.getHelper(context);
-            helper.addReport(backRep);
+            boolean OK = helper.addReport(backRep);
+            Log.d("xxxxxx", "onActivityResult 2" + OK);
             helper.close();
         }
     }

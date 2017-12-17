@@ -93,6 +93,7 @@ public class BookingActivity extends AppCompatActivity {
                                 if (t.getName().equals(name)) {
                                     sbIds.append(String.valueOf(t.getName()) + " ");
                                     duration[0] += t.getTime();
+                                    Log.d("weekrep", "dur: " + duration[0]+ ", time. "+ t.getTime());
                                 }
                             }
                         }

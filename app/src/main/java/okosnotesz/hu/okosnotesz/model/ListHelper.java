@@ -179,6 +179,7 @@ public class ListHelper {
                 r.setGuestName(cursor.getString(cursor.getColumnIndex("reportGuest")));
                 Log.d("xxx", "Monthlyadapter repList cursorGUE"+r.getGuestName());
                 r.setDate(cursor.getLong(cursor.getColumnIndex("reportDate")));
+                r.setDuration(cursor.getInt((cursor.getColumnIndex("reportDuration"))));
                 Log.d("xxx", "Monthlyadapter repList cursorDAt"+r.getDate());
                 r.setNote(cursor.getString(cursor.getColumnIndex("reportNote")));
                 Log.d("xxx", "Monthlyadapter repList cursorNote"+r.getNote());

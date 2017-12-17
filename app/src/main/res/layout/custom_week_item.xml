@@ -442,7 +442,7 @@ android:orientation="vertical"
     <RelativeLayout
         android:id="@+id/week_list_item_22"
         android:layout_width="51dp"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:orientation="vertical"
         android:layout_below="@+id/week_list_item_21">
         <TextView
@@ -456,15 +456,5 @@ android:orientation="vertical"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="1dp"
             />
-        <TextView
-            android:id="@+id/weekhalf22"
-            android:background="@android:color/white"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/tv_week_hour_22"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
     </RelativeLayout>
 </RelativeLayout>
