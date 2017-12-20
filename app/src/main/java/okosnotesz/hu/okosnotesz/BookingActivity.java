@@ -91,7 +91,7 @@ public class BookingActivity extends AppCompatActivity {
                         for (Treatments t : treatmentList) {
                             for (String name : selectedTreatmentNames) {
                                 if (t.getName().equals(name)) {
-                                    sbIds.append(String.valueOf(t.getName()) + " ");
+                                    sbIds.append(String.valueOf(t.getName()) + ", ");
                                     duration[0] += t.getTime();
                                     Log.d("weekrep", "dur: " + duration[0]+ ", time. "+ t.getTime());
                                 }

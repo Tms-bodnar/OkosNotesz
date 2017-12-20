@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import okosnotesz.hu.okosnotesz.R;
 
@@ -193,5 +194,18 @@ public class ListHelper {
         }
         Log.d("xxx", "Monthlyadapter repList1.5");
         return rList;
+    }
+
+    public static Treatments[] getTreatmentsOfReport(List<Treatments> allTreatment, String treatmentNames){
+        Treatments[] treatments = new Treatments[allTreatment.size()];
+        String[] splitted = treatmentNames.split(" ");
+        for (int j = 0; j < allTreatment.size(); j++) {
+            for (int i = 0; i < splitted.length; i++) {
+                if (allTreatment.get(j).getName().equals(splitted[i])) {
+                    treatments[i] = allTreatment.get(j);
+                }
+            }
+        }
+        return treatments;
     }
 }

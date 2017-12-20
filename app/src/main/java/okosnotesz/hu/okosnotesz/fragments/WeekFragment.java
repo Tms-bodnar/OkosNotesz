@@ -29,13 +29,14 @@ import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.WeekViewAdapter;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
+import okosnotesz.hu.okosnotesz.model.Treatments;
 
 public class WeekFragment extends Fragment {
 
     Date d;
     List<Reports> reportsList;
     List<Integer> weekDays;
-    List<Integer> treatmentsList;
+    List<Treatments> treatmentsList;
     List<Calendar> weeklyCalendarsDatas;
     Map<Integer, Reports[]> weeklyReports;
     RecyclerView recyclerView;
@@ -62,6 +63,7 @@ public class WeekFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         reportsList = ListHelper.getAllReports(getContext());
+        treatmentsList = ListHelper.getAllTreatments(getContext());
         Bundle b = getArguments();
         d = new Date((Long) b.get("day"));
         setDailyReports(d);
@@ -82,7 +84,7 @@ public class WeekFragment extends Fragment {
         barDrawerToggle.syncState();
         todayButton = (Button) toolbar.findViewById(R.id.tollbar_button);
         recyclerView = (RecyclerView) v.findViewById(R.id.week_view_recycle);
-        adapter = new WeekViewAdapter(this,  getContext(), ChartHelper.Days.values(), weeklyReports, weeklyCalendarsDatas);
+        adapter = new WeekViewAdapter(this,  getContext(), ChartHelper.Days.values(), weeklyReports, weeklyCalendarsDatas, treatmentsList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -102,6 +104,8 @@ public class WeekFragment extends Fragment {
         i.putExtra("newRep", sendReport);
         startActivityForResult(i, REQ_CODE);
     }
+
+
 
     private void setWeekDays(Date d, View v){
         TextView[] weekDates = new TextView[7];

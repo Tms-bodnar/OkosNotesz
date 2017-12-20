@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -26,7 +27,9 @@ import okosnotesz.hu.okosnotesz.ChartHelper;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.WeekItemClickListener;
 import okosnotesz.hu.okosnotesz.model.DBHelper;
+import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
+import okosnotesz.hu.okosnotesz.model.Treatments;
 
 /**
  * Created by user on 2017.11.23..
@@ -40,14 +43,16 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
    Map<Integer, Reports[]> dailymap;
    List<Calendar> calendarsOfWeek;
    List<TextView> textViewList;
+   List<Treatments> treatmentsList;
     private final int REQ_CODE = 9;
 
-    public WeekViewAdapter(Fragment fragment, Context context, ChartHelper.Days[] days, Map<Integer, Reports[]> dailymap, List<Calendar> calendarsOfWeeek){
+    public WeekViewAdapter(Fragment fragment, Context context, ChartHelper.Days[] days, Map<Integer, Reports[]> dailymap, List<Calendar> calendarsOfWeeek, List<Treatments> treatmentsList){
         this.fragment = fragment;
         this.context = context;
         this.days = days;
         this.dailymap = dailymap;
         this.calendarsOfWeek = calendarsOfWeeek;
+        this.treatmentsList = treatmentsList;
     }
 
 
@@ -86,11 +91,22 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         int j = (int) (Math.random()*10/2);
         for(int i = 0; i < dailyReports.length; i++){
             if(dailyReports[i]!=null){
+                Treatments[]treList = ListHelper.getTreatmentsOfReport(treatmentsList, dailyReports[i].getTreatment());
                 textViewList.get(i).setBackgroundColor(colorList.get(j));
-                textViewList.get(i).setText((CharSequence) dailyReports[i].getGuestName());
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textViewList.get(i).getLayoutParams();
+                lp.setMargins(0,0,0,0);
+                textViewList.get(i).setLayoutParams(lp);
+                textViewList.get(i).setTag(new String ("1"));
+                for(int k = 0; k < treList.length; k++ ){
+                    if(treList[k] != null ) {
+                        if(i==0?textViewList.get(i).getTag()!= null:textViewList.get(i-1).getTag()== null)
+                        textViewList.get(i).setText((CharSequence) dailyReports[i].getGuestName() + ", " + treList[k].getName() + ", " + treList[k].getPrice());
+                    }
+                }
             }
 
         }
+
 //        Log.d("weeek", "1: "+calendarsOfWeek.size() +", 2: " + hours.length +", 3: " + textViewList.size());
         for ( int i = 0; i < textViewList.size(); i++ ) {
             int finalI = i;
