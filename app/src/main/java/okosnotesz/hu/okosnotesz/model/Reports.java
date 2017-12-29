@@ -156,6 +156,6 @@ public class Reports implements Parcelable{
 
     @Override
     public String toString() {
-        return date+", "+ expertName+", "+treatmentNames+", "+ duration;
+        return guestName+", "+treatmentNames+ duration;
     }
 }

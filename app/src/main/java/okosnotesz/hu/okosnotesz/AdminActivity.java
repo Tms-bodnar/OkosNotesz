@@ -80,26 +80,26 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (t == null) {
 
-                    String name = String.valueOf(treName.getText());
+                    String name = String.valueOf(treName.getText()).trim();
                     if (name == null || name.isEmpty()) {
                         name = "-";
                     }
-                    String time = treTime.getText().toString();
+                    String time = treTime.getText().toString().trim();
                     if (time == null || time.isEmpty()) {
                         time = "0";
                     }
                     final int timeInt = Integer.valueOf(time);
-                    String price = trePrice.getText().toString();
+                    String price = trePrice.getText().toString().trim();
                     if (price == null || price.isEmpty()) {
                         price = "0";
                     }
                     final int priceInt = Integer.valueOf(price);
-                    String cost = treCost.getText().toString();
+                    String cost = treCost.getText().toString().trim();
                     if (cost == null || cost.isEmpty()) {
                         cost = "0";
                     }
                     final int costInt = Integer.valueOf(cost);
-                    String note = treNote.getText().toString();
+                    String note = treNote.getText().toString().trim();
                     if (note == null || note.isEmpty()) {
                         note = "-";
                     }

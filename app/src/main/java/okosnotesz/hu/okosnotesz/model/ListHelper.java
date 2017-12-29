@@ -36,18 +36,18 @@ public class ListHelper {
             helper.close();
         }
         if (prodList.isEmpty()) {
-            prodList.add(new Products(context.getString(R.string.noDatas),0 ,0 , context.getString(R.string.addNewData)));
+            prodList.add(new Products(context.getString(R.string.noDatas), 0, 0, context.getString(R.string.addNewData)));
         }
         return prodList;
     }
 
-    public static ArrayList<Experts> getAllExperts(Context context){
+    public static ArrayList<Experts> getAllExperts(Context context) {
         ArrayList<Experts> explist = new ArrayList<>();
         DBHelper helper = DBHelper.getHelper(context);
         Cursor c = helper.getAllExperts();
         c.moveToFirst();
         try {
-            while(!c.isAfterLast()){
+            while (!c.isAfterLast()) {
                 Experts e = new Experts();
                 e.setId(c.getInt(c.getColumnIndex("expertID")));
                 e.setName(c.getString(c.getColumnIndex("expertName")));
@@ -55,29 +55,29 @@ public class ListHelper {
                 explist.add(e);
                 c.moveToNext();
             }
-        }finally {
+        } finally {
             c.close();
             helper.close();
         }
-        if(explist.isEmpty()){
+        if (explist.isEmpty()) {
             explist.add(new Experts(context.getString(R.string.noDatas), context.getString(R.string.addNewData)));
         }
         return explist;
     }
 
-    public static Experts getExpert(int id, Context context){
+    public static Experts getExpert(int id, Context context) {
         Experts e = new Experts();
         DBHelper helper = DBHelper.getHelper(context);
         Cursor c = helper.getExpert(id);
         c.moveToFirst();
         try {
-            while(!c.isAfterLast()){
+            while (!c.isAfterLast()) {
                 e.setId(c.getInt(c.getColumnIndex("expertID")));
                 e.setName(c.getString(c.getColumnIndex("expertName")));
                 e.setNote(c.getString(c.getColumnIndex("expertNote")));
                 c.moveToNext();
             }
-        }finally {
+        } finally {
             c.close();
             helper.close();
         }
@@ -106,18 +106,18 @@ public class ListHelper {
             helper.close();
         }
         if (treatmentList.isEmpty()) {
-            treatmentList.add(new Treatments(context.getString(R.string.noDatas),0,0,0, context.getString(R.string.addNewData)));
+            treatmentList.add(new Treatments(context.getString(R.string.noDatas), 0, 0, 0, context.getString(R.string.addNewData)));
         }
         return treatmentList;
     }
 
-    public static Treatments getTreatment(int id, Context context){
+    public static Treatments getTreatment(int id, Context context) {
         Treatments t = new Treatments();
         DBHelper helper = DBHelper.getHelper(context);
         Cursor c = helper.getTreatment(id);
         c.moveToFirst();
-        try{
-            while(!c.isAfterLast()){
+        try {
+            while (!c.isAfterLast()) {
                 t.setId(c.getInt(c.getColumnIndex("treatmentID")));
                 t.setName(c.getString(c.getColumnIndex("treatmentName")));
                 t.setTime(c.getInt(c.getColumnIndex("treatmentTime")));
@@ -126,7 +126,7 @@ public class ListHelper {
                 t.setNote(c.getString(c.getColumnIndex("treatmentNote")));
                 c.moveToNext();
             }
-        }finally {
+        } finally {
             c.close();
             helper.close();
         }
@@ -149,46 +149,34 @@ public class ListHelper {
                 sList.add(s);
                 cursor.moveToNext();
             }
-        }
-        finally{
+        } finally {
             cursor.close();
             helper.close();
         }
-        return  sList;
+        return sList;
     }
 
-    public static ArrayList<Reports> getAllReports(Context context){
-        Log.d("xxx", "Monthlyadapter repList1.1");
+    public static ArrayList<Reports> getAllReports(Context context) {
         ArrayList<Reports> rList = new ArrayList<>();
         DBHelper helper = DBHelper.getHelper(context);
-        Log.d("xxx", "Monthlyadapter repList1.2");
         Cursor cursor = helper.getAllReports();
-        Log.d("xxx", "Monthlyadapter repList1.3");
-
         cursor.moveToFirst();
-        Log.d("xxx", "Monthlyadapter repList cursor"+cursor.getColumnCount());
-        try{
-            while(!cursor.isAfterLast()){
-                Log.d("xxx", "Monthlyadapter repList cursor"+cursor.getCount());
+        try {
+            while (!cursor.isAfterLast()) {
                 Reports r = new Reports();
                 r.setId(cursor.getInt(cursor.getColumnIndex("reportID")));
-                Log.d("xxx", "Monthlyadapter repList cursorID"+r.getId());
                 r.setTreatment(cursor.getString(cursor.getColumnIndex("reportTreatment")));
-                Log.d("xxx", "Monthlyadapter repList cursorTRe"+r.getTreatment());
                 r.setExpert(cursor.getInt(cursor.getColumnIndex("reportExpert")));
-                Log.d("xxx", "Monthlyadapter repList cursorEXp"+r.getExpert());
+                r.setExpertName(cursor.getString(cursor.getColumnIndex("reportExpertName")));
                 r.setGuestName(cursor.getString(cursor.getColumnIndex("reportGuest")));
-                Log.d("xxx", "Monthlyadapter repList cursorGUE"+r.getGuestName());
                 r.setDate(cursor.getLong(cursor.getColumnIndex("reportDate")));
                 r.setDuration(cursor.getInt((cursor.getColumnIndex("reportDuration"))));
-                Log.d("xxx", "Monthlyadapter repList cursorDAt"+r.getDate());
                 r.setNote(cursor.getString(cursor.getColumnIndex("reportNote")));
-                Log.d("xxx", "Monthlyadapter repList cursorNote"+r.getNote());
                 rList.add(r);
                 cursor.moveToNext();
             }
 
-        }finally {
+        } finally {
             cursor.close();
             helper.close();
         }
@@ -196,13 +184,16 @@ public class ListHelper {
         return rList;
     }
 
-    public static Treatments[] getTreatmentsOfReport(List<Treatments> allTreatment, String treatmentNames){
+    public static Treatments[] getTreatmentsOfReport(List<Treatments> allTreatment, String treatmentNames) {
         Treatments[] treatments = new Treatments[allTreatment.size()];
-        String[] splitted = treatmentNames.split(" ");
-        for (int j = 0; j < allTreatment.size(); j++) {
-            for (int i = 0; i < splitted.length; i++) {
-                if (allTreatment.get(j).getName().equals(splitted[i])) {
+        String[] splitted = treatmentNames.split("ß");
+        for (int i = 0; i < splitted.length; i++) {
+            splitted[i] = splitted[i].trim();
+            Log.d("gettre", splitted[i] + "--");
+            for (int j = 0; j < allTreatment.size(); j++) {
+                if (allTreatment.get(j).getName().trim().equals(splitted[i])) {
                     treatments[i] = allTreatment.get(j);
+                    Log.d("gettre", treatments[i].getName() + "=treArray[" + i + "]");
                 }
             }
         }

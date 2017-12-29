@@ -39,6 +39,7 @@ public class AdminTreatmentsFragment extends Fragment{
     final int MENU_OPT_2 = 2;
     final int MENU_OPT_3 = 3;
     static ArrayList<Treatments> treatmentsList = null;
+    LayoutInflater inflater;
     ListView lv;
     Treatments t;
 
@@ -53,6 +54,7 @@ public class AdminTreatmentsFragment extends Fragment{
     public View onCreateView(final LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+        this.inflater = inflater;
         Log.d("xxx", "onCreateViewTreatments");
         final View view = inflater.inflate(R.layout.treatments, container, false);
         FloatingActionButton treFab = (FloatingActionButton) view.findViewById(R.id.fabTre);
@@ -126,8 +128,7 @@ public class AdminTreatmentsFragment extends Fragment{
     private boolean treatmentDelete(final Treatments  t) {
         final boolean[] successful = {false};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inf = this.getLayoutInflater(null);
-        View alertView = inf.inflate(R.layout.admin_ok_dialog, null);
+        View alertView = inflater.inflate(R.layout.admin_ok_dialog, null);
         builder.setView(alertView);
         builder.setTitle(R.string.deleteAlert);
         TextView tv = (TextView) alertView.findViewById(R.id.adminOkTextView);

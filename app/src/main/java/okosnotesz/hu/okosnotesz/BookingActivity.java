@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,16 +29,23 @@ import okosnotesz.hu.okosnotesz.model.Treatments;
 public class BookingActivity extends AppCompatActivity {
 
     private Reports report;
+    private int position;
+    private int day;
     private final int CONTACT_REQ_CODE = 55;
     private final int TREATMENT_REQ_CODE = 44;
     Button btnGuest;
+    View contentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.booking_layout);
+        contentView = findViewById(R.id.booking_layout_id);
         Intent intent = getIntent();
         report = intent.getParcelableExtra("newRep");
+        position = intent.getIntExtra("position", 0);
+        day = intent.getIntExtra("day", 0);
+        Log.d("intentextra", position + ", "+ report.getDate());
         TextView dateTextView = (TextView) this.findViewById(R.id.tvBookingDate);
         final Date date = new Date(report.getDate());
         final SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMMM dd, HH:mm");
@@ -85,13 +93,13 @@ public class BookingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (String  name: selectedTreatmentNames) {
-                            sbNames.append(name+" ");
+                            sbNames.append(name+", ");
                         }
                         btnTreatment.setText(sbNames.toString());
                         for (Treatments t : treatmentList) {
                             for (String name : selectedTreatmentNames) {
                                 if (t.getName().equals(name)) {
-                                    sbIds.append(String.valueOf(t.getName()) + ", ");
+                                    sbIds.append(String.valueOf(t.getName()) + "ß");
                                     duration[0] += t.getTime();
                                     Log.d("weekrep", "dur: " + duration[0]+ ", time. "+ t.getTime());
                                 }
@@ -160,13 +168,19 @@ public class BookingActivity extends AppCompatActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("xxxxxx", report.getGuestName()  +", "+ formatter.format(new Date(report.getDate()))+", "+ report.getExpertname() +", "+ report.getTreatment() + ", "+ report.getDuration());
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("backRep", report);
-                Intent backIntent = new Intent();
-                backIntent.putExtra("backRep", report);
-                setResult(22, backIntent);
+                if(report.getGuestName()==null || report.getDate() == null || report.getExpertname() == null || report.getTreatment()==null){
+                        Toast.makeText(getApplicationContext() , R.string.noDatas, Toast.LENGTH_LONG).show();
+
+                }else {
+                    Log.d("intentextras", report.getGuestName() + ", " + formatter.format(new Date(report.getDate())) + ", " + report.getExpertname() + ", " + report.getTreatment() + ", " + report.getDuration());
+                    Intent backIntent = new Intent();
+                    backIntent.putExtra("backRep", report);
+                    backIntent.putExtra("position", position);
+                    backIntent.putExtra("day", day);
+                    setResult(22, backIntent);
+
                 onBackPressed();
+                }
             }
         });
         Button btnCancel = (Button) this.findViewById(R.id.btnBookingCance);
@@ -189,6 +203,7 @@ public class BookingActivity extends AppCompatActivity {
             guestName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             int contId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             cursor.close();
+
             btnGuest.setText(guestName);
             report.setGuestName(guestName);
             report.setConID(contId);

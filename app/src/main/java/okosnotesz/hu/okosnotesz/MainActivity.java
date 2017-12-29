@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawer;
     NavigationView navigationView;
     ActionBarDrawerToggle barDrawerToggle;
+    PagerAdapter weekAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                }if(mViewPager.getAdapter().getCount()==53){
                    Calendar today = Calendar.getInstance();
                    long todayInMillis = today.getTimeInMillis();
-                   PagerAdapter weekAdapter = new PagerAdapter(mContext,getSupportFragmentManager(), 53, todayInMillis);
+                   weekAdapter = new PagerAdapter(mContext,getSupportFragmentManager(), 53, todayInMillis);
                    mViewPager.setAdapter(weekAdapter);
                    mViewPager.setCurrentItem(26,true);
                    mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -221,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
                        public void onPageScrollStateChanged(int state) {
                        }
                    });
+                   weekAdapter.notifyDataSetChanged();
                }
            }
        });
@@ -344,5 +346,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mViewPager.getAdapter()== weekAdapter){
+            mViewPager.getAdapter().notifyDataSetChanged();
+        }
     }
 }

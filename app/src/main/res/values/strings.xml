@@ -30,6 +30,7 @@
     <string name="cost">Költség: </string>
     <string name="cancel">Mégsem</string>
     <string name="edit">Szerkeszt</string>
+    <string name="move">Mozgat</string>
     <string name="delete">Töröl</string>
     <string name="deleteAlert">Biztosan törlöd?</string>
     <string name="deleteSuccessful">Sikeresen törölve!</string>
@@ -110,6 +111,7 @@
     <string name="loading">Adatok betöltése</string>
     <string name="website">http://www.okosnotesz.hu</string>
     <string name="wait">Türelem</string>
+    <string name="reserved">A kezelésre nincs elég idő ebben az időpontban!</string>
     <item name="TRE_ARRAY" type="id" />
     <item name="REPORT" type="id" />
 

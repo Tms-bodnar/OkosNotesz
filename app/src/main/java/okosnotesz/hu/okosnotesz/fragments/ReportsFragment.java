@@ -1,7 +1,6 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,28 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import okosnotesz.hu.okosnotesz.ChartHelper;
-import okosnotesz.hu.okosnotesz.ChartHelper.*;
+import okosnotesz.hu.okosnotesz.ChartHelper.Days;
+import okosnotesz.hu.okosnotesz.ChartHelper.Months;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.CustomChartsAdapter;
-import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Sales;
 
@@ -75,6 +68,7 @@ public class ReportsFragment extends Fragment {
     }
 
     private BarData getBookingdatas() {
+            BarData bd = new BarData();
 
         return null;
     }

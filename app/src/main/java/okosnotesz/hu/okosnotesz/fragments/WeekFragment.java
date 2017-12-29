@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,10 +24,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import okosnotesz.hu.okosnotesz.BookingActivity;
 import okosnotesz.hu.okosnotesz.ChartHelper;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.WeekViewAdapter;
+import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
 import okosnotesz.hu.okosnotesz.model.Treatments;
@@ -45,13 +46,20 @@ public class WeekFragment extends Fragment {
     ActionBarDrawerToggle barDrawerToggle;
     android.support.v7.widget.Toolbar toolbar;
     Button todayButton;
-
     WeekViewAdapter adapter;
     View v;
+    final int MENU_GROUP_ID = 102;
+    final int MENU_OPT_1 = 1;
+    final int MENU_OPT_2 = 2;
+    final int MENU_OPT_3 = 3;
+    Reports menuReport;
+    int clickedDay;
+
+
     public WeekFragment() {
     }
 
-    public static Fragment newInstance(long cal){
+    public static Fragment newInstance(long cal) {
         Fragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putLong("day", cal);
@@ -62,7 +70,7 @@ public class WeekFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        reportsList = ListHelper.getAllReports(getContext());
+
         treatmentsList = ListHelper.getAllTreatments(getContext());
         Bundle b = getArguments();
         d = new Date((Long) b.get("day"));
@@ -78,14 +86,14 @@ public class WeekFragment extends Fragment {
         View v = inflater.inflate(R.layout.custom_calendar_week_view, null);
         toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
         drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-        barDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer,toolbar,R.string.welcome,R.string.cancel);
+        barDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.welcome, R.string.cancel);
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
         todayButton = (Button) toolbar.findViewById(R.id.tollbar_button);
         recyclerView = (RecyclerView) v.findViewById(R.id.week_view_recycle);
-        adapter = new WeekViewAdapter(this,  getContext(), ChartHelper.Days.values(), weeklyReports, weeklyCalendarsDatas, treatmentsList);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,false);
+        adapter = new WeekViewAdapter(this, getContext(), ChartHelper.Days.values(), weeklyCalendarsDatas, treatmentsList, weeklyReports);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return v;
@@ -96,18 +104,8 @@ public class WeekFragment extends Fragment {
     //frissíti a weeklyreportsot, ez alapján a setdailyreportsot.
     //elmenti a Reports adatbázist.
 
-    public void booking(Calendar temp) {
-        Toast.makeText(getContext(), temp.getTime().toString() + "", Toast.LENGTH_SHORT).show();
-        Reports sendReport = new Reports();
-        sendReport.setDate(temp.getTimeInMillis());
-        Intent i = new Intent(getContext(), BookingActivity.class);
-        i.putExtra("newRep", sendReport);
-        startActivityForResult(i, REQ_CODE);
-    }
 
-
-
-    private void setWeekDays(Date d, View v){
+    private void setWeekDays(Date d, View v) {
         TextView[] weekDates = new TextView[7];
         weekDates[0] = (TextView) v.findViewById(R.id.mon_date);
         weekDates[1] = (TextView) v.findViewById(R.id.tue_date);
@@ -131,15 +129,15 @@ public class WeekFragment extends Fragment {
         }
         for (int i = 0; i < weekDates.length; i++) {
             weekDates[i].setText(String.valueOf(weekDays.get(i)));
-            if(tempCal.get(Calendar.MONTH)==(today.get(Calendar.MONTH))
-                    && tempCal.get(Calendar.YEAR)==today.get(Calendar.YEAR)
-                    && weekDays.get(i)==today.get(Calendar.DAY_OF_MONTH)){
-                    weekDates[i].setBackgroundColor(Color.parseColor("#FF4081"));
+            if (tempCal.get(Calendar.MONTH) == (today.get(Calendar.MONTH))
+                    && tempCal.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                    && weekDays.get(i) == today.get(Calendar.DAY_OF_MONTH)) {
+                weekDates[i].setBackgroundColor(Color.parseColor("#FF4081"));
             }
         }
     }
 
-    private List<Calendar> setWeekCalendars(Date d){
+    private List<Calendar> setWeekCalendars(Date d) {
 
         List<Calendar> weeklyCalendars = new ArrayList<>(7);
         Calendar tempCal = Calendar.getInstance();
@@ -150,9 +148,9 @@ public class WeekFragment extends Fragment {
         for (int i = 0; i < datesList.size(); i++) {
             Calendar calInList = Calendar.getInstance();
             calInList.setTimeInMillis(datesList.get(i).getTime());
-            if(calInList.get(Calendar.YEAR)==tempCal.get(Calendar.YEAR)
-                    && calInList.get(Calendar.WEEK_OF_YEAR)==tempCal.get(Calendar.WEEK_OF_YEAR)){
-               weeklyCalendars.add(calInList);
+            if (calInList.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR)
+                    && calInList.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR)) {
+                weeklyCalendars.add(calInList);
             }
         }
         return weeklyCalendars;
@@ -168,7 +166,7 @@ public class WeekFragment extends Fragment {
         Reports[] fri = new Reports[31];
         Reports[] sat = new Reports[31];
         Reports[] sun = new Reports[31];
-        for(int i = 0; i<31; i++){
+        for (int i = 0; i < 31; i++) {
             mon[i] = null;
             tue[i] = null;
             wed[i] = null;
@@ -183,16 +181,16 @@ public class WeekFragment extends Fragment {
         int hour = -1;
         int dayHour = -1;
         int dayMinute = -1;
-        for(Reports r : reportsList) {
+        reportsList = ListHelper.getAllReports(getContext());
+        for (Reports r : reportsList) {
             weekCal.setTimeInMillis(r.getDate());
 
             if (weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR) &&
-                    weekCal.get(Calendar.MONTH) == tempCal.get(Calendar.MONTH)&&
-                    weekCal.get(Calendar.WEEK_OF_YEAR)== tempCal.get(Calendar.WEEK_OF_YEAR)) {
+                    weekCal.get(Calendar.MONTH) == tempCal.get(Calendar.MONTH) &&
+                    weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR)) {
                 int weekDay = weekCal.get(Calendar.DAY_OF_WEEK);
                 hour = weekCal.get(Calendar.HOUR_OF_DAY);
-                Log.d("hour", hour + ": hour, ");
-                switch(hour){
+                switch (hour) {
                     case 14:
                         dayHour = hour;
                         break;
@@ -204,83 +202,126 @@ public class WeekFragment extends Fragment {
                         break;
                 }
 
-                Log.d("hour", dayHour + ": dayHour, ");
+
                 dayMinute = weekCal.get(Calendar.MINUTE);
                 int cellMod = dayMinute < 30 ? 0 : 1;
                 int duration = r.getDuration();
-                int cellCount = duration/30;
-                Log.d("dur", duration + ", "+ cellCount + r.getTreatment());
-                if(dayHour> -1){
+                int cellCount = duration / 30;
+                dayHour += cellMod;
+                Log.d("hour", dayHour + ": dayHour, " + ", cellCount: " + cellCount + " ,cellmod: " + cellMod);
+                if (dayHour > -1) {
                     int temp = 0;
-                    switch (weekDay){
+                    switch (weekDay) {
                         case 1:
-                            if(dayHour+cellCount + cellMod <sun.length) {
-                            do {
-                                sun[dayHour + cellMod + temp] = r;
-                                temp += 1;
+                            if (dayHour + cellCount < sun.length) {
+                                do {
+                                    sun[dayHour + temp] = r;
+                                    temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == sun.length) {
                                 sun[dayHour] = r;
+                            } else if (dayHour + cellCount > sun.length) {
+                                cellCount = sun.length - dayHour;
+                                do {
+                                    sun[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                         case 2:
-                            if(dayHour + cellCount<sat.length) {
+                            if (dayHour + cellCount < mon.length) {
                                 do {
-                                    mon[dayHour + cellMod + temp] = r;
+                                    mon[dayHour + temp] = r;
                                     temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == mon.length) {
                                 mon[dayHour] = r;
+                            } else if (dayHour + cellCount > mon.length) {
+                                cellCount = mon.length - dayHour;
+                                do {
+                                    mon[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                         case 3:
-                            if(dayHour + cellCount<tue.length) {
+                            if (dayHour + cellCount < tue.length) {
                                 do {
-                                    tue[dayHour + cellMod + temp] = r;
+                                    tue[dayHour + temp] = r;
                                     temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == tue.length) {
                                 tue[dayHour] = r;
+                            } else if (dayHour + cellCount > tue.length) {
+                                cellCount = tue.length - dayHour;
+                                do {
+                                    tue[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                         case 4:
-                            if(dayHour + cellCount<wed.length) {
+                            if (dayHour + cellCount < wed.length) {
                                 do {
-                                    wed[dayHour + cellMod + temp] = r;
+                                    wed[dayHour + temp] = r;
                                     temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == wed.length) {
                                 wed[dayHour] = r;
+                            } else if (dayHour + cellCount > wed.length) {
+                                cellCount = wed.length - dayHour;
+                                do {
+                                    wed[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                         case 5:
-                            if(dayHour + cellCount < thu.length) {
+                            if (dayHour + cellCount < thu.length) {
                                 do {
-                                    thu[dayHour + cellMod + temp] = r;
+                                    thu[dayHour + temp] = r;
                                     temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == thu.length) {
                                 thu[dayHour] = r;
+                            } else if (dayHour + cellCount > thu.length) {
+                                cellCount = thu.length - dayHour;
+                                do {
+                                    thu[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                         case 6:
-                            if(dayHour + cellCount<fri.length) {
+                            if (dayHour + cellCount < fri.length) {
                                 do {
-                                    fri[dayHour + cellMod + temp] = r;
+                                    fri[dayHour + temp] = r;
                                     temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == fri.length) {
                                 fri[dayHour] = r;
+                            } else if (dayHour + cellCount > fri.length) {
+                                cellCount = fri.length - dayHour;
+                                do {
+                                    fri[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                         case 7:
-                            if(dayHour + cellCount<sat.length) {
+                            if (dayHour + cellCount < sat.length) {
                                 do {
-                                    sat[dayHour + cellMod + temp] = r;
+                                    sat[dayHour + temp] = r;
                                     temp += 1;
                                 } while (temp < cellCount);
-                            }else{
+                            } else if (dayHour + cellCount == sat.length) {
                                 sat[dayHour] = r;
+                            } else if (dayHour + cellCount > sat.length) {
+                                cellCount = sat.length - dayHour;
+                                do {
+                                    sat[dayHour + temp] = r;
+                                    temp += 1;
+                                } while (temp < cellCount);
                             }
                             break;
                     }
@@ -299,16 +340,36 @@ public class WeekFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-       adapter.onActivityResult(requestCode, resultCode, data);
-        Log.d("xxxxxx", "onActivityResult 3" );
-        Reports backRep = null;
+        menuReport = null;
+        TextView tempTextView = null;
         if (resultCode == 22) {
-            backRep = data.getParcelableExtra("backRep");
-            Date temp = new Date(backRep.getDate());
-            setDailyReports(temp);
-            weeklyCalendarsDatas = setWeekCalendars(temp);
+            menuReport = data.getParcelableExtra("backRep");
+            Date reportDate = new Date(menuReport.getDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, HH:mm");
+            int cellNumber = data.getIntExtra("position", 0);
+            clickedDay = data.getIntExtra("day", 0);
+            int cellCount = menuReport.getDuration() / 30;
+            WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(clickedDay);
+            TextView[] textViewArray = holder.getTextViewArray();
+            Log.d("intentextras", cellNumber + ", " + clickedDay);
+            for (int i = 0; i < cellCount; i++) {
+                if (cellNumber + i < 31) {
+                    if (textViewArray[cellNumber + i].getTag() != null) {
+                        adapter.itemAdd(menuReport, clickedDay, i);
+
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.reserved) + ": " + sdf.format(reportDate), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+            }
+            DBHelper helper = DBHelper.getHelper(getContext());
+            boolean OK = helper.addReport(menuReport);
+            helper.close();
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+
         }
-       // formatter = new SimpleDateFormat("yyyy MM dd HH:mm");
     }
+
 }
+
 

@@ -1,7 +1,6 @@
 package okosnotesz.hu.okosnotesz.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,8 +17,6 @@ import com.github.mikephil.charting.data.BarData;
 import java.util.List;
 
 import okosnotesz.hu.okosnotesz.R;
-
-import static android.graphics.Color.BLACK;
 
 /**
  * Created by user on 2017.09.14..
@@ -70,7 +67,7 @@ public class CustomChartsAdapter extends ArrayAdapter<BarData> {
 
 
         // do not forget to refresh the chart
-       // holder.chart.invalidate();
+        holder.chart.invalidate();
         holder.chart.animateY(700);
 
         return convertView;

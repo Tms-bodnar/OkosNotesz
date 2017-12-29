@@ -122,4 +122,9 @@ public class Treatments implements Parcelable{
     public void setCost(int cost) {
         this.cost = cost;
     }
+
+    @Override
+    public String toString() {
+        return name + price;
+    }
 }
