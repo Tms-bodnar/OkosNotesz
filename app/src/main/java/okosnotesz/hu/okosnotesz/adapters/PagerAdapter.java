@@ -77,15 +77,15 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                     fragment = CalendarFragment.newInstance(calLong);
                 }
                 break;
-            case 2:
+            case 1:
                 switch (position) {
                     case 0:
                         fragment = new SalesFragment();
                         break;
-                    case 1:
-                        fragment = new ReportsFragment();
-                        break;
                 }
+                break;
+            case 2:
+                        fragment = new ReportsFragment();
                 break;
             case 53:
                 if (position == 26) {

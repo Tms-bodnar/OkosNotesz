@@ -44,7 +44,7 @@ import okosnotesz.hu.okosnotesz.model.Treatments;
  * Created by user on 2017.11.23..
  */
 
-public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHolder>{
+public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHolder> {
 
     Fragment fragment;
     RecyclerView rv;
@@ -64,7 +64,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     final int MENU_OPT_3 = 3;
     Reports menuReport;
 
-    public WeekViewAdapter(Fragment fragment, Context context, ChartHelper.Days[] days, List<Calendar> calendarsOfWeeek, List<Treatments> treatmentsList,Map<Integer, Reports[]> dailymap ){
+    public WeekViewAdapter(Fragment fragment, Context context, ChartHelper.Days[] days, List<Calendar> calendarsOfWeeek, List<Treatments> treatmentsList, Map<Integer, Reports[]> dailymap) {
         this.fragment = fragment;
         this.context = context;
         this.days = days;
@@ -76,7 +76,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_week_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_week_item, parent, false);
         rv = (RecyclerView) parent;
         return new ViewHolder(view);
     }
@@ -85,8 +85,8 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         this.holder = holder;
         this.position = position;
-        textViewList = new ArrayList<>(Arrays.asList( holder.textView7, holder.textView730,
-                holder.textView8, holder.textView830,  holder.textView9, holder.textView930,
+        textViewList = new ArrayList<>(Arrays.asList(holder.textView7, holder.textView730,
+                holder.textView8, holder.textView830, holder.textView9, holder.textView930,
                 holder.textView10, holder.textView1030, holder.textView11, holder.textView1130,
                 holder.textView12, holder.textView1230, holder.textView13, holder.textView1330,
                 holder.textView14, holder.textView1430, holder.textView15, holder.textView1530,
@@ -95,21 +95,21 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 holder.textView20, holder.textView2030, holder.textView21, holder.textView2130,
                 holder.textView22));
 
-        Map <Reports, Integer> colorMap = getColors(position);
+        Map<Reports, Integer> colorMap = getColors(position);
         Hours[] hours = Hours.values();
-        for(int i = 0; i < hours.length; i++){
+        for (int i = 0; i < hours.length; i++) {
 
-            if(i%2==0 && position==0) {
+            if (i % 2 == 0 && position == 0) {
                 textViewList.get(i).setText(hours[i].getHour() + ":" + hours[i].getMinute());
             }
         }
         Reports[] dailyReports = dailymap.get(position);
 
-        for(int i = 0; i < dailyReports.length; i++){
+        for (int i = 0; i < dailyReports.length; i++) {
 
-            if(dailyReports[i]!=null&& dailyReports[i].getTreatment()!=null) {
-                Log.d("reportsList", dailyReports[i].toString() +", pos:" + position + ", cella: " + i);
-                if(textViewList.get(i).getTag()==null) {
+            if (dailyReports[i] != null && dailyReports[i].getTreatment() != null) {
+                Log.d("reportsList", dailyReports[i].toString() + ", pos:" + position + ", cella: " + i);
+                if (textViewList.get(i).getTag() == null) {
                     Log.d("reportsList", "pos:" + position + ", cella: " + i);
                 }
                 Treatments[] treList = ListHelper.getTreatmentsOfReport(treatmentsList, dailyReports[i].getTreatment());
@@ -142,7 +142,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                     calendarsOfWeek.get(position).set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours[finalI].getHour()));
                     calendarsOfWeek.get(position).set(Calendar.MINUTE, Integer.parseInt(hours[finalI].getMinute()));
                     calendarsOfWeek.get(position).set(Calendar.SECOND, 0);
-                    holder.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position );
+                    holder.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position);
                 }
             });
             textViewList.get(i).setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -154,59 +154,43 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         }
     }
 
-
     @Override
     public int getItemCount() {
         return days.length;
     }
 
-
-    public Map<Reports, Integer> getColors(int position){
-        Map <Reports, Integer> colorMap = new HashMap<>();
+    public Map<Reports, Integer> getColors(int position) {
+        Map<Reports, Integer> colorMap = new HashMap<>();
         Reports[] dailyReports = dailymap.get(position);
         String[] colorArray = context.getResources().getStringArray(R.array.appColors);
         Random r = new Random();
-        for(int i = 0; i < dailyReports.length; i++){
+        for (int i = 0; i < dailyReports.length; i++) {
             int j = r.nextInt((30 - 1) + 1) + 1;
-                colorMap.put(dailyReports[i], Color.parseColor(colorArray[j]));
-
+            colorMap.put(dailyReports[i], Color.parseColor(colorArray[j]));
         }
         return colorMap;
     }
 
     public void itemAdd(Reports menuReport, int day, int cellCount) {
         dailymap.get(day)[cellCount] = menuReport;
-        notifyItemChanged(day);
-        Log.d("intentextras", day + " itemChanged: "+cellCount );
-        Log.d("intentextras", "itemAdd");
-
-       /* int cellNumber = textViewList.indexOf(clickedView);
-        int duration = menuReport.getDuration();
-        int cellCount = duration/ 30;
-        for(int i = 0; i < cellCount; i++){
-            dailymap.get(day)[cellNumber+cellCount]=null;
-       }*/
+        Log.d("intentextras", "itemadd" + day +", "+cellCount);
     }
 
 
     private void itemRemoved(Reports menuReport, int day) {
-        for(int i = 0; i < dailymap.get(day).length; i++){
-            if(menuReport != null && menuReport == dailymap.get(day)[i]){
+        for (int i = 0; i < dailymap.get(day).length; i++) {
+            if (menuReport != null && menuReport == dailymap.get(day)[i]) {
                 dailymap.get(day)[i] = null;
-                Log.d("intentextras", day + " itemChanged: "+i );
             }
         }
-        Log.d("intentextras", "itemChanged");
-        fragment.getFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
 
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder implements WeekItemClickListener {
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements WeekItemClickListener{
 
-
-        TextView textView7, textView730, textView8,textView830,  textView9,textView930,  textView10,
-                textView1030, textView11,textView1130, textView12, textView1230, textView13,
+        TextView textView7, textView730, textView8, textView830, textView9, textView930, textView10,
+                textView1030, textView11, textView1130, textView12, textView1230, textView13,
                 textView1330, textView14, textView1430, textView15, textView1530, textView16,
                 textView1630, textView17, textView1730, textView18, textView1830, textView19,
                 textView1930, textView20, textView2030, textView21, textView2130, textView22;
@@ -246,10 +230,10 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             textView22 = (TextView) itemView.findViewById(R.id.tv_week_hour_22);
         }
 
-        public TextView[] getTextViewArray(){
+        public TextView[] getTextViewArray() {
 
-            return new TextView[] {textView7, textView730, textView8,textView830,  textView9,textView930,  textView10,
-                    textView1030, textView11,textView1130, textView12, textView1230, textView13,
+            return new TextView[]{textView7, textView730, textView8, textView830, textView9, textView930, textView10,
+                    textView1030, textView11, textView1130, textView12, textView1230, textView13,
                     textView1330, textView14, textView1430, textView15, textView1530, textView16,
                     textView1630, textView17, textView1730, textView18, textView1830, textView19,
                     textView1930, textView20, textView2030, textView21, textView2130, textView22};
@@ -270,14 +254,14 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 if (temp.getGuestName() != null) {
                     detailsGuest.setText(temp.getGuestName());
                 } else detailsGuest.setText(R.string.noDatas);
-                if(temp.getTreatment() != null) {
+                if (temp.getTreatment() != null) {
                     String[] tempTreName = temp.getTreatment().split("ß");
                     StringBuilder sb = new StringBuilder();
-                    for(int i = 0; i < tempTreName.length; i++){
+                    for (int i = 0; i < tempTreName.length; i++) {
                         sb.append(tempTreName[i]);
                     }
                     detailsTreatment.setText(sb);
-                }else detailsTreatment.setText(R.string.noDatas);
+                } else detailsTreatment.setText(R.string.noDatas);
                 if (temp.getExpertname() != null) {
                     detailsExp.setText(temp.getExpertname());
                 } else detailsExp.setText(R.string.noDatas);
@@ -290,22 +274,18 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                     }
                 });
             } else {
-                    Reports sendReport = new Reports();
-                    sendReport.setDate(cal.getTime().getTime());
-                    Intent i = new Intent(context, BookingActivity.class);
-                    i.putExtra("newRep", sendReport);
-                    i.putExtra("position",position);
-                    i.putExtra("day", day);
-                    fragment.startActivityForResult(i, REQ_CODE);
-
+                Reports sendReport = new Reports();
+                sendReport.setDate(cal.getTime().getTime());
+                Intent i = new Intent(context, BookingActivity.class);
+                i.putExtra("newRep", sendReport);
+                i.putExtra("position", position);
+                i.putExtra("day", day);
+                fragment.startActivityForResult(i, REQ_CODE);
             }
         }
 
-
-
         @Override
         public void onLongClick(Calendar cal) {
-
         }
 
         @Override
@@ -313,7 +293,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             clickedView = (TextView) v;
             menuReport = (Reports) clickedView.getTag();
-            if(menuReport!=null) {
+            if (menuReport != null) {
                 MenuItem move = menu.add(MENU_GROUP_ID, MENU_OPT_1, 0, R.string.move);
                 MenuItem delete = menu.add(MENU_GROUP_ID, MENU_OPT_2, 0, R.string.delete);
                 MenuItem cancel = menu.add(MENU_GROUP_ID, MENU_OPT_3, 0, R.string.cancel);
@@ -326,9 +306,9 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Log.d("xxx", "onItemselectedExpert: " + item.getGroupId());
-                if(MENU_GROUP_ID == item.getGroupId()) {
+                if (MENU_GROUP_ID == item.getGroupId()) {
                     switch (item.getItemId()) {
-                        case MENU_OPT_1 :
+                        case MENU_OPT_1:
                             return false;
                         case MENU_OPT_2:
                             Log.d("menuitemsel", "selected");
@@ -341,10 +321,9 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         };
 
 
-
         private boolean deleteReport(Reports menuReport, TextView view) {
             int day = position;
-            int cellCount = menuReport.getDuration()/30;
+            int cellCount = menuReport.getDuration() / 30;
             final boolean[] successful = {false};
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -352,7 +331,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             builder.setView(alertView);
             builder.setTitle(R.string.deleteAlert);
             TextView tv = (TextView) alertView.findViewById(R.id.adminOkTextView);
-            if (menuReport != null){
+            if (menuReport != null) {
                 tv.setText(menuReport.getGuestName());
                 builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                     @Override
@@ -360,9 +339,10 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                         DBHelper helper = DBHelper.getHelper(context);
                         successful[0] = helper.deleteReport(menuReport);
                         helper.close();
-                        if(successful[0]){
-                            Snackbar.make(rv , R.string.deleteSuccessful, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        if (successful[0]) {
+                            Snackbar.make(rv, R.string.deleteSuccessful, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             itemRemoved(menuReport, day);
+                            fragment.getFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
                         }
                     }
                 });

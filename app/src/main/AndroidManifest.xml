@@ -32,6 +32,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".BookingActivity" />
+        <activity android:name=".WebViewActivity"></activity>
     </application>
 
 </manifest>

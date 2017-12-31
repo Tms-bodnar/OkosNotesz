@@ -3,6 +3,7 @@ package okosnotesz.hu.okosnotesz;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -91,13 +92,49 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_commercial:
                         comActivityStart();
                         break;
+                    case R.id.nav_reports:
+                        reportStart();
+                        break;
                     case R.id.nav_settings:
                         firstStart();
+                        break;
+                    case R.id.nav_about_us:
+                        webStart();
                         break;
                 }
                 return false;
             }
         });
+    }
+
+    private void reportStart() {
+        PagerAdapter mSectionsPagerAdapterSales;
+        mainActivity = false;
+        setContentView(R.layout.activity_main);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        setnavigationDrawer();
+        Button btn = (Button) findViewById(R.id.tollbar_button);
+        btn.setVisibility(View.INVISIBLE);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        barDrawerToggle.setDrawerIndicatorEnabled(true);
+        drawer.addDrawerListener(barDrawerToggle);
+        barDrawerToggle.syncState();
+        toolbar.setTitle(R.string.reports);
+        mSectionsPagerAdapterSales = new PagerAdapter(mContext, getSupportFragmentManager(), 2);
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapterSales);
+        mViewPager.setOffscreenPageLimit(1);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.report_focus));
+        mViewPager.setCurrentItem(0);
+    }
+
+    private void webStart() {
+        Intent intent = new Intent(mContext, WebViewActivity.class);
+        startActivity(intent);
+
     }
 
     private void comActivityStart(){
@@ -115,50 +152,10 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
         toolbar.setTitle(R.string.commercial);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.commercial_focus));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.report_pale));
-        tabLayout.setTabGravity(tabLayout.GRAVITY_FILL);
-        mSectionsPagerAdapterSales = new PagerAdapter(mContext, getSupportFragmentManager(), 2);
+        mSectionsPagerAdapterSales = new PagerAdapter(mContext, getSupportFragmentManager(), 1);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterSales);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-                toolbar.setTitle(mSectionsPagerAdapterSales.getPageTitle(tab.getPosition()));
-                tab.setIcon(R.drawable.commercial_focus);
-                switch (tab.getPosition()) {
-                    case 1:
-                        tab.setIcon(R.drawable.report_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterSales.getPageTitle(tab.getPosition()));
-                        break;
-                    case 0:
-                        tab.setIcon(R.drawable.commercial_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterSales.getPageTitle(tab.getPosition()));
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 1:
-                        tab.setIcon(R.drawable.report_pale);
-                        break;
-                    case 0:
-                        tab.setIcon(R.drawable.commercial_pale);
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
         mViewPager.setCurrentItem(0);
     }
 
@@ -222,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
                        public void onPageScrollStateChanged(int state) {
                        }
                    });
-                   weekAdapter.notifyDataSetChanged();
                }
            }
        });

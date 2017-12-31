@@ -11,22 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import okosnotesz.hu.okosnotesz.ChartHelper;
-import okosnotesz.hu.okosnotesz.ChartHelper.Days;
-import okosnotesz.hu.okosnotesz.ChartHelper.Months;
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.adapters.CustomChartsAdapter;
-import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Sales;
 
 /**
@@ -47,7 +39,6 @@ public class ReportsFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("TAG", "onCreate Reports");
         super.onCreate(savedInstanceState);
     }
 
@@ -56,11 +47,9 @@ public class ReportsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.reports, container, false);
         ListView lv = (ListView) view.findViewById(R.id.chartList);
-        barDataList = new ArrayList<>();
-        barDataList.add(0, getIncomeDatas());
-        barDataList.add(1, getSalesdatas());
-        barDataList.add(2, getBookingdatas());
-
+        barDataList = new ArrayList<>(2);
+        barDataList.add(0, getSalesdatas());
+       // barDataList.add(0, getBookingdatas());
         CustomChartsAdapter cca = new CustomChartsAdapter(getContext(),0, barDataList);
         lv.setAdapter(cca);
         Log.d("TAG", "onCreateView Reports");
@@ -75,7 +64,7 @@ public class ReportsFragment extends Fragment {
 
     private BarData getSalesdatas() {
         BarData bd = new BarData();
-        ChartHelper ch = new ChartHelper();
+        /*ChartHelper ch = new ChartHelper();
         salesList = ListHelper.getAllSales(getContext());
         if(!salesList.isEmpty()) {
             ArrayList<BarData> ci;
@@ -143,8 +132,8 @@ public class ReportsFragment extends Fragment {
 
 
             bd = new BarData(chartSalesLabelsWeekly, ds);
-        }
-        return bd;
+        }*/
+        return null;
     }
 
     private BarData getIncomeDatas() {
@@ -152,35 +141,6 @@ public class ReportsFragment extends Fragment {
     }
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("TAG", "onActivityCreated Reports");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("TAG", "onStart Reports");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TAG", "onresume Reports");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("TAG", "onPause Reports");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("TAG", "onStop Reports");
-    }
 }
 
 /*    @Override

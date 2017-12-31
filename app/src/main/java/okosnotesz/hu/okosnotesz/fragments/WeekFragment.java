@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,10 @@ public class WeekFragment extends Fragment {
     android.support.v7.widget.Toolbar toolbar;
     Button todayButton;
     WeekViewAdapter adapter;
+    ScrollView scrollView;
     View v;
+    RecyclerView.LayoutManager layoutManager;
+    static Fragment fragment;
     final int MENU_GROUP_ID = 102;
     final int MENU_OPT_1 = 1;
     final int MENU_OPT_2 = 2;
@@ -60,7 +64,7 @@ public class WeekFragment extends Fragment {
     }
 
     public static Fragment newInstance(long cal) {
-        Fragment fragment = new WeekFragment();
+        fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putLong("day", cal);
         fragment.setArguments(args);
@@ -90,19 +94,17 @@ public class WeekFragment extends Fragment {
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
+        scrollView = (ScrollView) v.findViewById(R.id.week_scroll_view);
         todayButton = (Button) toolbar.findViewById(R.id.tollbar_button);
         recyclerView = (RecyclerView) v.findViewById(R.id.week_view_recycle);
         adapter = new WeekViewAdapter(this, getContext(), ChartHelper.Days.values(), weeklyCalendarsDatas, treatmentsList, weeklyReports);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
         return v;
     }
-    //recyclerview clicklistener, átadja a dátumot + időt
-    //meghívja a booking activityt,
-    //visszakapja egy Reports objektumban a  kezelés(ek) neveit, időtartamát, a foglalás dátumát, az Expertet, a Guestet.
-    //frissíti a weeklyreportsot, ez alapján a setdailyreportsot.
-    //elmenti a Reports adatbázist.
+
 
 
     private void setWeekDays(Date d, View v) {
@@ -352,24 +354,37 @@ public class WeekFragment extends Fragment {
             WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(clickedDay);
             TextView[] textViewArray = holder.getTextViewArray();
             Log.d("intentextras", cellNumber + ", " + clickedDay);
+            boolean free = true;
             for (int i = 0; i < cellCount; i++) {
                 if (cellNumber + i < 31) {
                     if (textViewArray[cellNumber + i].getTag() != null) {
-                        adapter.itemAdd(menuReport, clickedDay, i);
-
                         Toast.makeText(getContext(), getContext().getResources().getString(R.string.reserved) + ": " + sdf.format(reportDate), Toast.LENGTH_LONG).show();
+                        free = false;
                         return;
+                    }
+                }
+            }
+            if(free) {
+                for (int j = 0; j < cellCount; j++) {
+                    if (cellNumber + j < 31) {
+                        adapter.itemAdd(menuReport, clickedDay, cellNumber + j);
                     }
                 }
             }
             DBHelper helper = DBHelper.getHelper(getContext());
             boolean OK = helper.addReport(menuReport);
             helper.close();
+            List<Reports> rl = ListHelper.getAllReports(getContext());
+            Log.d("intentextras", String.valueOf(rl.size()));
+            for (int i = 0; i <rl.size(); i++) {
+                Log.d("intentextras", rl.get(i).getGuestName());
+            }
+            if(OK)  Log.d("intentextras", "dbok");
             getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-
+            scrollView.scrollTo(0, cellNumber*60);
+            Log.d("intentextras", "detach attach");
         }
     }
-
 }
 
 

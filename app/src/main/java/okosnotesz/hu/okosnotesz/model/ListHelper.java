@@ -180,7 +180,7 @@ public class ListHelper {
             cursor.close();
             helper.close();
         }
-        Log.d("xxx", "Monthlyadapter repList1.5");
+        Log.d("intentextras", "Monthlyadapter repList1.5");
         return rList;
     }
 

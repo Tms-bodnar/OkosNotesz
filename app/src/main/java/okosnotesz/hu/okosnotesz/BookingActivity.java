@@ -45,7 +45,7 @@ public class BookingActivity extends AppCompatActivity {
         report = intent.getParcelableExtra("newRep");
         position = intent.getIntExtra("position", 0);
         day = intent.getIntExtra("day", 0);
-        Log.d("intentextra", position + ", "+ report.getDate());
+        Log.d("intentextras", position + ", "+ report.getDate());
         TextView dateTextView = (TextView) this.findViewById(R.id.tvBookingDate);
         final Date date = new Date(report.getDate());
         final SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMMM dd, HH:mm");
@@ -101,7 +101,7 @@ public class BookingActivity extends AppCompatActivity {
                                 if (t.getName().equals(name)) {
                                     sbIds.append(String.valueOf(t.getName()) + "ß");
                                     duration[0] += t.getTime();
-                                    Log.d("weekrep", "dur: " + duration[0]+ ", time. "+ t.getTime());
+                                    Log.d("intentextras", "dur: " + duration[0]+ ", time. "+ t.getTime());
                                 }
                             }
                         }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by user on 2017.05.19..
@@ -445,7 +446,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean addReport(Reports r) {
+        if(r != null) Log.d("intentextras", "db, " +r.getGuestName());
         SQLiteDatabase db = this.getWritableDatabase();
+        if(db != null) Log.d("intentextras", "db "+ db.getVersion());
         ContentValues cv = new ContentValues();
         cv.put("reportTreatment", r.getTreatment());
         cv.put("reportExpert", r.getExpert());
@@ -455,7 +458,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("reportDate", r.getDate());
         cv.put("reportDuration", r.getDuration());
         cv.put("reportNote", r.getNote());
-        db.insert("reports", null, cv);
+        Log.d("intentextras", "dbinsert "+ db.insert("reports", null, cv));
         db.close();
         return true;
     }
