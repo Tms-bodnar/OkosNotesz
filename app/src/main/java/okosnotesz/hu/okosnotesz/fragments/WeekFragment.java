@@ -89,11 +89,6 @@ public class WeekFragment extends Fragment {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.custom_calendar_week_view, null);
         toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
-        drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-        barDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.welcome, R.string.cancel);
-        barDrawerToggle.setDrawerIndicatorEnabled(true);
-        drawer.addDrawerListener(barDrawerToggle);
-        barDrawerToggle.syncState();
         scrollView = (ScrollView) v.findViewById(R.id.week_scroll_view);
         todayButton = (Button) toolbar.findViewById(R.id.tollbar_button);
         recyclerView = (RecyclerView) v.findViewById(R.id.week_view_recycle);
@@ -156,8 +151,8 @@ public class WeekFragment extends Fragment {
             }
         }
         return weeklyCalendars;
-
     }
+
 
     private Map<Integer, Reports[]> setDailyReports(Date d) {
         weeklyReports = new LinkedHashMap<>(7);

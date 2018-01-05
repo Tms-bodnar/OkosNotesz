@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import okosnotesz.hu.okosnotesz.R;
 import okosnotesz.hu.okosnotesz.fragments.AdminExpertsFragment;
@@ -90,10 +91,12 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 53:
                 if (position == 26) {
                     fragment = WeekFragment.newInstance(clickedDate);
+                    Log.d("eee",new Date(clickedDate).toString());
                 } else {
                     Calendar clickedDay = Calendar.getInstance();
                     clickedDay.setTimeInMillis(clickedDate);
                     clickedDay.add(Calendar.DAY_OF_YEAR, (position - numOfTabs / 2) * 7);
+                    Log.d("eee", clickedDay.get(Calendar.DAY_OF_MONTH)+": dom");
                     fragment = WeekFragment.newInstance(clickedDay.getTimeInMillis());
                 }
         }

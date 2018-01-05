@@ -115,6 +115,7 @@
     <string name="reserved">A kezelésre nincs elég idő ebben az időpontban!</string>
     <item name="TRE_ARRAY" type="id" />
     <item name="REPORT" type="id" />
+    <item name="TEXT_VIEW_TAG" type="id"/>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

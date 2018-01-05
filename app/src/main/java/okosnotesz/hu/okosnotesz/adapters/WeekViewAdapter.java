@@ -1,25 +1,31 @@
 package okosnotesz.hu.okosnotesz.adapters;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +69,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     final int MENU_OPT_2 = 2;
     final int MENU_OPT_3 = 3;
     Reports menuReport;
+    final static String TAG = "longClickTag";
 
     public WeekViewAdapter(Fragment fragment, Context context, ChartHelper.Days[] days, List<Calendar> calendarsOfWeeek, List<Treatments> treatmentsList, Map<Integer, Reports[]> dailymap) {
         this.fragment = fragment;
@@ -145,12 +152,28 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                     holder.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position);
                 }
             });
-            textViewList.get(i).setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            textViewList.get(i).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                    holder.onCreateContextMenu(menu, v, menuInfo);
+                public boolean onLongClick(View v) {
+                    if(v.getTag()!= null) {
+                        holder.onLongClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position, v);
+                        return true;
+                    }else{
+                        calendarsOfWeek.get(position).set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours[finalI].getHour()));
+                        calendarsOfWeek.get(position).set(Calendar.MINUTE, Integer.parseInt(hours[finalI].getMinute()));
+                        calendarsOfWeek.get(position).set(Calendar.SECOND, 0);
+                        holder.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position);
+
+                    }
+                    return false;
                 }
             });
+/* textViewList.get(i).setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+@Override
+public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+holder.onCreateContextMenu(menu, v, menuInfo);
+}
+});*/
         }
     }
 
@@ -185,6 +208,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         }
 
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements WeekItemClickListener {
 
@@ -285,10 +309,17 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         }
 
         @Override
-        public void onLongClick(Calendar cal) {
+        public void onLongClick(Calendar cal, int viewPosition, Reports temp, int day, View v) {
+            v.setTag(R.id.TEXT_VIEW_TAG, TAG);
+            ClipData.Item item = new ClipData.Item((CharSequence) v.getTag(R.id.TEXT_VIEW_TAG));
+            ClipData dragData = new ClipData((CharSequence) v.getTag(R.id.TEXT_VIEW_TAG), new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN}, item);
+            View.DragShadowBuilder dragShadow = new MyDragShadowBuilder(v);
+            v.startDrag(dragData,dragShadow,null,0);
+            View.OnDragListener mDragListener= new MyOnDragListener(cal, viewPosition, temp, day);
+            textViewList.get(position).setOnDragListener(mDragListener);
         }
 
-        @Override
+        /*@Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             clickedView = (TextView) v;
@@ -318,7 +349,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 }
                 return false;
             }
-        };
+        };*/
 
 
         private boolean deleteReport(Reports menuReport, TextView view) {
@@ -359,6 +390,103 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         }
     }
 
+
+    private static class MyDragShadowBuilder extends View.DragShadowBuilder{
+        private static Drawable shadow;
+
+        public MyDragShadowBuilder( View v){
+            super(v);
+            shadow = new ColorDrawable(Color.LTGRAY);
+        }
+
+        @Override
+        public void onProvideShadowMetrics(Point outShadowSize, Point outShadowTouchPoint) {
+            int width;
+            int height;
+            width =  getView().getWidth()*90/100;
+            height = getView().getHeight()*90/100;
+            shadow.setBounds(0,0,width,height);
+            outShadowSize.set(width,height);
+            outShadowTouchPoint.set(width/2, height/2);
+        }
+
+        @Override
+        public void onDrawShadow(Canvas canvas) {
+            shadow.draw(canvas);
+        }
+    }
+
+    private class MyOnDragListener implements View.OnDragListener {
+
+        Calendar cal;
+        int position;
+        Reports temp;
+        int day;
+        float xCoord;
+        float yCoord;
+
+        public MyOnDragListener(Calendar cal, int position, Reports temp, int day){
+            this.cal=cal;
+            this.position = position;
+            this.temp = temp;
+            this.day = day;
+        }
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            final int action = event.getAction();
+            switch (action){
+                case DragEvent.ACTION_DRAG_STARTED:
+                    if(event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)){
+                        v.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                        Log.d("dragdrop", "started at ="+position +", day: " + day);
+                        v.invalidate();
+                        return true;
+                    }
+                    return false;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    v.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
+
+                    Log.d("dragdrop", "entered ="+position +", day: " + day);
+                    v.invalidate();
+                    return true;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    Log.d("dragdrop", "location ="+position +", day: " + day);
+                    return true;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    v.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+                    Log.d("dragdrop", "excited ="+position +", day: " + day);
+                    v.invalidate();
+                    return true;
+                case DragEvent.ACTION_DROP:
+                    ClipData.Item item = event.getClipData().getItemAt(0);
+                    String dragData = menuReport.getGuestName();
+
+                    Log.d("dragdrop", "drop ="+position +", day: " + day);
+                    Toast.makeText(context, "Dragged data is " + dragData, Toast.LENGTH_LONG).show();
+                    v.getBackground().clearColorFilter();
+                    v.invalidate();
+                    return true;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    v.getBackground().clearColorFilter();
+                    v.invalidate();
+                    if(event.getResult() ){
+                        Toast.makeText(context, "The drop was handled.", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(context, "The drop didn't work.", Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                default:
+                    Log.e("DragDrop Example","Unknown action type received by OnDragListener.");
+                    break;
+            }
+
+            return false;
+
+
+        }
+    }
 
     public enum Hours {
 
