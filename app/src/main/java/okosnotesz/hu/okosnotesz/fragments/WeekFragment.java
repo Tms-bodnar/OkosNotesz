@@ -78,6 +78,7 @@ public class WeekFragment extends Fragment {
         treatmentsList = ListHelper.getAllTreatments(getContext());
         Bundle b = getArguments();
         d = new Date((Long) b.get("day"));
+        Log.d("daycells", d.toString() + "fragment onCreateView()");
         setDailyReports(d);
         weeklyCalendarsDatas = setWeekCalendars(d);
         v = initUiLayout();
@@ -115,16 +116,24 @@ public class WeekFragment extends Fragment {
         Calendar tempCal = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
         tempCal.setTime(d);
+        tempCal.add(Calendar.DATE, 1);
         List<Date> datesList = CalendarFragment.getDayValueInCells(tempCal);
         int weekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
+        int yearNumber = tempCal.get(Calendar.YEAR);
         Calendar weekCal = Calendar.getInstance();
+        weekCal.setFirstDayOfWeek(Calendar.MONDAY);
+        Log.d("caldaysok", tempCal.get(Calendar.WEEK_OF_YEAR)+ ", " + tempCal.get(Calendar.DAY_OF_MONTH) +"," + tempCal.get(Calendar.MONTH) + ", year:" + yearNumber);
         for (int i = 0; i < datesList.size(); i++) {
             weekCal.setTime(datesList.get(i));
+            Log.d("caldays", weekCal.get(Calendar.WEEK_OF_YEAR) +":week, "+ weekCal.get(Calendar.DAY_OF_MONTH) + ": day "+ weekCal.get(Calendar.MONTH) + " year: " + weekCal.get(Calendar.YEAR));
             if (weekNumber == weekCal.get(Calendar.WEEK_OF_YEAR) && !weekDays.contains(weekCal.get(Calendar.DAY_OF_MONTH))) {
                 weekDays.add(weekCal.get(Calendar.DAY_OF_MONTH));
+
             }
         }
+        Log.d("caldaysoklist", weekDays.size()+"");
         for (int i = 0; i < weekDates.length; i++) {
+            Log.d("caldaysoklist", i +". " + weekDays.get(i)+ "date");
             weekDates[i].setText(String.valueOf(weekDays.get(i)));
             if (tempCal.get(Calendar.MONTH) == (today.get(Calendar.MONTH))
                     && tempCal.get(Calendar.YEAR) == today.get(Calendar.YEAR)
@@ -144,9 +153,12 @@ public class WeekFragment extends Fragment {
         int index = 0;
         for (int i = 0; i < datesList.size(); i++) {
             Calendar calInList = Calendar.getInstance();
+            calInList.setFirstDayOfWeek(Calendar.MONDAY);
             calInList.setTimeInMillis(datesList.get(i).getTime());
+            Log.d("daycells", calInList.get(Calendar.YEAR )+ " "+ calInList.get(Calendar.MONTH) + " " + calInList.get(Calendar.DAY_OF_MONTH)+ ", week:" + calInList.get(Calendar.WEEK_OF_YEAR));
             if (calInList.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR)
                     && calInList.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR)) {
+                Log.d("daycells", "setweekcalendar if_ " + calInList.get(Calendar.DAY_OF_MONTH));
                 weeklyCalendars.add(calInList);
             }
         }
@@ -184,8 +196,9 @@ public class WeekFragment extends Fragment {
 
             if (weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR) &&
                     weekCal.get(Calendar.MONTH) == tempCal.get(Calendar.MONTH) &&
-                    weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR)) {
+                    weekCal.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR)) {
                 int weekDay = weekCal.get(Calendar.DAY_OF_WEEK);
+                Log.d("daycells", "in setreportsMap: " + weekDay);
                 hour = weekCal.get(Calendar.HOUR_OF_DAY);
                 switch (hour) {
                     case 14:

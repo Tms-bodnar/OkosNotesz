@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(mViewPager.getAdapter()== weekAdapter){
+        if(mViewPager != null && mViewPager.getAdapter() != null && mViewPager.getAdapter()== weekAdapter){
             mViewPager.getAdapter().notifyDataSetChanged();
         }
     }

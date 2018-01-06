@@ -91,12 +91,12 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 53:
                 if (position == 26) {
                     fragment = WeekFragment.newInstance(clickedDate);
-                    Log.d("eee",new Date(clickedDate).toString());
+                    Log.d("daycells",new Date(clickedDate).toString()+ ", adapterposition: "+ position + "adapter: " +numOfTabs);
                 } else {
                     Calendar clickedDay = Calendar.getInstance();
                     clickedDay.setTimeInMillis(clickedDate);
                     clickedDay.add(Calendar.DAY_OF_YEAR, (position - numOfTabs / 2) * 7);
-                    Log.d("eee", clickedDay.get(Calendar.DAY_OF_MONTH)+": dom");
+                    Log.d("daycells", clickedDay.get(Calendar.DAY_OF_MONTH)+": dom");
                     fragment = WeekFragment.newInstance(clickedDay.getTimeInMillis());
                 }
         }
