@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
         mContext = getApplicationContext();
         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

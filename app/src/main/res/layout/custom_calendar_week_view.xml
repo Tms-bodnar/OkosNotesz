@@ -5,17 +5,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/week_progress"
+    <ImageView
+        android:id="@+id/delete_iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible" />
+        android:layout_above="@+id/rec_scroll"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorAccent"
+        android:src="@android:drawable/ic_menu_delete" />
 
     <LinearLayout
+        android:id="@+id/days_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:id="@+id/days_layout">
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/mon_day"
@@ -96,10 +99,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/dates_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dates_layout"
         android:layout_below="@+id/days_layout">
+
         <TextView
             android:id="@+id/mon_date"
             android:layout_width="0dp"
@@ -109,8 +113,8 @@
             android:gravity="center"
             android:text="@string/mo"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tue_date"
@@ -178,33 +182,24 @@
             android:textColor="@android:color/white"
             android:textStyle="bold" />
     </LinearLayout>
-    <LinearLayout
-        android:baselineAligned="false"
+
+    <ScrollView
+        android:id="@+id/rec_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:orientation="horizontal"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/dates_layout">
 
-        <RelativeLayout
-            android:id="@+id/weekly_layout"
-            android:layout_width="0dp"
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/week_view_recycle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/week_scroll_view">
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:scrollbars="vertical"/>
+    </ScrollView>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/week_view_recycle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </android.support.v7.widget.RecyclerView>
-            </ScrollView>
-        </RelativeLayout>
-    </LinearLayout>
 </RelativeLayout>

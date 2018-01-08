@@ -1,18 +1,35 @@
 package okosnotesz.hu.okosnotesz.fragments;
 
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,14 +43,16 @@ import java.util.List;
 import java.util.Map;
 
 import okosnotesz.hu.okosnotesz.ChartHelper;
+import okosnotesz.hu.okosnotesz.MainActivity;
 import okosnotesz.hu.okosnotesz.R;
+import okosnotesz.hu.okosnotesz.WeekItemClickListener;
 import okosnotesz.hu.okosnotesz.adapters.WeekViewAdapter;
 import okosnotesz.hu.okosnotesz.model.DBHelper;
 import okosnotesz.hu.okosnotesz.model.ListHelper;
 import okosnotesz.hu.okosnotesz.model.Reports;
 import okosnotesz.hu.okosnotesz.model.Treatments;
 
-public class WeekFragment extends Fragment {
+public class WeekFragment extends Fragment implements WeekItemClickListener {
 
     Date d;
     List<Reports> reportsList;
@@ -42,9 +61,6 @@ public class WeekFragment extends Fragment {
     List<Calendar> weeklyCalendarsDatas;
     Map<Integer, Reports[]> weeklyReports;
     RecyclerView recyclerView;
-    private final int REQ_CODE = 9;
-    DrawerLayout drawer;
-    ActionBarDrawerToggle barDrawerToggle;
     android.support.v7.widget.Toolbar toolbar;
     Button todayButton;
     WeekViewAdapter adapter;
@@ -58,6 +74,8 @@ public class WeekFragment extends Fragment {
     final int MENU_OPT_3 = 3;
     Reports menuReport;
     int clickedDay;
+    Context mContext;
+    ImageView delete_iv;
 
 
     public WeekFragment() {
@@ -74,8 +92,8 @@ public class WeekFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        treatmentsList = ListHelper.getAllTreatments(getContext());
+        mContext = getContext();
+        treatmentsList = ListHelper.getAllTreatments(mContext);
         Bundle b = getArguments();
         d = new Date((Long) b.get("day"));
         Log.d("daycells", d.toString() + "fragment onCreateView()");
@@ -87,17 +105,20 @@ public class WeekFragment extends Fragment {
     }
 
     private View initUiLayout() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
+
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.custom_calendar_week_view, null);
         toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
-        scrollView = (ScrollView) v.findViewById(R.id.week_scroll_view);
         todayButton = (Button) toolbar.findViewById(R.id.tollbar_button);
+        delete_iv = (ImageView) v.findViewById(R.id.delete_iv);
+        delete_iv.setVisibility(View.INVISIBLE);
         recyclerView = (RecyclerView) v.findViewById(R.id.week_view_recycle);
-        adapter = new WeekViewAdapter(this, getContext(), ChartHelper.Days.values(), weeklyCalendarsDatas, treatmentsList, weeklyReports);
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        adapter = new WeekViewAdapter(this, mContext, ChartHelper.Days.values(), weeklyCalendarsDatas, treatmentsList, weeklyReports);
+        layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+        scrollView = (ScrollView) v.findViewById(R.id.rec_scroll);
+        scrollView.setSmoothScrollingEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
         return v;
     }
 
@@ -190,7 +211,7 @@ public class WeekFragment extends Fragment {
         int hour = -1;
         int dayHour = -1;
         int dayMinute = -1;
-        reportsList = ListHelper.getAllReports(getContext());
+        reportsList = ListHelper.getAllReports(mContext);
         for (Reports r : reportsList) {
             weekCal.setTimeInMillis(r.getDate());
 
@@ -366,7 +387,7 @@ public class WeekFragment extends Fragment {
             for (int i = 0; i < cellCount; i++) {
                 if (cellNumber + i < 31) {
                     if (textViewArray[cellNumber + i].getTag() != null) {
-                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.reserved) + ": " + sdf.format(reportDate), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, mContext.getResources().getString(R.string.reserved) + ": " + sdf.format(reportDate), Toast.LENGTH_LONG).show();
                         free = false;
                         return;
                     }
@@ -376,22 +397,183 @@ public class WeekFragment extends Fragment {
                 for (int j = 0; j < cellCount; j++) {
                     if (cellNumber + j < 31) {
                         adapter.itemAdd(menuReport, clickedDay, cellNumber + j);
+
                     }
                 }
+                adapter.notifyItemChanged(clickedDay);
             }
-            DBHelper helper = DBHelper.getHelper(getContext());
+            DBHelper helper = DBHelper.getHelper(mContext);
             boolean OK = helper.addReport(menuReport);
             helper.close();
-            List<Reports> rl = ListHelper.getAllReports(getContext());
+            List<Reports> rl = ListHelper.getAllReports(mContext);
             Log.d("intentextras", String.valueOf(rl.size()));
             for (int i = 0; i <rl.size(); i++) {
                 Log.d("intentextras", rl.get(i).getGuestName());
             }
             if(OK)  Log.d("intentextras", "dbok");
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-            scrollView.scrollTo(0, cellNumber*60);
+
+           // getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            scrollView.smoothScrollTo(0, cellNumber*60);
             Log.d("intentextras", "detach attach");
         }
+    }
+
+
+
+
+    @Override
+    public void onClick(Calendar cal, int position, Reports report, int day) {
+
+    }
+
+    @Override
+    public void onLongClick(Calendar cal, int position, Reports temp, int day) {
+        WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(day);
+        TextView draggedTV= holder.getTextViewArray()[position];
+        draggedTV.setTag(R.id.TEXT_VIEW_TAG, temp.getGuestName());
+        ClipData.Item item = new ClipData.Item((CharSequence) draggedTV.getTag(R.id.TEXT_VIEW_TAG));
+        ClipData dragData = new ClipData((CharSequence) draggedTV.getTag(R.id.TEXT_VIEW_TAG), new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN}, item);
+        View.DragShadowBuilder dragShadow = new MyDragShadowBuilder(draggedTV);
+        draggedTV.startDrag(dragData, dragShadow, null, 0);
+        View.OnDragListener mDragListener = new MyOnDragListener(cal, position, temp, day,  draggedTV);
+        recyclerView.setOnDragListener(mDragListener);
+        delete_iv.setOnDragListener(mDragListener);
+
+    }
+
+    private boolean deleteReport(Reports deleteReport, int day) {
+                    DBHelper helper = DBHelper.getHelper(mContext);
+                    boolean  successful = helper.deleteReport(deleteReport);
+                    helper.close();
+                    if (successful) {
+                        Snackbar.make(getView(), R.string.deleteSuccessful, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        adapter.itemRemoved(deleteReport, day);
+                        adapter.notifyItemChanged(day);
+                    }
+                    return successful;
+    }
+
+
+    private static class MyDragShadowBuilder extends View.DragShadowBuilder{
+        private static Drawable shadow;
+
+        public MyDragShadowBuilder( View v){
+            super(v);
+            shadow = new ColorDrawable(Color.LTGRAY);
+        }
+
+        @Override
+        public void onProvideShadowMetrics(Point outShadowSize, Point outShadowTouchPoint) {
+            int width;
+            int height;
+            width =  getView().getWidth()*90/100;
+            height = getView().getHeight()*90/100;
+            shadow.setBounds(0,0,width,height);
+            outShadowSize.set(width,height);
+            outShadowTouchPoint.set(width/2, height/2);
+        }
+
+        @Override
+        public void onDrawShadow(Canvas canvas) {
+            shadow.draw(canvas);
+        }
+    }
+
+    private class MyOnDragListener implements View.OnDragListener {
+
+        Calendar cal;
+        int position;
+        Reports temp;
+        int day;
+        int windowHeight;
+        TextView tv;
+        int xCoord;
+        int yCoord;
+
+        public MyOnDragListener(Calendar cal, int position, Reports temp, int day, TextView tv){
+            this.cal=cal;
+            this.position = position;
+            this.temp = temp;
+            this.day = day;
+            this.tv = tv;
+            windowHeight = scrollView.getHeight();
+        }
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            xCoord = (int) event.getX();
+            yCoord = (int) event.getY();
+            int[] viewCoords = new int[2];
+            v.getLocationOnScreen(viewCoords);
+            int viewTop = viewCoords[1];
+            final int action = event.getAction();
+            switch (action){
+                case DragEvent.ACTION_DRAG_STARTED:
+                    if(event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)){
+                        delete_iv.setVisibility(View.VISIBLE);
+                        delete_iv.bringToFront();
+                        createTopDownAnimation(delete_iv,null,delete_iv.getHeight()).start();
+                        v.invalidate();
+                        break;
+                    }
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    v.invalidate();
+                    break;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    int value = yCoord - windowHeight / 2;
+                    ObjectAnimator.ofInt(scrollView,"scrollY",value).setDuration(200).start();
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    break;
+                case DragEvent.ACTION_DROP:
+                    v.invalidate();
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    v.getBackground().clearColorFilter();
+                    createBottomUpAnimation(delete_iv,null,delete_iv.getHeight()).start();
+                    v.invalidate();
+                    if(event.getResult() ){
+                       Log.d("dragdrop", viewTop +":top");
+                        if(viewTop < 500){
+                            if(deleteReport(temp, day)){
+                   //             fragment.getFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(mContext, "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                default:
+                    Log.e("DragDrop Example","Unknown action type received by OnDragListener.");
+                    break;
+            }
+            return true;
+        }
+
+        public  ObjectAnimator createTopDownAnimation(View view, AnimatorListenerAdapter listener,
+                                                            float distance) {
+            view.setTranslationY(-distance);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0);
+            animator.setDuration(500);
+            animator.removeAllListeners();
+            if (listener != null) {
+                animator.addListener(listener);
+            }
+            return animator;
+        }
+
+        private ObjectAnimator createBottomUpAnimation(View view,
+                                                              AnimatorListenerAdapter listener, float distance) {
+            ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", -distance);
+            animator.setDuration(500);
+            animator.removeAllListeners();
+            if (listener != null) {
+                animator.addListener(listener);
+            }
+            return animator;
+        }
+
     }
 }
 

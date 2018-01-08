@@ -6,7 +6,7 @@
     android:layout_height="140dp"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/Base.ThemeOverlay.AppCompat">
 
     <ImageView
         android:id="@+id/img_header_bg"
@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@color/whiteDark2"
+        android:background="@color/colorLightBlue"
         android:scaleType="fitXY" />
 
     <LinearLayout

@@ -113,6 +113,7 @@
     <string name="wait">Türelem</string>
     <string name="search">Keresés</string>
     <string name="reserved">A kezelésre nincs elég idő ebben az időpontban!</string>
+    <string name="today">Mai nap</string>
     <item name="TRE_ARRAY" type="id" />
     <item name="REPORT" type="id" />
     <item name="TEXT_VIEW_TAG" type="id"/>
