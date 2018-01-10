@@ -73,6 +73,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     final int MENU_OPT_2 = 2;
     final int MENU_OPT_3 = 3;
     Reports menuReport;
+    static int cellCount;
     int clickedDay;
     Context mContext;
     ImageView delete_iv;
@@ -397,7 +398,6 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 for (int j = 0; j < cellCount; j++) {
                     if (cellNumber + j < 31) {
                         adapter.itemAdd(menuReport, clickedDay, cellNumber + j);
-
                     }
                 }
                 adapter.notifyItemChanged(clickedDay);
@@ -428,6 +428,8 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
 
     @Override
     public void onLongClick(Calendar cal, int position, Reports temp, int day) {
+
+        cellCount = temp.getDuration() == 0 ? 30 : temp.getDuration() / 30;
         WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(day);
         TextView draggedTV= holder.getTextViewArray()[position];
         draggedTV.setTag(R.id.TEXT_VIEW_TAG, temp.getGuestName());
@@ -437,8 +439,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         draggedTV.startDrag(dragData, dragShadow, null, 0);
         View.OnDragListener mDragListener = new MyOnDragListener(cal, position, temp, day,  draggedTV);
         recyclerView.setOnDragListener(mDragListener);
-        delete_iv.setOnDragListener(mDragListener);
-
+       // delete_iv.setOnDragListener(mDragListener);
     }
 
     private boolean deleteReport(Reports deleteReport, int day) {
@@ -446,7 +447,6 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                     boolean  successful = helper.deleteReport(deleteReport);
                     helper.close();
                     if (successful) {
-                        Snackbar.make(getView(), R.string.deleteSuccessful, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         adapter.itemRemoved(deleteReport, day);
                         adapter.notifyItemChanged(day);
                     }
@@ -459,7 +459,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
 
         public MyDragShadowBuilder( View v){
             super(v);
-            shadow = new ColorDrawable(Color.LTGRAY);
+            shadow = new ColorDrawable(Color.GREEN);
         }
 
         @Override
@@ -503,9 +503,15 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         public boolean onDrag(View v, DragEvent event) {
             xCoord = (int) event.getX();
             yCoord = (int) event.getY();
-            int[] viewCoords = new int[2];
-            v.getLocationOnScreen(viewCoords);
-            int viewTop = viewCoords[1];
+            int[] coordsOfRecView = new int[2];
+            int[] coordsOfImageView = new int[2];
+            if(v instanceof RecyclerView) {
+                v.getLocationOnScreen(coordsOfRecView);
+            }else if (v instanceof ImageView) {
+                v.getLocationOnScreen(coordsOfImageView);
+            }
+            int viewTopOfRecView = coordsOfRecView[1];
+            int viewTopOfImageView = coordsOfImageView[1];
             final int action = event.getAction();
             switch (action){
                 case DragEvent.ACTION_DRAG_STARTED:
@@ -525,6 +531,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                     ObjectAnimator.ofInt(scrollView,"scrollY",value).setDuration(200).start();
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
+                    Log.d("dragdrop", ""+yCoord +",iv: "+ viewTopOfImageView + "Rv:" + viewTopOfRecView);
                     break;
                 case DragEvent.ACTION_DROP:
                     v.invalidate();
@@ -534,11 +541,13 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                     createBottomUpAnimation(delete_iv,null,delete_iv.getHeight()).start();
                     v.invalidate();
                     if(event.getResult() ){
-                       Log.d("dragdrop", viewTop +":top");
-                        if(viewTop < 500){
+                        if(yCoord<viewTopOfRecView && yCoord > viewTopOfImageView){
+                            Log.d("dragdrop", ""+yCoord +",iv: "+ viewTopOfImageView + "Rv:" + viewTopOfRecView);
                             if(deleteReport(temp, day)){
-                   //             fragment.getFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
+                                Snackbar.make(getView(), R.string.deleteSuccessful, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             }
+                        }else if(yCoord>viewTopOfRecView){
+                            Snackbar.make(getView(), "Itt kell az áthelyezést megírni", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
                     } else {
                         Toast.makeText(mContext, "The drop didn't work.", Toast.LENGTH_SHORT).show();
@@ -554,6 +563,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         public  ObjectAnimator createTopDownAnimation(View view, AnimatorListenerAdapter listener,
                                                             float distance) {
             view.setTranslationY(-distance);
+
             ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0);
             animator.setDuration(500);
             animator.removeAllListeners();

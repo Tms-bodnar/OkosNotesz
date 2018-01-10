@@ -45,7 +45,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = new CalendarFragment();
+        Fragment fragment = null;
         switch (numOfTabs) {
             case 4:
                 switch (position) {
