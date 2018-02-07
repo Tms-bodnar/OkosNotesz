@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_custom_calendar"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +11,17 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:id="@+id/monthly_top_layout">
+
+        <TextView
+            android:id="@+id/week_num"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/week"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="12sp"/>
 
 
         <TextView
@@ -94,23 +101,29 @@
             android:textColor="@android:color/white"
             android:textStyle="bold" />
     </LinearLayout>
-<ScrollView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/week_number_recycle"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:scrollbars="vertical"
+        android:nestedScrollingEnabled="true"
+        android:layout_below="@+id/monthly_top_layout"
+        />
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/month_view_recycle"
+            android:id="@+id/week_view_recycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
             android:scrollbars="vertical"
-            android:fadeScrollbars="true"/>
-    </LinearLayout>
-</ScrollView>
-></LinearLayout>
+            android:nestedScrollingEnabled="true"
+            android:layout_below="@id/monthly_top_layout"
+            android:layout_toRightOf="@+id/week_number_recycle"
+            android:layout_toEndOf="@+id/week_number_recycle"/>
+</RelativeLayout>

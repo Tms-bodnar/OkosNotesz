@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="okosnotesz.hu.okosnotesz">
+    package="hu.okosnotesz.okosnotesz">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="hu.okosnotesz.okosnotesz.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AdminActivity"
+            android:name="hu.okosnotesz.okosnotesz.AdminActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="hu.okosnotesz.okosnotesz.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".BookingActivity" />
-        <activity android:name=".WebViewActivity"/>
+        <activity android:name="hu.okosnotesz.okosnotesz.BookingActivity" />
+        <activity android:name="hu.okosnotesz.okosnotesz.WebViewActivity"/>
     </application>
 
 </manifest>

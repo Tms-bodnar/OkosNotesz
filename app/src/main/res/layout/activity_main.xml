@@ -8,8 +8,6 @@
     tools:openDrawer="start"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical">
-    <!--android:fitsSystemWindows="true"-->
-
 
     <RelativeLayout
         android:layout_width="match_parent"

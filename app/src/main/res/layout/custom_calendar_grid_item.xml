@@ -1,203 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="55dp">
 
-
-    <View
-        android:id="@+id/border1"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark" />
-
-    <LinearLayout
-        android:id="@+id/grid"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
-
-        <TextView
-            android:id="@+id/calendar_date_id"
-            android:layout_width="19dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/last_date"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <GridLayout
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:layout_margin="1dp"
-
-            android:columnCount="4"
-            android:rowCount="4">
-
-
-          <!--  <TextView
-                android:id="@+id/event_id6"
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:layout_column="0"
-                android:layout_marginBottom="1dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginStart="1dp"
-                android:layout_row="0" />-->
-
-            <TextView
-                android:id="@+id/event_id7"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_margin="1dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginStart="3dp"
-                android:layout_column="0"
-                android:layout_row="0" />
-
-            <TextView
-                android:id="@+id/event_id8"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_margin="1dp"
-                android:layout_column="1"
-                android:layout_row="0" />
-
-            <TextView
-                android:id="@+id/event_id9"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_margin="1dp"
-                android:layout_column="2"
-                android:layout_row="0" />
-
-            <TextView
-                android:id="@+id/event_id10"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_margin="1dp"
-                android:layout_column="3"
-                android:layout_row="0" />
-
-            <TextView
-                android:id="@+id/event_id11"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginStart="3dp"
-                android:layout_column="0"
-                android:layout_margin="1dp"
-                android:layout_row="1" />
-
-            <TextView
-                android:id="@+id/event_id12"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="1"
-                android:layout_margin="1dp"
-                android:layout_row="1" />
-
-            <TextView
-                android:id="@+id/event_id13"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="2"
-                android:layout_margin="1dp"
-                android:layout_row="1" />
-
-            <TextView
-                android:id="@+id/event_id14"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="3"
-                android:layout_margin="1dp"
-                android:layout_row="1" />
-
-            <TextView
-                android:id="@+id/event_id15"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginStart="3dp"
-                android:layout_column="0"
-                android:layout_margin="1dp"
-                android:layout_row="2" />
-
-            <TextView
-                android:id="@+id/event_id16"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="1"
-                android:layout_margin="1dp"
-                android:layout_row="2" />
-
-            <TextView
-                android:id="@+id/event_id17"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="2"
-                android:layout_margin="1dp"
-                android:layout_row="2" />
-
-            <TextView
-                android:id="@+id/event_id18"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="3"
-                android:layout_margin="1dp"
-                android:layout_row="2" />
-
-            <TextView
-                android:id="@+id/event_id19"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginStart="3dp"
-                android:layout_column="0"
-                android:layout_margin="1dp"
-                android:layout_row="3" />
-
-            <TextView
-                android:id="@+id/event_id20"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="1"
-                android:layout_margin="1dp"
-                android:layout_row="3" />
-
-            <TextView
-                android:id="@+id/event_id21"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="2"
-                android:layout_margin="1dp"
-                android:layout_row="3" />
-
-            <TextView
-                android:id="@+id/event_id22"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:layout_column="3"
-                android:layout_margin="1dp"
-                android:layout_row="3" />
-
-           <!-- <TextView
-                android:id="@+id/event_id23"
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:layout_column="5"
-                android:layout_margin="1dp"
-                android:layout_row="2" />-->
-        </GridLayout>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/border2"
+    <android.support.v7.widget.CardView
+        android:id="@+id/item_card_view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryDark" />
-</RelativeLayout>
+        android:layout_height="match_parent"
+        >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/date_background"/>
+                <LinearLayout
+                    android:id="@+id/date_cell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/calendar_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_date"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

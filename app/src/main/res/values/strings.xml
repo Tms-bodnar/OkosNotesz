@@ -99,7 +99,7 @@
     <string name="sa">Szo</string>
     <string name="su">V</string>
     <string name="month"> </string>
-    <string name="week"> hét</string>
+    <string name="week">Hét</string>
     <string name="year">2017</string>
     <string name="title_activity_calendar">Calendar</string>
     <string name="date_picker">Időpont választása</string>
