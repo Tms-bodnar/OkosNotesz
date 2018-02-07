@@ -147,22 +147,24 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     }
 
     public static List<Date> getDayValueInCells(Calendar day) {
-        List<Date> dayValueInCells = new ArrayList<>();
+        List<Date> dayValueInCells = new ArrayList<>(7);
         Calendar tempCal = (Calendar) day.clone();
-        tempCal.setFirstDayOfWeek(Calendar.MONDAY);
-/*        tempCal.setFirstDayOfWeek(Calendar.MONDAY);
+        int weekNum = tempCal.get(Calendar.WEEK_OF_YEAR);
         tempCal.set(Calendar.DAY_OF_MONTH, 1);
         int firstDayOfTheMonth = tempCal.get(Calendar.DAY_OF_WEEK) + 4;
-        tempCal.set(Calendar.DAY_OF_MONTH, -firstDayOfTheMonth);*/
-        tempCal.add(Calendar.WEEK_OF_YEAR, -1);
-        Log.d("open weekfragment", "week getdayvalue: "+"week: " +tempCal.get(Calendar.WEEK_OF_YEAR)+", "+ tempCal.get(Calendar.MONTH)+"," + tempCal.get(Calendar.DAY_OF_MONTH));
-        do {
-            if (day.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR)) {
-                Log.d("open weekfragment", "week getdayvalue: "+"week: " +tempCal.get(Calendar.WEEK_OF_YEAR)+", "+ tempCal.get(Calendar.MONTH)+"," + tempCal.get(Calendar.DAY_OF_MONTH));
-                dayValueInCells.add(tempCal.getTime());
+        tempCal.set(Calendar.DAY_OF_MONTH, -firstDayOfTheMonth);
+        tempCal.setFirstDayOfWeek(Calendar.MONDAY);
+        Log.d("open weekfragment", "weeknum: "+ weekNum + ", "+ tempCal.get(Calendar.WEEK_OF_YEAR));
+        while (weekNum != tempCal.get(Calendar.WEEK_OF_YEAR)){
+                tempCal.add(Calendar.DAY_OF_MONTH, 1);
             }
+        while (weekNum == tempCal.get(Calendar.WEEK_OF_YEAR)){
+            Log.d("open weekfragment", ":"+ new Date(tempCal.getTimeInMillis()) + ", "+ tempCal.get(Calendar.WEEK_OF_YEAR));
+            Calendar newCal = Calendar.getInstance();
+            newCal.setTimeInMillis(tempCal.getTimeInMillis());
+            dayValueInCells.add(new Date(newCal.getTimeInMillis()));
             tempCal.add(Calendar.DAY_OF_MONTH, 1);
-        } while (dayValueInCells.size() < CalendarFragment.MAX_CALENDAR_CELLS + 1);
+        }
         return dayValueInCells;
     }
 
@@ -188,8 +190,11 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             weekCal.setTime(datesList.get(i));
             if (weekNumber == tempCal.get(Calendar.WEEK_OF_YEAR) && !weekDays.contains(weekCal.get(Calendar.DAY_OF_MONTH))) {
                 weekDays.add(weekCal.get(Calendar.DAY_OF_MONTH));
+                Log.d("weeek", ""+weekDays.size());
+                Log.d("weeek", "day:"+weekCal.get(Calendar.DAY_OF_MONTH));
             }
         }
+
         for (int i = 0; i < weekDates.length; i++) {
             weekDates[i].setText(String.valueOf(weekDays.get(i)));
             if (tempCal.get(Calendar.MONTH) == (today.get(Calendar.MONTH))

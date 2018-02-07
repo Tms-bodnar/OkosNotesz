@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -174,10 +175,13 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setVisibility(View.INVISIBLE);
         tabLayout.setSelectedTabIndicatorColor(ResourcesCompat.getColor(getResources(),R.color.colorPrimaryDark, null));
-        mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 1, 3);
+        mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 49, 3);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setCurrentItem(24);
         toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(mViewPager.getCurrentItem()));
+        Log.d("eee", "start Main");
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                }
            }
        });
+//        mViewPager.setCurrentItem();
     }
 
 
@@ -299,11 +304,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        PagerAdapter adapter = (PagerAdapter) mViewPager.getAdapter();
-        int fragmentType = adapter.getFragmentType();
-        if (!mainActivity || fragmentType != 3) {
+        if (!mainActivity) {
+            mainActivityStart();
+        }else if(mViewPager.getAdapter().getCount()==53){
             mainActivityStart();
         }
+
         else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = getLayoutInflater();

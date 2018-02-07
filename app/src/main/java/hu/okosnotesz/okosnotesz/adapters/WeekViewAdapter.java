@@ -3,11 +3,14 @@ package hu.okosnotesz.okosnotesz.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -49,6 +52,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     List<TextView> textViewList;
     List<Treatments> treatmentsList;
     private final int REQ_CODE = 9;
+    int delayAnimate = 150;
 
     public WeekViewAdapter(WeekFragment fragment, Context context, ChartHelper.Days[] days, List<Calendar> calendarsOfWeeek, List<Treatments> treatmentsList, Map<Integer, Reports[]> dailymap) {
         this.fragment = fragment;
@@ -142,6 +146,22 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 }
             });
         }
+        holder.itemView.setVisibility(View.INVISIBLE);
+        setAnimation(holder.itemView);
+    }
+
+    private void setAnimation(View view) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.view_in);
+                if(view!=null){
+                    view.startAnimation(animation);
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+        }, delayAnimate);
+        delayAnimate+=150;
     }
 
     public int getPosition() {

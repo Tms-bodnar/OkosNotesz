@@ -101,29 +101,23 @@
             android:textColor="@android:color/white"
             android:textStyle="bold" />
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/week_number_recycle"
-        android:layout_width="20dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:scrollbars="vertical"
-        android:nestedScrollingEnabled="true"
-        android:layout_below="@+id/monthly_top_layout"
-        />
+    <ScrollView
+        android:id="@+id/rec_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/monthly_top_layout">
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/week_view_recycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@color/colorPrimaryDark"
             android:orientation="horizontal"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:scrollbars="vertical"
-            android:nestedScrollingEnabled="true"
-            android:layout_below="@id/monthly_top_layout"
-            android:layout_toRightOf="@+id/week_number_recycle"
-            android:layout_toEndOf="@+id/week_number_recycle"/>
+            android:scrollbars="vertical"/>
+
+    </ScrollView>
+
 </RelativeLayout>

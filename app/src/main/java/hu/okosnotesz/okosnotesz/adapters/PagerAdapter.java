@@ -1,6 +1,7 @@
 package hu.okosnotesz.okosnotesz.adapters;
 
 import android.content.Context;
+import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -8,6 +9,8 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import hu.okosnotesz.okosnotesz.R;
 import hu.okosnotesz.okosnotesz.fragments.AdminExpertsFragment;
@@ -29,15 +32,16 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     int numOfTabs;
     long clickedDate;
     int fragmentType;
+    List<Calendar> calList;
 
 
 
     public PagerAdapter(Context context, FragmentManager supportFragmentManager, int i, int j) {
-
         super(supportFragmentManager);
         this.numOfTabs = i;
         this.mContext = context;
         this.fragmentType = j;
+
     }
 
     public PagerAdapter(Context context, FragmentManager supportFragmentManager, int i, long date, int j) {
@@ -48,8 +52,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         this.fragmentType = j;
     }
 
-    public int getFragmentType(){
-        return fragmentType;
+    public PagerAdapter(Context context, FragmentManager supportFragmentManager, int i, long date, List<Calendar> calList, int j){
+        super(supportFragmentManager);
+        this.numOfTabs = i;
+        this.mContext = context;
+        this.calList = calList;
+        this.clickedDate = date;
+        this.fragmentType = j;
     }
 
     @Override
@@ -75,17 +84,25 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 3:
                 Calendar cal = Calendar.getInstance();
                 long calLong = cal.getTimeInMillis();
-                fragment = CalendarFragment.newInstance(calLong);
-                break;
-/*
-                 else {
+                Log.d("eee", cal.getTime() + "adapter first");
+                if (position == 24) {
+                    Log.d("eee", cal.getTime() + "adapter first, Position: " + position + ", numOftabs/2: " + numOfTabs / 2);
+                    fragment = CalendarFragment.newInstance(calLong);
+
+                } else {
                     cal.add(Calendar.MONTH, position - numOfTabs / 2);
                     calLong = cal.getTimeInMillis();
+                    Log.d("eee", cal.getTime() + "adapter moving, Position: " + position + ", numOftabs/2: " + numOfTabs / 2);
                     fragment = CalendarFragment.newInstance(calLong);
                 }
-                break;*/
+                break;
             case 2:
+//                switch (position) {
+//                    case 0:
+
                         fragment = new SalesFragment();
+//                        break;
+//                }
                 break;
             case 1:
                         fragment = new ReportsFragment();
@@ -93,10 +110,12 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 5:
                 if (position == 26) {
                     fragment = WeekFragment.newInstance(clickedDate);
+                    Log.d("clickmonthpager",new Date(clickedDate).toString()+ ", adapterposition: "+ position + "adapter: " +numOfTabs);
                 } else {
                     Calendar clickedDay = Calendar.getInstance();
                     clickedDay.setTimeInMillis(clickedDate);
-                    clickedDay.add(Calendar.WEEK_OF_YEAR, (position - numOfTabs / 2));
+                    clickedDay.add(Calendar.DAY_OF_YEAR, (position - numOfTabs / 2) * 7);
+                    Log.d("clickmonthpager", clickedDay.get(Calendar.DAY_OF_MONTH)+"."+clickedDay.get(Calendar.MONTH)+": dom");
                     fragment = WeekFragment.newInstance(clickedDay.getTimeInMillis());
                 }
                 break;
@@ -165,7 +184,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                         pageTitle = formatter.format(clickedDay.getTime()) +"."+ mContext.getString(R.string.week);
                         break;
                     default:
-                        clickedDay.add(Calendar.WEEK_OF_YEAR, (position- numOfTabs/2));
+                        clickedDay.add(Calendar.DAY_OF_YEAR, (position- numOfTabs/2)*7);
                         pageTitle = formatter.format(clickedDay.getTime()) +"."+ mContext.getString(R.string.week);
                         break;
                 }

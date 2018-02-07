@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,7 +24,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,22 +41,24 @@ import hu.okosnotesz.okosnotesz.model.Reports;
 public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.MonthViewHolder> {
 
     Context mContext;
-    List<Calendar> datesList;
+    Map<Integer, List<Calendar>> datesList;
+    List<Calendar> calList;
     Calendar currentDate;
     List<Reports> allReports;
     Calendar tempCal;
     Calendar today;
     RecyclerView recyclerView;
     ViewPager viewpager;
-    FragmentManager fragmentManager;
+    Fragment mFragment;
     Toolbar toolbar;
     int lastPosition = -1;
+    int delayAnimate = 200;
 
 
 
-    public MonthGridAdapter(Context context, FragmentManager fragmentManager, Toolbar toolbar, RecyclerView recyclerView, List<Calendar> datesList, Calendar currentDate, List<Reports> allReports, ViewPager viewPager){
+    public MonthGridAdapter(Context context, Fragment fragment, Toolbar toolbar, RecyclerView recyclerView, Map<Integer, List<Calendar>> datesList, Calendar currentDate, List<Reports> allReports, ViewPager viewPager){
         this.mContext = context;
-        this.fragmentManager = fragmentManager;
+        this.mFragment = fragment;
         this.toolbar = toolbar;
         this.recyclerView = recyclerView;
         this.datesList = datesList;
@@ -71,30 +71,29 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
 
     @Override
     public MonthViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_grid_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_month_item, parent, false);
         MonthViewHolder monthViewHolder = new MonthViewHolder(view);
         return monthViewHolder;
     }
 
     @Override
     public void onBindViewHolder(MonthViewHolder holder, int position) {
-        tempCal = datesList.get(position);
-        TextView dateCell = holder.dateCell;
-        ImageView cellCircle = holder.circle;
-        GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-        int firstVisible = layoutManager.findFirstCompletelyVisibleItemPosition();
-        toolbar.setTitle(getTitle(datesList.get(firstVisible + 14)));
-        drawCircle(cellCircle, 0, 1);
-/*        for(int i = 0; i < calList.size(); i++){
+        calList = datesList.get(position);
+        tempCal = calList.get(0);
+        int weekValue = tempCal.get(Calendar.WEEK_OF_YEAR);
+        holder.weekNumber.setText(weekValue+".");
+        List<TextView> dateCellList = holder.getDateCells();
+        List<ImageView> cellCirclesList = holder.getCellCircles();
+        for(int i = 0; i < calList.size(); i++){
             tempCal = calList.get(i);
             final int monthValue = tempCal.get(Calendar.MONTH) + 1;
             final int year = tempCal.get(Calendar.YEAR);
             int yearValue = tempCal.get(Calendar.YEAR);
             int dayValue = tempCal.get(Calendar.DAY_OF_MONTH);
             int currentMonth = currentDate.get(Calendar.MONTH) + 1;
-            int currentYear = currentDate.get(Calendar.YEAR);*/
-            dateCell.setText(String.valueOf(tempCal.get(Calendar.DAY_OF_MONTH)));
-        /*if (monthValue == currentMonth && yearValue == currentYear) {
+            int currentYear = currentDate.get(Calendar.YEAR);
+            drawCircle(cellCirclesList.get(i), 0, 0);
+        if (monthValue == currentMonth && yearValue == currentYear) {
             if (tempCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY || tempCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 dateCellList.get(i).setTextColor(Color.parseColor("#66BB6A"));
                 drawCircle(cellCirclesList.get(i), 0, 1);
@@ -126,43 +125,37 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
             }
         }
             int finalI = i;
-            dateCellList.get(i).setOnClickListener(view -> holder.onClick(position, fragmentManager, viewpager, finalI)
+            dateCellList.get(i).setOnClickListener(view -> holder.onClick(position, mFragment, viewpager, finalI)
             );
-        }*/
-//        holder.itemView.setVisibility(View.INVISIBLE);
-        setAnimation(holder.itemView, position);
+        }
+        holder.itemView.setVisibility(View.INVISIBLE);
+        setAnimation(holder.itemView);
     }
 
-    private void setAnimation(View viewToAnimate, int position) {
-/*
+    private void setAnimation(View view) {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
                     Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.fade_in);
-                    if(viewToAnimate!=null){
-                        viewToAnimate.startAnimation(animation);
-                        viewToAnimate.setVisibility(View.VISIBLE);
+                    if(view!=null){
+                        view.startAnimation(animation);
+                        view.setVisibility(View.VISIBLE);
                     }
                 }
             }, delayAnimate);
-            delayAnimate+=20;
+            delayAnimate+=200;
         }
-*/
-        if (position > lastPosition) {
+
+       /* if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.fade_in);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
-        }
-    }
+        }*/
+
 
     @Override
     public int getItemCount() {
         return datesList.size();
-    }
-
-    private String getTitle(Calendar cal){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMMM");
-        return formatter.format(cal.getTime());
     }
 
     public void drawCircle(ImageView view, int duration, int today){
@@ -211,26 +204,75 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
     public class MonthViewHolder extends RecyclerView.ViewHolder implements MonthItemClickListener{
 
         CardView itemCardView;
-        TextView dateCell;
-        ImageView circle;
+        TextView dateCell_mon;
+        ImageView circle_mon;
+        TextView dateCell_tue;
+        ImageView circle_tue;
+        TextView dateCell_wed;
+        ImageView circle_wed;
+        TextView dateCell_thu;
+        ImageView circle_thu;
+        TextView dateCell_fri;
+        ImageView circle_fri;
+        TextView dateCell_sat;
+        ImageView circle_sat;
+        TextView dateCell_sun;
+        ImageView circle_sun;
+        TextView weekNumber;
 
         public MonthViewHolder(View itemView) {
             super(itemView);
             itemCardView = (CardView) itemView.findViewById(R.id.item_card_view);
-            dateCell = (TextView) itemView.findViewById(R.id.calendar_date);
-            circle = (ImageView) itemView.findViewById(R.id.date_background);
-
+            weekNumber = (TextView) itemView.findViewById(R.id.week_number);
+            dateCell_mon = (TextView) itemView.findViewById(R.id.calendar_date_mon);
+            circle_mon = (ImageView) itemView.findViewById(R.id.date_background_mon);
+            dateCell_tue = (TextView) itemView.findViewById(R.id.calendar_date_tue);
+            circle_tue = (ImageView) itemView.findViewById(R.id.date_background_tue);
+            dateCell_wed = (TextView) itemView.findViewById(R.id.calendar_date_wed);
+            circle_wed = (ImageView) itemView.findViewById(R.id.date_background_wed);
+            dateCell_thu= (TextView) itemView.findViewById(R.id.calendar_date_thu);
+            circle_thu = (ImageView) itemView.findViewById(R.id.date_background_thu);
+            dateCell_fri = (TextView) itemView.findViewById(R.id.calendar_date_fri);
+            circle_fri = (ImageView) itemView.findViewById(R.id.date_background_fri);
+            dateCell_sat = (TextView) itemView.findViewById(R.id.calendar_date_sat);
+            circle_sat = (ImageView) itemView.findViewById(R.id.date_background_sat);
+            dateCell_sun = (TextView) itemView.findViewById(R.id.calendar_date_sun);
+            circle_sun = (ImageView) itemView.findViewById(R.id.date_background_sun);
         }
 
-        @Override
-        public void onClick(int position, FragmentManager fragmentManager, ViewPager viewP, int i) {
-            long dateLong = datesList.get(position).getTimeInMillis();
+        private List<TextView> getDateCells(){
+            List<TextView> dateCellList = new ArrayList<>(7);
+            dateCellList.add(dateCell_mon);
+            dateCellList.add(dateCell_tue);
+            dateCellList.add(dateCell_wed);
+            dateCellList.add(dateCell_thu);
+            dateCellList.add(dateCell_fri);
+            dateCellList.add(dateCell_sat);
+            dateCellList.add(dateCell_sun);
+            return dateCellList;
+        }
+
+        private List<ImageView> getCellCircles(){
+            List<ImageView> cellCirclesList = new ArrayList<>(7);
+            cellCirclesList.add(circle_mon);
+            cellCirclesList.add(circle_tue);
+            cellCirclesList.add(circle_wed);
+            cellCirclesList.add(circle_thu);
+            cellCirclesList.add(circle_fri);
+            cellCirclesList.add(circle_sat);
+            cellCirclesList.add(circle_sun);
+            return cellCirclesList;
+        }
+
+
+        public void onClick(int position, Fragment fragment, ViewPager viewP, int i) {
+            long dateLong = datesList.get(position).get(i).getTimeInMillis();
             Log.d("open weekfragment", "month onclick"+new Date(dateLong));
-            setViewPager(53, dateLong, viewP, fragmentManager);
+            setViewPager(53, dateLong, viewP, fragment);
         }
 
-        private void setViewPager(int i, long l, ViewPager mViewPager, FragmentManager fragmentManager) {
-            mViewPager.setAdapter(new PagerAdapter(mContext, fragmentManager, i, l, 5));
+        private void setViewPager(int i, long l, ViewPager mViewPager, Fragment mFragment) {
+            mViewPager.setAdapter(new PagerAdapter(mContext, mFragment.getFragmentManager(), i, l, 5));
             mViewPager.setOffscreenPageLimit(1);
             mViewPager.setCurrentItem(26);
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -245,6 +287,11 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
                 public void onPageScrollStateChanged(int state) {
                 }
             });
+        }
+
+        @Override
+        public void onClick(int position, FragmentManager fragmentManager, ViewPager viewPager, int i) {
+
         }
     }
 }
