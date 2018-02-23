@@ -166,6 +166,7 @@ public class BookingActivity extends AppCompatActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("bookingdata", "booking"+report.getGuestName()+", "+report.getExpertname()+", "+report.getTreatment()+", "+report.getDate()+", ");
                 if(report.getGuestName()==null || report.getDate() == null || report.getExpertname() == null || report.getTreatment()==null){
                         Toast.makeText(getApplicationContext() , R.string.noDatas, Toast.LENGTH_LONG).show();
 
@@ -175,7 +176,6 @@ public class BookingActivity extends AppCompatActivity {
                     backIntent.putExtra("position", position);
                     backIntent.putExtra("day", day);
                     setResult(22, backIntent);
-
                 onBackPressed();
                 }
             }

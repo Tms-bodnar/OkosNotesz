@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,23 +124,17 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             textViewList.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    calendarsOfWeek.get(position).set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours[finalI].getHour()));
-                    calendarsOfWeek.get(position).set(Calendar.MINUTE, Integer.parseInt(hours[finalI].getMinute()));
-                    calendarsOfWeek.get(position).set(Calendar.SECOND, 0);
-                    holder.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position);
+                    fragment.onClick(finalI, dailyReports[finalI], position);
                 }
             });
             textViewList.get(i).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     if (v.getTag() != null && dailyReports[finalI] != null) {
-                        fragment.onLongClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position);
+                        fragment.onLongClick(finalI, dailyReports[finalI], position);
                         return true;
                     } else {
-                        calendarsOfWeek.get(position).set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours[finalI].getHour()));
-                        calendarsOfWeek.get(position).set(Calendar.MINUTE, Integer.parseInt(hours[finalI].getMinute()));
-                        calendarsOfWeek.get(position).set(Calendar.SECOND, 0);
-                        holder.onClick(calendarsOfWeek.get(position), finalI, dailyReports[finalI], position);
+                        fragment.onClick(finalI, dailyReports[finalI], position);
 
                     }
                     return true;
@@ -154,7 +149,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.view_in);
+                Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
                 if(view!=null){
                     view.startAnimation(animation);
                     view.setVisibility(View.VISIBLE);
@@ -201,7 +196,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements WeekItemClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView7, textView730, textView8, textView830, textView9, textView930, textView10,
                 textView1030, textView11, textView1130, textView12, textView1230, textView13,
@@ -253,8 +248,8 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                     textView1930, textView20, textView2030, textView21, textView2130, textView22};
         }
 
-        @Override
-        public void onClick(Calendar cal, int position, Reports temp, int day) {
+ /*       @Override
+        public void onClick(int position, Reports temp, int day) {
             if (temp != null) {
                 View detailsView = LayoutInflater.from(context).inflate(R.layout.booking_details, null);
                 Button detailsOK = (Button) detailsView.findViewById(R.id.booking_details_button);
@@ -287,6 +282,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                     }
                 });
             } else {
+                Log.d("booking", "position: " + position + ", day: "+ day + ", date: "+ new Date(cal.getTimeInMillis()));
                 Reports sendReport = new Reports();
                 sendReport.setDate(cal.getTime().getTime());
                 Intent i = new Intent(context, BookingActivity.class);
@@ -300,7 +296,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         @Override
         public void onLongClick(Calendar cal, int viewPosition, Reports temp, int day) {
 
-        }
+        }*/
     }
 
     public enum Hours {

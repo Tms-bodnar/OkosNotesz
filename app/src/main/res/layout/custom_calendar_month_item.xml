@@ -24,7 +24,7 @@
                 android:text="52" />
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:orientation="vertical">
             <ImageView
@@ -50,7 +50,7 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:orientation="vertical">
             <ImageView
@@ -76,7 +76,7 @@
         </RelativeLayout>
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <ImageView
@@ -102,7 +102,7 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <ImageView
@@ -128,7 +128,7 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <ImageView
@@ -154,7 +154,7 @@
             </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="70dp"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <ImageView
@@ -180,7 +180,7 @@
                 </RelativeLayout>
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <ImageView

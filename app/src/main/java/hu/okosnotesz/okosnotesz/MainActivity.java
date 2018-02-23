@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -29,10 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import hu.okosnotesz.okosnotesz.adapters.PagerAdapter;
+import hu.okosnotesz.okosnotesz.fragments.CalendarFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MonthItemClickListener {
 
     private boolean mainActivity;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
@@ -43,12 +47,17 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ActionBarDrawerToggle barDrawerToggle;
     PagerAdapter weekAdapter;
+    Toolbar mToolbar;
+    private final int ITEM_NUM = 25;
+    public static int  clickedPosition = 24;
+    public static FragmentManager mSupportFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
         mContext = getApplicationContext();
+        mSupportFragmentManager = getSupportFragmentManager();
         sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean firstStart = sp.getBoolean(getString(R.string.first_start), false);
         if (!firstStart) {
@@ -63,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
 
-            mainActivityStart();
+            mainActivityStart(ITEM_NUM);
         }
     }
 
@@ -88,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_home_calendar:
-                        mainActivityStart();
+                        mainActivityStart(ITEM_NUM);
                         break;
                     case R.id.nav_commercial:
                         comActivityStart();
@@ -117,12 +126,12 @@ public class MainActivity extends AppCompatActivity {
         setnavigationDrawer();
         Button btn = (Button) findViewById(R.id.tollbar_button);
         btn.setVisibility(View.INVISIBLE);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,mToolbar,R.string.welcome,R.string.cancel);
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
-        toolbar.setTitle(R.string.reports);
+        mToolbar.setTitle(R.string.reports);
         mSectionsPagerAdapterSales = new PagerAdapter(mContext, getSupportFragmentManager(), 1, 1);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterSales);
@@ -147,12 +156,12 @@ public class MainActivity extends AppCompatActivity {
         Button btn = (Button) findViewById(R.id.tollbar_button);
         btn.setVisibility(View.INVISIBLE);
         setnavigationDrawer();
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,mToolbar,R.string.welcome,R.string.cancel);
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
-        toolbar.setTitle(R.string.commercial);
+        mToolbar.setTitle(R.string.commercial);
         mSectionsPagerAdapterSales = new PagerAdapter(mContext, getSupportFragmentManager(), 1, 2);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterSales);
@@ -160,35 +169,34 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(0);
     }
 
-    private void mainActivityStart() {
+    public void mainActivityStart(int itemNum) {
         final PagerAdapter mSectionsPagerAdapterMain;
         mainActivity = true;
         setContentView(R.layout.activity_main);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setnavigationDrawer();
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,mToolbar,R.string.welcome,R.string.cancel);
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setVisibility(View.INVISIBLE);
         tabLayout.setSelectedTabIndicatorColor(ResourcesCompat.getColor(getResources(),R.color.colorPrimaryDark, null));
+        tabLayout.setVisibility(View.INVISIBLE);
         mSectionsPagerAdapterMain = new PagerAdapter(mContext, getSupportFragmentManager(), 49, 3);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setCurrentItem(24);
-        toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(mViewPager.getCurrentItem()));
-        Log.d("eee", "start Main");
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setCurrentItem(49/2);
+        mToolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(mViewPager.getCurrentItem()));
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
             @Override
             public void onPageSelected(int position) {
-                toolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(mViewPager.getCurrentItem()));
+                mToolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(mViewPager.getCurrentItem()));
             }
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -199,17 +207,17 @@ public class MainActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                if(mViewPager.getAdapter().getCount()==49) {
-                   mViewPager.setCurrentItem(24,true);
+                   mViewPager.setCurrentItem(49/2,true);
                }if(mViewPager.getAdapter().getCount()==53){
                    Calendar today = Calendar.getInstance();
                    long todayInMillis = today.getTimeInMillis();
                    weekAdapter = new PagerAdapter(mContext,getSupportFragmentManager(), 53, todayInMillis, 5);
                    mViewPager.setAdapter(weekAdapter);
-                   mViewPager.setCurrentItem(26,true);
+                   mViewPager.setCurrentItem(53/2,true);
                    mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                        @Override
                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                           toolbar.setTitle(weekAdapter.getPageTitle(mViewPager.getCurrentItem()));
+                           mToolbar.setTitle(weekAdapter.getPageTitle(mViewPager.getCurrentItem()));
                        }
                        @Override
                        public void onPageSelected(int position) {
@@ -233,9 +241,9 @@ public class MainActivity extends AppCompatActivity {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setnavigationDrawer();
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_first_settings);
-        toolbar.setTitle(R.string.guests);
-        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.welcome,R.string.cancel);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_first_settings);
+        mToolbar.setTitle(R.string.guests);
+        barDrawerToggle = new ActionBarDrawerToggle(this, drawer,mToolbar,R.string.welcome,R.string.cancel);
         barDrawerToggle.setDrawerIndicatorEnabled(true);
         drawer.addDrawerListener(barDrawerToggle);
         barDrawerToggle.syncState();
@@ -254,24 +262,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                mToolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                 //tab.setText(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                 switch (tab.getPosition()) {
                     case 0:
                         tab.setIcon(R.drawable.guests_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                        mToolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                     case 1:
                         tab.setIcon(R.drawable.expert_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                        mToolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                     case 2:
                         tab.setIcon(R.drawable.treatment_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                        mToolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                     case 3:
                         tab.setIcon(R.drawable.commercial_focus);
-                        toolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
+                        mToolbar.setTitle(mSectionsPagerAdapterFirstStart.getPageTitle(tab.getPosition()));
                         break;
                 }
             }
@@ -305,11 +313,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!mainActivity) {
-            mainActivityStart();
+            mainActivityStart(ITEM_NUM);
         }else if(mViewPager.getAdapter().getCount()==53){
-            mainActivityStart();
+            int modifyPage = clickedPosition >= 24 ? clickedPosition - 1 : clickedPosition + 1;
+            mainActivityStart(modifyPage);
         }
-
         else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = getLayoutInflater();
@@ -350,4 +358,35 @@ public class MainActivity extends AppCompatActivity {
             mViewPager.getAdapter().notifyDataSetChanged();
         }
     }
-}
+
+    @Override
+    public void onClick(int position, int i) {
+        PagerAdapter adapter = (PagerAdapter) mViewPager.getAdapter();
+        CalendarFragment calFragment = (CalendarFragment) adapter.instantiateItem(mViewPager,mViewPager.getCurrentItem());
+        long dateLong = calFragment.getDayValueInCells().get(position).get(i).getTimeInMillis();
+        Log.d("clickmonthpager", "month onclick "+new Date(dateLong)+", pos: " + position + ", i: "+i);
+        setViewPager(53, dateLong);
+    }
+
+    private void setViewPager(int i, long l) {
+
+            Log.d("clickmonthpager",  "ok");
+            mViewPager.setAdapter(new PagerAdapter(mContext, mSupportFragmentManager, i, l, 5));
+            mViewPager.setOffscreenPageLimit(1);
+            mViewPager.setCurrentItem(27);
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    mToolbar.setTitle(mViewPager.getAdapter().getPageTitle(mViewPager.getCurrentItem()));
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
+        }
+    }

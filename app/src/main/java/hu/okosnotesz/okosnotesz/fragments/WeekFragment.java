@@ -2,6 +2,7 @@ package hu.okosnotesz.okosnotesz.fragments;
 
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
@@ -16,15 +17,18 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +41,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import hu.okosnotesz.okosnotesz.BookingActivity;
 import hu.okosnotesz.okosnotesz.ChartHelper;
+import hu.okosnotesz.okosnotesz.MainActivity;
 import hu.okosnotesz.okosnotesz.R;
 import hu.okosnotesz.okosnotesz.WeekItemClickListener;
 import hu.okosnotesz.okosnotesz.adapters.WeekViewAdapter;
@@ -68,8 +74,9 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     int clickedDay;
     Context mContext;
     ImageView delete_iv;
-
-
+    private final int REQ_CODE = 9;
+    ViewPager mViewPager;
+    int fragmentItemPosition;
     public WeekFragment() {
     }
 
@@ -85,6 +92,8 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = getContext();
+        mViewPager = (ViewPager) container;
+        fragmentItemPosition = mViewPager.getAdapter().getItemPosition(fragment);
         Bundle b = getArguments();
         d = new Date((Long) b.get("day"));
         Log.d("open weekfragment", "week onCreate: "+d);
@@ -248,6 +257,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         int dayHour;
         int dayMinute;
         reportsList = ListHelper.getAllReports(mContext);
+        Log.d("bookingdata", "replist: "+reportsList.size());
         for (Reports r : reportsList) {
             weekCal.setTimeInMillis(r.getDate());
             if (weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR) &&
@@ -400,11 +410,14 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         return weeklyReports;
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         menuReport = null;
         if (resultCode == 22) {
             menuReport = data.getParcelableExtra("backRep");
+            Log.d("bookingdata", "weekfrag"+menuReport.getGuestName()+", "+menuReport.getExpertname()+", "+menuReport.getTreatment()+", "+menuReport.getDate()+", ");
             Date reportDate = new Date(menuReport.getDate());
             SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, HH:mm");
             int cellNumber = data.getIntExtra("position", 0);
@@ -431,19 +444,64 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 adapter.notifyItemChanged(clickedDay);
             }
             DBHelper helper = DBHelper.getHelper(mContext);
-            helper.addReport(menuReport);
+            if(helper.addReport(menuReport))  Log.d("bookingdata", "weekdb Ok"+menuReport.getGuestName()+", "+menuReport.getExpertname()+", "+menuReport.getTreatment()+", "+menuReport.getDate()+", ");
             helper.close();
             scrollView.smoothScrollTo(0, cellNumber * 60);
         }
     }
-
     @Override
-    public void onClick(Calendar cal, int position, Reports report, int day) {
-
+    public void onClick( int position, Reports report, int day) {
+        if (report != null) {
+            View detailsView = LayoutInflater.from(mContext).inflate(R.layout.booking_details, null);
+            Button detailsOK = (Button) detailsView.findViewById(R.id.booking_details_button);
+            TextView detailsDate = (TextView) detailsView.findViewById(R.id.booking_date_details);
+            TextView detailsGuest = (TextView) detailsView.findViewById(R.id.booking_guest_datails);
+            TextView detailsTreatment = (TextView) detailsView.findViewById(R.id.booking_treatment_details);
+            TextView detailsExp = (TextView) detailsView.findViewById(R.id.booking_expert_details);
+            SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy MMMM dd, HH:mm");
+            detailsDate.setText(formatter2.format(new Date(report.getDate())));
+            if (report.getGuestName() != null) {
+                detailsGuest.setText(report.getGuestName());
+            } else detailsGuest.setText(R.string.noDatas);
+            if (report.getTreatment() != null) {
+                String[] tempTreName = report.getTreatment().split("ß");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < tempTreName.length; i++) {
+                    sb.append(tempTreName[i]);
+                }
+                detailsTreatment.setText(sb);
+            } else detailsTreatment.setText(R.string.noDatas);
+            if (report.getExpertname() != null) {
+                detailsExp.setText(report.getExpertname());
+            } else detailsExp.setText(R.string.noDatas);
+            final PopupWindow pop = new PopupWindow(detailsView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            pop.showAtLocation(detailsView, Gravity.CENTER, 0, 0);
+            detailsOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.dismiss();
+                }
+            });
+        } else {
+            Log.d("bookingdata" , "position: " + position + ", day: "+ day + ", date: "+ new Date(datesList.get(day).getTime()));
+            Reports sendReport = new Reports();
+            WeekViewAdapter.Hours[] hours = WeekViewAdapter.Hours.values();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(datesList.get(day).getTime());
+            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours[position].getHour()));
+            cal.set(Calendar.MINUTE, Integer.parseInt(hours[position].getMinute()));
+            cal.set(Calendar.SECOND, 0);
+            sendReport.setDate(cal.getTimeInMillis());
+            Intent i = new Intent(mContext, BookingActivity.class);
+            i.putExtra("newRep", sendReport);
+            i.putExtra("position", position);
+            i.putExtra("day", day);
+            fragment.startActivityForResult(i, REQ_CODE);
+        }
     }
 
     @Override
-    public void onLongClick(Calendar cal, int position, Reports temp, int day) {
+    public void onLongClick(int position, Reports temp, int day) {
 
         cellCount = temp.getDuration() == 0 ? 30 : temp.getDuration() / 30;
         WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(day);
@@ -453,7 +511,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         ClipData dragData = new ClipData((CharSequence) draggedTV.getTag(R.id.TEXT_VIEW_TAG), new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN}, item);
         View.DragShadowBuilder dragShadow = new MyDragShadowBuilder(draggedTV);
         draggedTV.startDrag(dragData, dragShadow, null, 0);
-        View.OnDragListener mDragListener = new MyOnDragListener(cal, position, temp, day, draggedTV);
+        View.OnDragListener mDragListener = new MyOnDragListener(position, temp, day, draggedTV);
         recyclerView.setOnDragListener(mDragListener);
     }
 
@@ -496,7 +554,6 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
 
     private class MyOnDragListener implements View.OnDragListener {
 
-        Calendar cal;
         int position;
         Reports temp;
         int day;
@@ -505,8 +562,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         int xCoord;
         int yCoord;
 
-        public MyOnDragListener(Calendar cal, int position, Reports temp, int day, TextView tv) {
-            this.cal = cal;
+        public MyOnDragListener(int position, Reports temp, int day, TextView tv) {
             this.position = position;
             this.temp = temp;
             this.day = day;

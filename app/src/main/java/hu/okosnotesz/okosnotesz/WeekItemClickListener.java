@@ -9,8 +9,7 @@ import hu.okosnotesz.okosnotesz.model.Reports;
  */
 
 public interface WeekItemClickListener {
-        void onClick(Calendar cal, int position, Reports report, int day);
-        void  onLongClick(Calendar cal, int position, Reports temp, int day);
-       // void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo);
+        void onClick(int position, Reports report, int day);
+        void  onLongClick(int position, Reports temp, int day);
 }
 

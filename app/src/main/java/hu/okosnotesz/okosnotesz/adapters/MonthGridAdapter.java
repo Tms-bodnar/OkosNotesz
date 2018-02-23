@@ -23,6 +23,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import hu.okosnotesz.okosnotesz.MonthItemClickListener;
 import hu.okosnotesz.okosnotesz.R;
+import hu.okosnotesz.okosnotesz.fragments.CalendarFragment;
 import hu.okosnotesz.okosnotesz.model.Reports;
 
 /**
@@ -52,7 +54,8 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
     Fragment mFragment;
     Toolbar toolbar;
     int lastPosition = -1;
-    int delayAnimate = 200;
+    int delayAnimate = 300;
+    CalendarFragment calFrag;
 
 
 
@@ -67,12 +70,14 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         tempCal = Calendar.getInstance();
         today = Calendar.getInstance();
         this.viewpager = viewPager;
+        calFrag = (CalendarFragment) mFragment;
     }
 
     @Override
     public MonthViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_month_item, parent, false);
         MonthViewHolder monthViewHolder = new MonthViewHolder(view);
+
         return monthViewHolder;
     }
 
@@ -125,8 +130,8 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
             }
         }
             int finalI = i;
-            dateCellList.get(i).setOnClickListener(view -> holder.onClick(position, mFragment, viewpager, finalI)
-            );
+
+            dateCellList.get(i).setOnClickListener(view ->calFrag.onClick(position, finalI));
         }
         holder.itemView.setVisibility(View.INVISIBLE);
         setAnimation(holder.itemView);
@@ -201,7 +206,7 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         view.setImageBitmap(bitmap);
     }
 
-    public class MonthViewHolder extends RecyclerView.ViewHolder implements MonthItemClickListener{
+    public class MonthViewHolder extends RecyclerView.ViewHolder{
 
         CardView itemCardView;
         TextView dateCell_mon;
@@ -265,34 +270,39 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         }
 
 
-        public void onClick(int position, Fragment fragment, ViewPager viewP, int i) {
+       /* public void onClick(int position, Fragment mFragment, ViewPager viewP, int i) {
             long dateLong = datesList.get(position).get(i).getTimeInMillis();
-            Log.d("open weekfragment", "month onclick"+new Date(dateLong));
-            setViewPager(53, dateLong, viewP, fragment);
-        }
+            Log.d("clickmonthpager", "month onclick"+viewP.getCurrentItem());
+            setViewPager(53, dateLong, viewP, mFragment);
+        }*/
 
-        private void setViewPager(int i, long l, ViewPager mViewPager, Fragment mFragment) {
-            mViewPager.setAdapter(new PagerAdapter(mContext, mFragment.getFragmentManager(), i, l, 5));
-            mViewPager.setOffscreenPageLimit(1);
-            mViewPager.setCurrentItem(26);
-            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                   toolbar.setTitle(viewpager.getAdapter().getPageTitle(mViewPager.getCurrentItem()));
-                }
-                @Override
-                public void onPageSelected(int position) {
-                }
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                }
-            });
-        }
+        /*private void setViewPager(int i, long l, ViewPager mViewPager, Fragment mFragment) {
 
-        @Override
-        public void onClick(int position, FragmentManager fragmentManager, ViewPager viewPager, int i) {
+            if (mFragment.getFragmentManager() == null) {
+                Toast.makeText(mContext,R.string.loading, Toast.LENGTH_SHORT).show();
+                Log.d("clickmonthpager",  "NoT OK");
+            }
+            else {
+                Log.d("clickmonthpager",  "ok");
+                mViewPager.setAdapter(new PagerAdapter(mContext, mFragment.getFragmentManager(), i, l, 5));
+                mViewPager.setOffscreenPageLimit(1);
+                mViewPager.setCurrentItem(26);
+                mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        toolbar.setTitle(mViewPager.getAdapter().getPageTitle(mViewPager.getCurrentItem()));
+                    }
 
-        }
+                    @Override
+                    public void onPageSelected(int position) {
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+                    }
+                });
+            }
+        }*/
     }
 }
 

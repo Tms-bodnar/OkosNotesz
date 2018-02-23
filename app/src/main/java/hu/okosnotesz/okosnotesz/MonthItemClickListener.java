@@ -12,5 +12,5 @@ import java.util.List;
  */
 
 public interface MonthItemClickListener{
-    void onClick(int position, FragmentManager fragmentManager, ViewPager viewPager, int i);
+    void onClick(int position, int i);
 }

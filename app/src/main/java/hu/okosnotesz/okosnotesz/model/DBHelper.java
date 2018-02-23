@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by user on 2017.05.19..
@@ -445,6 +446,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public boolean addReport(Reports r) {
+        Log.d("bookingdata", "db"+r.getGuestName()+", "+r.getExpertname()+", "+r.getTreatment()+", "+r.getDate()+", ");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("reportTreatment", r.getTreatment());
