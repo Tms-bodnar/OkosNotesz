@@ -64,7 +64,6 @@ public class CalendarFragment extends Fragment implements MonthItemClickListener
         super.onCreate(savedInstanceState);
         mContext = getContext();
         mActivity = (MainActivity) getActivity();
-        Log.d("clickmonthpager", "oncreatewievm "+mFragment.getId()+"");
     }
 
     @Nullable

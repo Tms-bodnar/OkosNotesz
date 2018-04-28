@@ -2,7 +2,6 @@ package hu.okosnotesz.okosnotesz.fragments;
 
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
@@ -33,6 +32,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,7 +44,6 @@ import java.util.Map;
 
 import hu.okosnotesz.okosnotesz.BookingActivity;
 import hu.okosnotesz.okosnotesz.ChartHelper;
-import hu.okosnotesz.okosnotesz.MainActivity;
 import hu.okosnotesz.okosnotesz.R;
 import hu.okosnotesz.okosnotesz.WeekItemClickListener;
 import hu.okosnotesz.okosnotesz.adapters.WeekViewAdapter;
@@ -58,7 +58,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     List<Reports> reportsList;
     List<Integer> weekDays;
     List<Treatments> treatmentsList;
-    List<Calendar> weeklyCalendarsDatas;
+    List<DateTime> weeklyCalendarsDatas;
     Map<Integer, Reports[]> weeklyReports;
     List<Date> datesList;
     RecyclerView recyclerView;
@@ -101,11 +101,11 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         weeklyCalendarsDatas = setWeekCalendars(d);
         setWeekDays(d, v);
         new SetRecViewItems().execute();
+
         return v;
     }
 
     private View initUiLayout() {
-
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.custom_calendar_week_view, null);
         Calendar cal = Calendar.getInstance();
@@ -144,12 +144,13 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     }
 
     private void setupRecViewAdapter() {
-        if (getActivity() == null || weeklyCalendarsDatas == null || weeklyReports == null) {
+        if (getActivity() == null || weeklyReports == null) {
             return;
         }
-        if (weeklyCalendarsDatas != null && weeklyReports != null) {
-            recyclerView.setAdapter(new WeekViewAdapter(this, mContext, ChartHelper.Days.values(), weeklyCalendarsDatas, treatmentsList, weeklyReports));
+        if (weeklyReports != null) {
+            recyclerView.setAdapter(new WeekViewAdapter(this, mContext, ChartHelper.Days.values(), treatmentsList, weeklyReports));
             adapter = (WeekViewAdapter) recyclerView.getAdapter();
+            adapter.notifyDataSetChanged();
         } else {
             recyclerView.setAdapter(null);
         }
@@ -157,22 +158,17 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
 
     public static List<Date> getDayValueInCells(Calendar day) {
         List<Date> dayValueInCells = new ArrayList<>(7);
-        Calendar tempCal = (Calendar) day.clone();
-        int weekNum = tempCal.get(Calendar.WEEK_OF_YEAR);
-        tempCal.set(Calendar.DAY_OF_MONTH, 1);
-        int firstDayOfTheMonth = tempCal.get(Calendar.DAY_OF_WEEK) + 4;
-        tempCal.set(Calendar.DAY_OF_MONTH, -firstDayOfTheMonth);
-        tempCal.setFirstDayOfWeek(Calendar.MONDAY);
-        Log.d("open weekfragment", "weeknum: "+ weekNum + ", "+ tempCal.get(Calendar.WEEK_OF_YEAR));
-        while (weekNum != tempCal.get(Calendar.WEEK_OF_YEAR)){
-                tempCal.add(Calendar.DAY_OF_MONTH, 1);
-            }
-        while (weekNum == tempCal.get(Calendar.WEEK_OF_YEAR)){
-            Log.d("open weekfragment", ":"+ new Date(tempCal.getTimeInMillis()) + ", "+ tempCal.get(Calendar.WEEK_OF_YEAR));
-            Calendar newCal = Calendar.getInstance();
-            newCal.setTimeInMillis(tempCal.getTimeInMillis());
-            dayValueInCells.add(new Date(newCal.getTimeInMillis()));
-            tempCal.add(Calendar.DAY_OF_MONTH, 1);
+        DateTime dt = new DateTime(day);
+        int weekNumber = dt.getWeekOfWeekyear();
+        dt = dt.minusWeeks(1);
+        while (weekNumber != dt.getWeekOfWeekyear()){
+               dt =  dt.plusDays(1);
+        }
+        while (weekNumber == dt.getWeekOfWeekyear()){
+            DateTime dt2 = new DateTime(dt);
+            dayValueInCells.add(new Date(dt2.getMillis()));
+            Log.d("dayvalues", dt2.toString()+" "+dt2.getDayOfWeek());
+            dt = dt.plusDays(1);
         }
         return dayValueInCells;
     }
@@ -192,15 +188,13 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         tempCal.setTime(d);
         tempCal.setFirstDayOfWeek(Calendar.MONDAY);
         int weekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
-        int yearNumber = tempCal.get(Calendar.YEAR);
         Calendar weekCal = Calendar.getInstance();
         weekCal.setFirstDayOfWeek(Calendar.MONDAY);
         for (int i = 0; i < datesList.size(); i++) {
             weekCal.setTime(datesList.get(i));
             if (weekNumber == tempCal.get(Calendar.WEEK_OF_YEAR) && !weekDays.contains(weekCal.get(Calendar.DAY_OF_MONTH))) {
+
                 weekDays.add(weekCal.get(Calendar.DAY_OF_MONTH));
-                Log.d("weeek", ""+weekDays.size());
-                Log.d("weeek", "day:"+weekCal.get(Calendar.DAY_OF_MONTH));
             }
         }
 
@@ -214,18 +208,21 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         }
     }
 
-
-    private List<Calendar> setWeekCalendars(Date d) {
-        List<Calendar> weeklyCalendars = new ArrayList<>(7);
-        Calendar tempCal = Calendar.getInstance();
-        tempCal.setTimeInMillis(d.getTime());
-        int weekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
-        Calendar weekCal = Calendar.getInstance();
-        weekCal.setFirstDayOfWeek(Calendar.MONDAY);
+    private List<DateTime> setWeekCalendars(Date d) {
+        List<DateTime> weeklyCalendars = new ArrayList<>(7);
+//        Calendar tempCal = Calendar.getInstance();
+//        tempCal.setTimeInMillis(d.getTime());
+//        int weekNumber = tempCal.get(Calendar.WEEK_OF_YEAR);
+//        Calendar weekCal = Calendar.getInstance();
+//        weekCal.setFirstDayOfWeek(Calendar.MONDAY);
+        DateTime dt = new DateTime();
+        DateTime dt2 = new DateTime(d.getTime());
+        int weekNumber = dt2.getWeekyear();
         for (int i = 0; i < datesList.size(); i++) {
-            weekCal.setTime(datesList.get(i));
-            if (weekNumber == tempCal.get(Calendar.WEEK_OF_YEAR) && !weeklyCalendars.contains(weekCal.get(Calendar.DAY_OF_MONTH))) {
-                weeklyCalendars.add(weekCal);
+            dt.withMillis(datesList.get(i).getTime());
+            if (weekNumber == dt.getWeekOfWeekyear() && !weeklyCalendars.contains(dt2.dayOfMonth())) {
+                weeklyCalendars.add(dt);
+                Log.d("dayvalues", dt.toString()+" "+dt.getDayOfWeek());
             }
         }
         return weeklyCalendars;
@@ -251,7 +248,9 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             sun[i] = null;
         }
         Calendar weekCal = Calendar.getInstance();
+        DateTime dt = new DateTime();
         Calendar tempCal = Calendar.getInstance();
+        DateTime tempDT = new DateTime(d.getTime());
         tempCal.setTime(d);
         int hour;
         int dayHour;
@@ -260,11 +259,14 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         Log.d("bookingdata", "replist: "+reportsList.size());
         for (Reports r : reportsList) {
             weekCal.setTimeInMillis(r.getDate());
-            if (weekCal.get(Calendar.WEEK_OF_YEAR) == tempCal.get(Calendar.WEEK_OF_YEAR) &&
-                    weekCal.get(Calendar.MONTH) == tempCal.get(Calendar.MONTH) &&
-                    weekCal.get(Calendar.YEAR) == tempCal.get(Calendar.YEAR)) {
-                int weekDay = weekCal.get(Calendar.DAY_OF_WEEK);
-                hour = weekCal.get(Calendar.HOUR_OF_DAY);
+            DateTime weekDT =  dt.withMillis(r.getDate());
+
+            if (weekDT.getWeekyear() == tempDT.getWeekyear() &&
+                    weekDT.getMonthOfYear() == tempDT.getMonthOfYear() &&
+                    weekDT.getWeekOfWeekyear() == tempDT.getWeekOfWeekyear()) {
+                Log.d("dayvalues", "..." +weekDT.getDayOfWeek()+" "+tempDT.getWeekOfWeekyear());
+                int weekDay = weekDT.getDayOfWeek();
+                hour = weekDT.getHourOfDay();
                 switch (hour) {
                     case 14:
                         dayHour = hour;
@@ -276,7 +278,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                         dayHour = hour < 14 ? hour - (14 % hour) : hour + (hour % 14);
                         break;
                 }
-                dayMinute = weekCal.get(Calendar.MINUTE);
+                dayMinute = weekDT.getMinuteOfDay();
                 int cellMod = dayMinute < 30 ? 0 : 1;
                 int duration = r.getDuration();
                 int cellCount = duration / 30;
@@ -284,7 +286,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 if (dayHour > -1) {
                     int temp = 0;
                     switch (weekDay) {
-                        case 1:
+                        case 7:
                             if (dayHour + cellCount < sun.length) {
                                 do {
                                     sun[dayHour + temp] = r;
@@ -300,7 +302,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                                 } while (temp < cellCount);
                             }
                             break;
-                        case 2:
+                        case 1:
                             if (dayHour + cellCount < mon.length) {
                                 do {
                                     mon[dayHour + temp] = r;
@@ -316,7 +318,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                                 } while (temp < cellCount);
                             }
                             break;
-                        case 3:
+                        case 2:
                             if (dayHour + cellCount < tue.length) {
                                 do {
                                     tue[dayHour + temp] = r;
@@ -332,7 +334,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                                 } while (temp < cellCount);
                             }
                             break;
-                        case 4:
+                        case 3:
                             if (dayHour + cellCount < wed.length) {
                                 do {
                                     wed[dayHour + temp] = r;
@@ -348,7 +350,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                                 } while (temp < cellCount);
                             }
                             break;
-                        case 5:
+                        case 4:
                             if (dayHour + cellCount < thu.length) {
                                 do {
                                     thu[dayHour + temp] = r;
@@ -364,7 +366,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                                 } while (temp < cellCount);
                             }
                             break;
-                        case 6:
+                        case 5:
                             if (dayHour + cellCount < fri.length) {
                                 do {
                                     fri[dayHour + temp] = r;
@@ -380,7 +382,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                                 } while (temp < cellCount);
                             }
                             break;
-                        case 7:
+                        case 6:
                             if (dayHour + cellCount < sat.length) {
                                 do {
                                     sat[dayHour + temp] = r;
@@ -413,7 +415,6 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         menuReport = null;
         if (resultCode == 22) {
             menuReport = data.getParcelableExtra("backRep");
@@ -436,16 +437,18 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 }
             }
             if (free) {
+                DBHelper helper = DBHelper.getHelper(mContext);
+                if(helper.addReport(menuReport))  Log.d("bookingdata", "weekdb Ok"+menuReport.getGuestName()+", "+menuReport.getExpertname()+", "+menuReport.getTreatment()+", "+menuReport.getDate()+", ");
+                helper.close();
                 for (int j = 0; j < cellCount; j++) {
                     if (cellNumber + j < 31) {
-                        adapter.itemAdd(menuReport, clickedDay, cellNumber + j);
+                        Log.d("bookingdatas", clickedDay+"");
+                        setDailyReports(reportDate);
+                        adapter.itemAdd(weeklyReports);
                     }
                 }
-                adapter.notifyItemChanged(clickedDay);
             }
-            DBHelper helper = DBHelper.getHelper(mContext);
-            if(helper.addReport(menuReport))  Log.d("bookingdata", "weekdb Ok"+menuReport.getGuestName()+", "+menuReport.getExpertname()+", "+menuReport.getTreatment()+", "+menuReport.getDate()+", ");
-            helper.close();
+
             scrollView.smoothScrollTo(0, cellNumber * 60);
         }
     }

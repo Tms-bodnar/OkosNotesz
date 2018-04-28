@@ -28,8 +28,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import hu.okosnotesz.okosnotesz.MonthItemClickListener;
 import hu.okosnotesz.okosnotesz.R;
@@ -89,6 +92,11 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         holder.weekNumber.setText(weekValue+".");
         List<TextView> dateCellList = holder.getDateCells();
         List<ImageView> cellCirclesList = holder.getCellCircles();
+        List <Integer> startHours = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            startHours.add(0);
+        }
+        Log.d("starthours", startHours.size()+"");
         for(int i = 0; i < calList.size(); i++){
             tempCal = calList.get(i);
             final int monthValue = tempCal.get(Calendar.MONTH) + 1;
@@ -97,11 +105,11 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
             int dayValue = tempCal.get(Calendar.DAY_OF_MONTH);
             int currentMonth = currentDate.get(Calendar.MONTH) + 1;
             int currentYear = currentDate.get(Calendar.YEAR);
-            drawCircle(cellCirclesList.get(i), 0, 0);
+            drawCircle(cellCirclesList.get(i), startHours, 0);
         if (monthValue == currentMonth && yearValue == currentYear) {
             if (tempCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY || tempCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 dateCellList.get(i).setTextColor(Color.parseColor("#66BB6A"));
-                drawCircle(cellCirclesList.get(i), 0, 1);
+                drawCircle(cellCirclesList.get(i), startHours, 1);
             }
             else{
                 dateCellList.get(i).setTextColor(Color.BLACK);
@@ -114,9 +122,10 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
                 monthValue == today.get(Calendar.MONTH)+1 &&
                 year == today.get(Calendar.YEAR)){
             dateCellList.get(i).setTextColor(Color.MAGENTA);
-            drawCircle(cellCirclesList.get(i), 0, -1);
+            drawCircle(cellCirclesList.get(i), startHours, -1);
         }
         Calendar eventCal = Calendar.getInstance();
+
         for (int j = 0; j < allReports.size(); j++) {
             eventCal.setTimeInMillis(allReports.get(j).getDate());
             int startHour = eventCal.get(Calendar.HOUR_OF_DAY);
@@ -124,13 +133,17 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
                     && yearValue == eventCal.get(Calendar.YEAR)) {
                 for (int k = 7; k < 22; k++) {
                     if (k == startHour) {
-                        drawCircle(cellCirclesList.get(i), k, 1);
+                        startHours.add(k-7, k);
                     }
                 }
+                drawCircle(cellCirclesList.get(i), startHours, 1);
+                Log.d("drawcircle", dayValue + "");
             }
         }
+            for (int l = 0; l < 15; l++) {
+                startHours.set(l,0);
+            }
             int finalI = i;
-
             dateCellList.get(i).setOnClickListener(view ->calFrag.onClick(position, finalI));
         }
         holder.itemView.setVisibility(View.INVISIBLE);
@@ -163,7 +176,7 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         return datesList.size();
     }
 
-    public void drawCircle(ImageView view, int duration, int today){
+    public void drawCircle(ImageView view, List<Integer> startHours, int today){
         final int[] mWidth = {60};
         final int[] mHeight = {60};
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -179,8 +192,6 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         final RectF rect = new RectF();
         int mRadius = mHeight[0]/3;
         int strokeWidth = mHeight[0]/7;
-        int startAngle = duration == 0 ? -90 : duration * 30 - 90;
-        int sweepAngle = duration == 0 ? 0 : 30;
         Bitmap bitmap = Bitmap.createBitmap(mWidth[0], mHeight[0], Bitmap.Config.ARGB_8888);
         rect.set(mWidth[0] /2- mRadius, mHeight[0] /2 - mRadius, mWidth[0] /2 + mRadius, mHeight[0] /2 + mRadius);
         switch(today){
@@ -202,7 +213,22 @@ public class MonthGridAdapter extends RecyclerView.Adapter<MonthGridAdapter.Mont
         paint.setAntiAlias(true);
         paint.setStrokeCap(Paint.Cap.BUTT);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        int startAngle = -165;
+        int sweepAngle = 0;
         canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+        for(int i = 0; i < startHours.size(); i++){
+            if(startHours.get(i)==0) {
+                canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+                sweepAngle = 0;
+                startAngle += 15;
+            }
+             if(startHours.get(i)!= 0){
+                    canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+                    startAngle += 15;
+                    sweepAngle += 15;
+                }
+        }
+
         view.setImageBitmap(bitmap);
     }
 

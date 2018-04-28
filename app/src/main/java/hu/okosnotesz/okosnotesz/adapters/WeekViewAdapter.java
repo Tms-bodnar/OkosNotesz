@@ -17,6 +17,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,18 +51,16 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     ViewHolder holder;
     ChartHelper.Days[] days;
     Map<Integer, Reports[]> dailymap;
-    List<Calendar> calendarsOfWeek;
     List<TextView> textViewList;
     List<Treatments> treatmentsList;
     private final int REQ_CODE = 9;
     int delayAnimate = 150;
 
-    public WeekViewAdapter(WeekFragment fragment, Context context, ChartHelper.Days[] days, List<Calendar> calendarsOfWeeek, List<Treatments> treatmentsList, Map<Integer, Reports[]> dailymap) {
+    public WeekViewAdapter(WeekFragment fragment, Context context, ChartHelper.Days[] days, List<Treatments> treatmentsList, Map<Integer, Reports[]> dailymap) {
         this.fragment = fragment;
         this.context = context;
         this.days = days;
         this.dailymap = dailymap;
-        this.calendarsOfWeek = calendarsOfWeeek;
         this.treatmentsList = treatmentsList;
     }
 
@@ -95,8 +95,6 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         Reports[] dailyReports = dailymap.get(position);
         for (int i = 0; i < dailyReports.length; i++) {
             if (dailyReports[i] != null && dailyReports[i].getTreatment() != null) {
-                if (textViewList.get(i).getTag() == null) {
-                }
                 Treatments[] treList = ListHelper.getTreatmentsOfReport(treatmentsList, dailyReports[i].getTreatment());
                 textViewList.get(i).setBackgroundColor(colorMap.get(dailyReports[i]));
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) textViewList.get(i).getLayoutParams();
@@ -180,8 +178,9 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         return colorMap;
     }
 
-    public void itemAdd(Reports menuReport, int day, int cellCount) {
-        dailymap.get(day)[cellCount] = menuReport;
+    public void itemAdd(Map<Integer, Reports[]> newDailymap) {
+        dailymap.clear();
+        dailymap.putAll(newDailymap);
     }
 
 

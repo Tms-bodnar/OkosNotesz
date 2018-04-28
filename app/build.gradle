@@ -35,12 +35,16 @@ dependencies {
     compile 'com.android.support:design:25.4.0'
     compile 'com.android.support:support-v4:25.4.0'
     compile 'com.afollestad.material-dialogs:core:0.8.6.0'
-    compile 'com.android.support:cardview-v7:25.0.+'
+    compile 'com.android.support:cardview-v7:25.4.0'
     testCompile 'junit:junit:4.12'
 }
 repositories {
     maven { url "https://jitpack.io" }
+    jcenter()
     google()
+}
+dependencies {
+    compile 'joda-time:joda-time:2.9.9'
 }
 
 dependencies {

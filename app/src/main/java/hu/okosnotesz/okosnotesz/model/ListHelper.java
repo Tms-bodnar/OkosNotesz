@@ -160,9 +160,11 @@ public class ListHelper {
         ArrayList<Reports> rList = new ArrayList<>();
         DBHelper helper = DBHelper.getHelper(context);
         Cursor cursor = helper.getAllReports();
+        Log.d("bookingdata", cursor.getCount()+": cursorcount");
         cursor.moveToFirst();
         try {
             while (!cursor.isAfterLast()) {
+
                 Reports r = new Reports();
                 r.setId(cursor.getInt(cursor.getColumnIndex("reportID")));
                 r.setTreatment(cursor.getString(cursor.getColumnIndex("reportTreatment")));

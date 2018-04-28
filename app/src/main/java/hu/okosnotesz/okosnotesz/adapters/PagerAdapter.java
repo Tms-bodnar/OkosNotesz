@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,15 +79,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 Calendar cal = Calendar.getInstance();
                 long calLong = cal.getTimeInMillis();
                 if (position == numOfTabs/2) {
-                    MainActivity.clickedPosition = position;
+                    Log.d("clickmonthpager", "pos center: "+position);
                     fragment = CalendarFragment.newInstance(calLong);
-                    Log.d("clickmonthpager"," adapterposition: "+ position);
                 } else {
-                    MainActivity.clickedPosition = position;
                     cal.add(Calendar.MONTH, position - numOfTabs / 2);
                     calLong = cal.getTimeInMillis();
+                    Log.d("clickmonthpager", "pos : "+position);
                     fragment = CalendarFragment.newInstance(calLong);
-                    Log.d("clickmonthpager"," adapterposition: "+ position);
                 }
                 break;
             case 2:
@@ -97,11 +97,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 5:
                 if (position == numOfTabs/2) {
                     fragment = WeekFragment.newInstance(clickedDate);
+
                 } else {
                     Calendar clickedDay = Calendar.getInstance();
                     clickedDay.setTimeInMillis(clickedDate);
                     clickedDay.add(Calendar.DAY_OF_YEAR, (position - numOfTabs / 2) * 7);
-                    fragment = WeekFragment.newInstance(clickedDay.getTimeInMillis());
+                    DateTime dt = new DateTime(clickedDate);
+                    long dtMillis = dt.plusDays((position - numOfTabs / 2) * 7).getMillis();
+                    fragment = WeekFragment.newInstance(dtMillis);
                 }
                 break;
         }
@@ -148,6 +151,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 49:
                 formatter = new SimpleDateFormat("yyyy MMMM");
                 Calendar cal = Calendar.getInstance();
+
                 switch (position) {
                     case 24:
                         pageTitle = formatter.format(cal.getTime());
@@ -162,13 +166,16 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 formatter = new SimpleDateFormat("yyyy MMM, ww");
                 Calendar clickedDay = Calendar.getInstance();
                 clickedDay.setTimeInMillis(clickedDate);
+                DateTime dt = new DateTime(clickedDate);
+
                 switch (position) {
                     case 26:
-                        pageTitle = formatter.format(clickedDay.getTime()) +"."+ mContext.getString(R.string.week);
+                        pageTitle = (dt.getWeekOfWeekyear()) +"."+ mContext.getString(R.string.week);
                         break;
                     default:
+                        dt.plusDays((position- numOfTabs/2)*7);
                         clickedDay.add(Calendar.DAY_OF_YEAR, (position- numOfTabs/2)*7);
-                        pageTitle = formatter.format(clickedDay.getTime()) +"."+ mContext.getString(R.string.week);
+                        pageTitle = dt.plusDays((position- numOfTabs/2)*7).getWeekOfWeekyear() +"."+ mContext.getString(R.string.week);
                         break;
                 }
 

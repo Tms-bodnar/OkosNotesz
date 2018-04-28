@@ -457,6 +457,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("reportDate", r.getDate());
         cv.put("reportDuration", r.getDuration());
         cv.put("reportNote", r.getNote());
+        db.insert("reports",null,cv);
         db.close();
         return true;
     }

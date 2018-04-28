@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
@@ -48,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements MonthItemClickLis
     ActionBarDrawerToggle barDrawerToggle;
     PagerAdapter weekAdapter;
     Toolbar mToolbar;
-    private final int ITEM_NUM = 25;
-    public static int  clickedPosition = 24;
+    private final int ITEM_NUM = 49/2;
+    public int  clickedPosition = 24;
     public static FragmentManager mSupportFragmentManager;
 
     @Override
@@ -188,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements MonthItemClickLis
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapterMain);
         mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setCurrentItem(49/2);
+        mViewPager.setCurrentItem(itemNum);
         mToolbar.setTitle(mSectionsPagerAdapterMain.getPageTitle(mViewPager.getCurrentItem()));
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -315,8 +314,7 @@ public class MainActivity extends AppCompatActivity implements MonthItemClickLis
         if (!mainActivity) {
             mainActivityStart(ITEM_NUM);
         }else if(mViewPager.getAdapter().getCount()==53){
-            int modifyPage = clickedPosition >= 24 ? clickedPosition - 1 : clickedPosition + 1;
-            mainActivityStart(modifyPage);
+            mainActivityStart(clickedPosition);
         }
         else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -354,14 +352,13 @@ public class MainActivity extends AppCompatActivity implements MonthItemClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        if(mViewPager != null && mViewPager.getAdapter() != null && mViewPager.getAdapter()== weekAdapter){
-            mViewPager.getAdapter().notifyDataSetChanged();
         }
-    }
+
 
     @Override
     public void onClick(int position, int i) {
         PagerAdapter adapter = (PagerAdapter) mViewPager.getAdapter();
+        clickedPosition = mViewPager.getCurrentItem();
         CalendarFragment calFragment = (CalendarFragment) adapter.instantiateItem(mViewPager,mViewPager.getCurrentItem());
         long dateLong = calFragment.getDayValueInCells().get(position).get(i).getTimeInMillis();
         Log.d("clickmonthpager", "month onclick "+new Date(dateLong)+", pos: " + position + ", i: "+i);
@@ -369,11 +366,9 @@ public class MainActivity extends AppCompatActivity implements MonthItemClickLis
     }
 
     private void setViewPager(int i, long l) {
-
-            Log.d("clickmonthpager",  "ok");
             mViewPager.setAdapter(new PagerAdapter(mContext, mSupportFragmentManager, i, l, 5));
             mViewPager.setOffscreenPageLimit(1);
-            mViewPager.setCurrentItem(27);
+            mViewPager.setCurrentItem(53/2);
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
