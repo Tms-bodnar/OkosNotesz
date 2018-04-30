@@ -76,15 +76,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         this.holder = holder;
         this.position = position;
-        textViewList = new ArrayList<>(Arrays.asList(holder.textView7, holder.textView730,
-                holder.textView8, holder.textView830, holder.textView9, holder.textView930,
-                holder.textView10, holder.textView1030, holder.textView11, holder.textView1130,
-                holder.textView12, holder.textView1230, holder.textView13, holder.textView1330,
-                holder.textView14, holder.textView1430, holder.textView15, holder.textView1530,
-                holder.textView16, holder.textView1630, holder.textView17, holder.textView1730,
-                holder.textView18, holder.textView1830, holder.textView19, holder.textView1930,
-                holder.textView20, holder.textView2030, holder.textView21, holder.textView2130,
-                holder.textView22));
+        textViewList = Arrays.asList(holder.getTextViewArray());
         Map<Reports, Integer> colorMap = getColors(position);
         Hours[] hours = Hours.values();
         for (int i = 0; i < hours.length; i++) {
@@ -101,6 +93,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 lp.setMargins(0, 0, 0, 0);
                 textViewList.get(i).setLayoutParams(lp);
                 textViewList.get(i).setTag(dailyReports[i]);
+                Log.d("bookindata", "tag1: " +  i + "--"+textViewList.get(i).getTag());
                 String guestName = dailyReports[i].getGuestName() + ", ";
                 String treName = dailyReports[i].getTreatment().replace('ß', ',');
                 int price = 0;
@@ -139,9 +132,11 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 }
             });
         }
+        holder.setTextViewArray((TextView[]) textViewList.toArray());
         holder.itemView.setVisibility(View.INVISIBLE);
         setAnimation(holder.itemView);
     }
+
 
     private void setAnimation(View view) {
         Handler handler = new Handler();
@@ -184,6 +179,10 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     }
 
 
+    public List<TextView> getTextViewList() {
+        return textViewList;
+    }
+
     public void itemRemoved(Reports menuReport, int day) {
         for (int i = 0; i < dailymap.get(day).length; i++) {
             if (menuReport != null && menuReport == dailymap.get(day)[i]) {
@@ -202,6 +201,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 textView1330, textView14, textView1430, textView15, textView1530, textView16,
                 textView1630, textView17, textView1730, textView18, textView1830, textView19,
                 textView1930, textView20, textView2030, textView21, textView2130, textView22;
+        TextView[] textViewArray;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -236,66 +236,21 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             textView21 = (TextView) itemView.findViewById(R.id.tv_week_hour_21);
             textView2130 = (TextView) itemView.findViewById(R.id.weekhalf21);
             textView22 = (TextView) itemView.findViewById(R.id.tv_week_hour_22);
-        }
-
-        public TextView[] getTextViewArray() {
-
-            return new TextView[]{textView7, textView730, textView8, textView830, textView9, textView930, textView10,
+            textViewArray  = new TextView[]{textView7, textView730, textView8, textView830, textView9, textView930, textView10,
                     textView1030, textView11, textView1130, textView12, textView1230, textView13,
                     textView1330, textView14, textView1430, textView15, textView1530, textView16,
                     textView1630, textView17, textView1730, textView18, textView1830, textView19,
                     textView1930, textView20, textView2030, textView21, textView2130, textView22};
+
         }
 
- /*       @Override
-        public void onClick(int position, Reports temp, int day) {
-            if (temp != null) {
-                View detailsView = LayoutInflater.from(context).inflate(R.layout.booking_details, null);
-                Button detailsOK = (Button) detailsView.findViewById(R.id.booking_details_button);
-                TextView detailsDate = (TextView) detailsView.findViewById(R.id.booking_date_details);
-                TextView detailsGuest = (TextView) detailsView.findViewById(R.id.booking_guest_datails);
-                TextView detailsTreatment = (TextView) detailsView.findViewById(R.id.booking_treatment_details);
-                TextView detailsExp = (TextView) detailsView.findViewById(R.id.booking_expert_details);
-                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy MMMM dd, HH:mm");
-                detailsDate.setText(formatter2.format(new Date(temp.getDate())));
-                if (temp.getGuestName() != null) {
-                    detailsGuest.setText(temp.getGuestName());
-                } else detailsGuest.setText(R.string.noDatas);
-                if (temp.getTreatment() != null) {
-                    String[] tempTreName = temp.getTreatment().split("ß");
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < tempTreName.length; i++) {
-                        sb.append(tempTreName[i]);
-                    }
-                    detailsTreatment.setText(sb);
-                } else detailsTreatment.setText(R.string.noDatas);
-                if (temp.getExpertname() != null) {
-                    detailsExp.setText(temp.getExpertname());
-                } else detailsExp.setText(R.string.noDatas);
-                final PopupWindow pop = new PopupWindow(detailsView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                pop.showAtLocation(detailsView, Gravity.CENTER, 0, 0);
-                detailsOK.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        pop.dismiss();
-                    }
-                });
-            } else {
-                Log.d("booking", "position: " + position + ", day: "+ day + ", date: "+ new Date(cal.getTimeInMillis()));
-                Reports sendReport = new Reports();
-                sendReport.setDate(cal.getTime().getTime());
-                Intent i = new Intent(context, BookingActivity.class);
-                i.putExtra("newRep", sendReport);
-                i.putExtra("position", position);
-                i.putExtra("day", day);
-                fragment.startActivityForResult(i, REQ_CODE);
-            }
+        public TextView[] getTextViewArray() {
+            return textViewArray;
         }
 
-        @Override
-        public void onLongClick(Calendar cal, int viewPosition, Reports temp, int day) {
-
-        }*/
+        public void setTextViewArray(TextView[] textViewArray) {
+            this.textViewArray = textViewArray;
+        }
     }
 
     public enum Hours {

@@ -278,11 +278,12 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                         dayHour = hour < 14 ? hour - (14 % hour) : hour + (hour % 14);
                         break;
                 }
-                dayMinute = weekDT.getMinuteOfDay();
+                dayMinute = weekDT.getMinuteOfHour();
                 int cellMod = dayMinute < 30 ? 0 : 1;
                 int duration = r.getDuration();
                 int cellCount = duration / 30;
                 dayHour += cellMod;
+                Log.d("bookindata","hour"+dayHour+ new Date(r.getDate()));
                 if (dayHour > -1) {
                     int temp = 0;
                     switch (weekDay) {
@@ -427,7 +428,9 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(clickedDay);
             TextView[] textViewArray = holder.getTextViewArray();
             boolean free = true;
+            Log.d("bookindata", "clickedday:"+clickedDay+", cellcount:"+cellCount+", cellnumbenr: "+cellNumber +", array: "+textViewArray.length);
             for (int i = 0; i < cellCount; i++) {
+                Log.d("bookindata", "tag: "+textViewArray[cellNumber + i].getTag()+", "+ i);
                 if (cellNumber + i < 31) {
                     if (textViewArray[cellNumber + i].getTag() != null) {
                         Toast.makeText(mContext, mContext.getResources().getString(R.string.reserved) + ": " + sdf.format(reportDate), Toast.LENGTH_LONG).show();
@@ -442,7 +445,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 helper.close();
                 for (int j = 0; j < cellCount; j++) {
                     if (cellNumber + j < 31) {
-                        Log.d("bookingdatas", clickedDay+"");
+                        Log.d("bookindata", clickedDay+"");
                         setDailyReports(reportDate);
                         adapter.itemAdd(weeklyReports);
                     }
