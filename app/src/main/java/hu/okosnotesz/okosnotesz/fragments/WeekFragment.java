@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
     ScrollView scrollView;
     View v;
     RecyclerView.LayoutManager layoutManager;
+    LinearLayout delLayout;
     static Fragment fragment;
     Reports menuReport;
     static int cellCount;
@@ -100,7 +102,11 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         v = initUiLayout();
         weeklyCalendarsDatas = setWeekCalendars(d);
         setWeekDays(d, v);
-        new SetRecViewItems().execute();
+        treatmentsList = ListHelper.getAllTreatments(mContext);
+        weeklyCalendarsDatas = setWeekCalendars(d);
+        setDailyReports(d);
+        setupRecViewAdapter();
+ //       new SetRecViewItems().execute();
 
         return v;
     }
@@ -122,6 +128,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         scrollView = (ScrollView) v.findViewById(R.id.rec_scroll);
         scrollView.setSmoothScrollingEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
+        delLayout = (LinearLayout) v.findViewById(R.id.del_layout);
         setupRecViewAdapter();
         return v;
     }
@@ -150,11 +157,11 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         if (weeklyReports != null) {
             recyclerView.setAdapter(new WeekViewAdapter(this, mContext, ChartHelper.Days.values(), treatmentsList, weeklyReports));
             adapter = (WeekViewAdapter) recyclerView.getAdapter();
-            adapter.notifyDataSetChanged();
         } else {
             recyclerView.setAdapter(null);
         }
     }
+
 
     public static List<Date> getDayValueInCells(Calendar day) {
         List<Date> dayValueInCells = new ArrayList<>(7);
@@ -262,7 +269,6 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             DateTime weekDT =  dt.withMillis(r.getDate());
 
             if (weekDT.getWeekyear() == tempDT.getWeekyear() &&
-                    weekDT.getMonthOfYear() == tempDT.getMonthOfYear() &&
                     weekDT.getWeekOfWeekyear() == tempDT.getWeekOfWeekyear()) {
                 Log.d("dayvalues", "..." +weekDT.getDayOfWeek()+" "+tempDT.getWeekOfWeekyear());
                 int weekDay = weekDT.getDayOfWeek();
@@ -283,7 +289,6 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 int duration = r.getDuration();
                 int cellCount = duration / 30;
                 dayHour += cellMod;
-                Log.d("bookindata","hour"+dayHour+ new Date(r.getDate()));
                 if (dayHour > -1) {
                     int temp = 0;
                     switch (weekDay) {
@@ -426,13 +431,14 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             clickedDay = data.getIntExtra("day", 0);
             int cellCount = menuReport.getDuration() / 30;
             WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(clickedDay);
-            TextView[] textViewArray = holder.getTextViewArray();
+            List<TextView> textViewL = holder.getTextViewArray();
+            Log.d("bookindata", "tag get1");
             boolean free = true;
-            Log.d("bookindata", "clickedday:"+clickedDay+", cellcount:"+cellCount+", cellnumbenr: "+cellNumber +", array: "+textViewArray.length);
+            Log.d("bookindata", "clickedday:"+clickedDay+", cellcount:"+cellCount+", cellnumbenr: "+cellNumber +", array: "+textViewL.size());
             for (int i = 0; i < cellCount; i++) {
-                Log.d("bookindata", "tag: "+textViewArray[cellNumber + i].getTag()+", "+ i);
+                Log.d("bookindata", "tag: "+textViewL.get(cellNumber + i).getTag()+", "+ i);
                 if (cellNumber + i < 31) {
-                    if (textViewArray[cellNumber + i].getTag() != null) {
+                    if (textViewL.get(cellNumber + i).getTag() != null) {
                         Toast.makeText(mContext, mContext.getResources().getString(R.string.reserved) + ": " + sdf.format(reportDate), Toast.LENGTH_LONG).show();
                         free = false;
                         return;
@@ -440,16 +446,10 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 }
             }
             if (free) {
-                DBHelper helper = DBHelper.getHelper(mContext);
-                if(helper.addReport(menuReport))  Log.d("bookingdata", "weekdb Ok"+menuReport.getGuestName()+", "+menuReport.getExpertname()+", "+menuReport.getTreatment()+", "+menuReport.getDate()+", ");
-                helper.close();
-                for (int j = 0; j < cellCount; j++) {
-                    if (cellNumber + j < 31) {
-                        Log.d("bookindata", clickedDay+"");
-                        setDailyReports(reportDate);
-                        adapter.itemAdd(weeklyReports);
-                    }
+                if(addReport(menuReport, clickedDay)){
+                    Snackbar.make(getView(), R.string.OK, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
+
             }
 
             scrollView.smoothScrollTo(0, cellNumber * 60);
@@ -489,7 +489,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                 }
             });
         } else {
-            Log.d("bookingdata" , "position: " + position + ", day: "+ day + ", date: "+ new Date(datesList.get(day).getTime()));
+            Log.d("bookingdatas" , "position: " + position + ", day: "+ day + ", date: "+ new Date(datesList.get(day).getTime()));
             Reports sendReport = new Reports();
             WeekViewAdapter.Hours[] hours = WeekViewAdapter.Hours.values();
             Calendar cal = Calendar.getInstance();
@@ -511,7 +511,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
 
         cellCount = temp.getDuration() == 0 ? 30 : temp.getDuration() / 30;
         WeekViewAdapter.ViewHolder holder = (WeekViewAdapter.ViewHolder) recyclerView.findViewHolderForAdapterPosition(day);
-        TextView draggedTV = holder.getTextViewArray()[position];
+        TextView draggedTV = holder.getTextViewArray().get(position);
         draggedTV.setTag(R.id.TEXT_VIEW_TAG, temp.getGuestName());
         ClipData.Item item = new ClipData.Item((CharSequence) draggedTV.getTag(R.id.TEXT_VIEW_TAG));
         ClipData dragData = new ClipData((CharSequence) draggedTV.getTag(R.id.TEXT_VIEW_TAG), new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN}, item);
@@ -519,6 +519,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         draggedTV.startDrag(dragData, dragShadow, null, 0);
         View.OnDragListener mDragListener = new MyOnDragListener(position, temp, day, draggedTV);
         recyclerView.setOnDragListener(mDragListener);
+        delLayout.setOnDragListener(mDragListener);
     }
 
     private boolean deleteReport(Reports deleteReport, int day) {
@@ -526,10 +527,71 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         boolean successful = helper.deleteReport(deleteReport);
         helper.close();
         if (successful) {
-            adapter.itemRemoved(deleteReport, day);
-            adapter.notifyItemChanged(day);
+            for (int i = 0; i < weeklyReports.get(day).length; i++) {
+                if (menuReport != null && menuReport == weeklyReports.get(day)[i]) {
+                    weeklyReports.get(day)[i] = null;
+                }
+            }
+                adapter.itemRemoved(deleteReport, day);
+                adapter.notifyItemChanged(day);
         }
         return successful;
+    }
+
+    private boolean addReport(Reports addReport, int day){
+        DBHelper helper = DBHelper.getHelper(mContext);
+        boolean successful = helper.addReport(addReport);
+        helper.close();
+        if(successful){
+            Log.d("bookindatacli", "44 " + day);
+//            weeklyReports = setDailyReports(new Date(addReport.getDate()));
+//            adapter.notifyItemRangeChanged(0, weeklyReports.get(day).length);
+        }
+        return successful;
+    }
+    public void itemAdd(Reports addReport, int day) {
+        DateTime dt = new DateTime(addReport.getDate());
+        int hour = dt.getHourOfDay();
+        int dayHour;
+        switch (hour) {
+            case 14:
+                dayHour = hour;
+                break;
+            case 7:
+                dayHour = 0;
+                break;
+            default:
+                dayHour = hour < 14 ? hour - (14 % hour) : hour + (hour % 14);
+                break;
+        }
+        int dayMinute = dt.getMinuteOfHour();
+        int cellMod = dayMinute < 30 ? 0 : 1;
+        int duration = addReport.getDuration();
+        int cellCount = duration / 30;
+        dayHour += cellMod;
+        Log.d("bookindatacli", dayMinute+", "+duration + " " + "rep:" + addReport.getDate());
+        if (dayHour > -1) {
+            int temp = 0;
+            if (dayHour + cellCount < weeklyReports.get(day).length) {
+                do {
+                    weeklyReports.get(day)[dayHour + temp] = addReport;
+                    Log.d("bookindatacli", "11");
+                    temp += 1;
+                } while (temp < cellCount);
+            } else if (dayHour + cellCount == weeklyReports.get(day).length) {
+                weeklyReports.get(day)[dayHour] = addReport;
+                Log.d("bookindatacli", "22");
+            } else if (dayHour + cellCount > weeklyReports.get(day).length) {
+                cellCount = weeklyReports.get(day).length - dayHour;
+                Log.d("bookindatacli", "33");
+                do {
+                    weeklyReports.get(day)[dayHour + temp] = addReport;
+                    temp += 1;
+                } while (temp < cellCount);
+            }
+        }
+        adapter.notifyItemChanged(day);
+        Log.d("bookindatacli", "OK " +day + "-"+weeklyReports.get(day).length);
     }
 
 
@@ -567,6 +629,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
         TextView tv;
         int xCoord;
         int yCoord;
+        boolean deletable = false;
 
         public MyOnDragListener(int position, Reports temp, int day, TextView tv) {
             this.position = position;
@@ -574,6 +637,7 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             this.day = day;
             this.tv = tv;
             windowHeight = scrollView.getHeight();
+
         }
 
         @Override
@@ -584,12 +648,15 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
             int[] coordsOfImageView = new int[2];
             if (v instanceof RecyclerView) {
                 v.getLocationOnScreen(coordsOfRecView);
+                Log.d("dragdrop", "v = recview");
             } else if (v instanceof ImageView) {
                 v.getLocationOnScreen(coordsOfImageView);
+                Log.d("dragdrop", "v = imageview");
             }
             int viewTopOfRecView = coordsOfRecView[1];
             int viewTopOfImageView = coordsOfImageView[1];
             final int action = event.getAction();
+
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
@@ -601,31 +668,41 @@ public class WeekFragment extends Fragment implements WeekItemClickListener {
                     }
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.d("dragdrop", "entered y:"+yCoord +", x:"+xCoord +" -- toprec:"+viewTopOfRecView+", topimg:" +viewTopOfImageView+ deletable);
                     v.invalidate();
                     break;
                 case DragEvent.ACTION_DRAG_LOCATION:
                     int value = yCoord - windowHeight / 2;
+                    Log.d("dragdrop", "location" + "y:"+yCoord +", x:"+xCoord +" -- toprec:"+viewTopOfRecView+", topimg:" +viewTopOfImageView + deletable);
                     ObjectAnimator.ofInt(scrollView, "scrollY", value).setDuration(200).start();
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
+                    xCoord = (int) event.getX();
+                    yCoord = (int) event.getY();
+                    deletable = true;
+                    Log.d("dragdrop", "excited y:"+yCoord +", x:"+xCoord +" -- toprec:"+viewTopOfRecView+", topimg:" +viewTopOfImageView+ deletable);
                     break;
                 case DragEvent.ACTION_DROP:
+                    xCoord = (int) event.getX();
+                    yCoord = (int) event.getY();
+                    View view = (View) event.getLocalState();
+                    Log.d("dragdrop", "drop y:"+yCoord +", x:"+xCoord +" -- toprec:"+viewTopOfRecView+", topimg:" +view+ deletable);
                     v.invalidate();
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
-                    v.getBackground().clearColorFilter();
+                    Log.d("dragdrop", "ended" + "y:"+yCoord +", x:"+xCoord +" -- toprec:"+viewTopOfRecView+", topimg:" +viewTopOfImageView + deletable);
+//                    v.getBackground().clearColorFilter();
                     createBottomUpAnimation(delete_iv, null, delete_iv.getHeight()).start();
                     v.invalidate();
-                    if (event.getResult()) {
-                        if (yCoord < viewTopOfRecView && yCoord > viewTopOfImageView) {
+                    xCoord = (int) event.getX();
+                    yCoord = (int) event.getY();
+                    Log.d("dragdrop", "ended" + "y:"+yCoord +", x:"+xCoord +" -- toprec:"+viewTopOfRecView+", topimg:" +viewTopOfImageView + deletable);
+                    if (deletable) {
                             if (deleteReport(temp, day)) {
                                 Snackbar.make(getView(), R.string.deleteSuccessful, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             }
-                        } else if (yCoord > viewTopOfRecView) {
-                            Snackbar.make(getView(), "Itt kell az áthelyezést megírni", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                        }
                     } else {
-                        Toast.makeText(mContext, "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), "Itt kell az áthelyezést megírni", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                     break;
                 default:

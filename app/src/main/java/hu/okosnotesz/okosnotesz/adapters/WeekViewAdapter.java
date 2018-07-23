@@ -76,7 +76,15 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         this.holder = holder;
         this.position = position;
-        textViewList = Arrays.asList(holder.getTextViewArray());
+        textViewList = new ArrayList<>(Arrays.asList(holder.textView7, holder.textView730,
+                holder.textView8, holder.textView830, holder.textView9, holder.textView930,
+                holder.textView10, holder.textView1030, holder.textView11, holder.textView1130,
+                holder.textView12, holder.textView1230, holder.textView13, holder.textView1330,
+                holder.textView14, holder.textView1430, holder.textView15, holder.textView1530,
+                holder.textView16, holder.textView1630, holder.textView17, holder.textView1730,
+                holder.textView18, holder.textView1830, holder.textView19, holder.textView1930,
+                holder.textView20, holder.textView2030, holder.textView21, holder.textView2130,
+                holder.textView22));
         Map<Reports, Integer> colorMap = getColors(position);
         Hours[] hours = Hours.values();
         for (int i = 0; i < hours.length; i++) {
@@ -93,7 +101,9 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 lp.setMargins(0, 0, 0, 0);
                 textViewList.get(i).setLayoutParams(lp);
                 textViewList.get(i).setTag(dailyReports[i]);
-                Log.d("bookindata", "tag1: " +  i + "--"+textViewList.get(i).getTag());
+//                for (TextView t :textViewList) {
+//                    Log.d("bookindata", "tag list: "+t.getTag()+", ");
+//                }
                 String guestName = dailyReports[i].getGuestName() + ", ";
                 String treName = dailyReports[i].getTreatment().replace('ß', ',');
                 int price = 0;
@@ -132,7 +142,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 }
             });
         }
-        holder.setTextViewArray((TextView[]) textViewList.toArray());
+        holder.setTextViewArray(textViewList);
         holder.itemView.setVisibility(View.INVISIBLE);
         setAnimation(holder.itemView);
     }
@@ -173,15 +183,52 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
         return colorMap;
     }
 
-    public void itemAdd(Map<Integer, Reports[]> newDailymap) {
-        dailymap.clear();
-        dailymap.putAll(newDailymap);
+    public void itemAdd(Reports addReport, int day) {
+        DateTime dt = new DateTime(addReport.getDate());
+        int hour = dt.getHourOfDay();
+        int dayHour;
+        switch (hour) {
+            case 14:
+                dayHour = hour;
+                break;
+            case 7:
+                dayHour = 0;
+                break;
+            default:
+                dayHour = hour < 14 ? hour - (14 % hour) : hour + (hour % 14);
+                break;
+        }
+        int dayMinute = dt.getMinuteOfHour();
+        int cellMod = dayMinute < 30 ? 0 : 1;
+        int duration = addReport.getDuration();
+        int cellCount = duration / 30;
+        dayHour += cellMod;
+        Log.d("bookindatacli", dayMinute+", "+duration + " " + "rep:" + addReport.getDate());
+        if (dayHour > -1) {
+            int temp = 0;
+            if (dayHour + cellCount < dailymap.get(day).length) {
+                do {
+                    dailymap.get(day)[dayHour + temp] = addReport;
+                    Log.d("bookindatacli", "11");
+                            temp += 1;
+                } while (temp < cellCount);
+            } else if (dayHour + cellCount == dailymap.get(day).length) {
+                dailymap.get(day)[dayHour] = addReport;
+                Log.d("bookindatacli", "22");
+            } else if (dayHour + cellCount > dailymap.get(day).length) {
+                cellCount = dailymap.get(day).length - dayHour;
+                Log.d("bookindatacli", "33");
+                do {
+                    dailymap.get(day)[dayHour + temp] = addReport;
+                    temp += 1;
+                } while (temp < cellCount);
+            }
+        }
+
+        Log.d("bookindatacli", "OK " +day + "-"+dailymap.get(day).length);
     }
 
 
-    public List<TextView> getTextViewList() {
-        return textViewList;
-    }
 
     public void itemRemoved(Reports menuReport, int day) {
         for (int i = 0; i < dailymap.get(day).length; i++) {
@@ -189,7 +236,6 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 dailymap.get(day)[i] = null;
             }
         }
-
 
     }
 
@@ -201,7 +247,7 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
                 textView1330, textView14, textView1430, textView15, textView1530, textView16,
                 textView1630, textView17, textView1730, textView18, textView1830, textView19,
                 textView1930, textView20, textView2030, textView21, textView2130, textView22;
-        TextView[] textViewArray;
+        public List<TextView> textViewList;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -236,20 +282,30 @@ public class WeekViewAdapter extends RecyclerView.Adapter<WeekViewAdapter.ViewHo
             textView21 = (TextView) itemView.findViewById(R.id.tv_week_hour_21);
             textView2130 = (TextView) itemView.findViewById(R.id.weekhalf21);
             textView22 = (TextView) itemView.findViewById(R.id.tv_week_hour_22);
-            textViewArray  = new TextView[]{textView7, textView730, textView8, textView830, textView9, textView930, textView10,
+            textViewList = new ArrayList<>(Arrays.asList(textView7, textView730, textView8, textView830, textView9, textView930, textView10,
                     textView1030, textView11, textView1130, textView12, textView1230, textView13,
                     textView1330, textView14, textView1430, textView15, textView1530, textView16,
                     textView1630, textView17, textView1730, textView18, textView1830, textView19,
-                    textView1930, textView20, textView2030, textView21, textView2130, textView22};
-
+                    textView1930, textView20, textView2030, textView21, textView2130, textView22));
         }
 
-        public TextView[] getTextViewArray() {
-            return textViewArray;
+        public List<TextView> getTextViewArray() {
+            Log.d("bookindata", "tag get: ");
+            for (TextView t :textViewList) {
+                if(t.getTag() != null) {
+                    Log.d("bookindata", "tag get: " + t.getTag() + ", ");
+                }
+                }
+            return textViewList;
         }
 
-        public void setTextViewArray(TextView[] textViewArray) {
-            this.textViewArray = textViewArray;
+        public void setTextViewArray(List<TextView> textViewList) {
+            for (TextView t :textViewList) {
+            if(t.getTag() != null) {
+                Log.d("bookindata", "tag set: "+t.getTag()+", ");
+                    }
+            }
+            this.textViewList= textViewList;
         }
     }
 
